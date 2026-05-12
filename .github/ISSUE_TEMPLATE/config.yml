@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/halo-hx/Kafka-Desktop-Manager/discussions
+    about: Ask questions and share ideas with the community.
+  - name: 🔒 Security vulnerability
+    url: https://github.com/halo-hx/Kafka-Desktop-Manager/security/advisories/new
+    about: Please report security issues privately, not in public issues.
