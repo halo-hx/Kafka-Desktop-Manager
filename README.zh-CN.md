@@ -27,6 +27,14 @@
 - **国际化** — 内置中英文
 - **轻量高效** — Rust 原生内核，包体积小，占用低
 
+## 📸 截图
+
+<p align="center">
+  <img src="docs/screenshots/cluster-overview.png" alt="集群概览" width="900" />
+  <br/>
+  <sub><em>集群概览 — Broker、Topic、分区、消费组与配置一目了然。</em></sub>
+</p>
+
 ## 📦 安装
 
 在 [Releases](https://github.com/halo-hx/Kafka-Desktop-Manager/releases) 下载对应平台的安装包：

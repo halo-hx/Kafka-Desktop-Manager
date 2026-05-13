@@ -36,7 +36,11 @@ English | [简体中文](./README.zh-CN.md)
 
 ## 📸 Screenshots
 
-> _Add screenshots / GIFs here before first release._
+<p align="center">
+  <img src="docs/screenshots/cluster-overview.png" alt="Cluster overview" width="900" />
+  <br/>
+  <sub><em>Cluster overview — brokers, topics, partitions, consumer groups, and live configuration at a glance.</em></sub>
+</p>
 
 ## 📦 Installation
 
