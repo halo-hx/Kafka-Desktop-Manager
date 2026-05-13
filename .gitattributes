@@ -1,0 +1,12 @@
+# Force LF line endings on all platforms (fixes Windows CRLF / rustfmt mismatch)
+* text=auto eol=lf
+
+# Treat these as binary so Git won't normalize them
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.webp binary
+*.svg text eol=lf
