@@ -2,7 +2,7 @@
 name = "kafka-desktop-manager"
 version = "0.1.0"
 description = "A modern, cross-platform desktop GUI for Apache Kafka built with Tauri, React and Rust."
-authors = ["Jinjie He <jinjie_he@outlook.com>"]
+authors = ["Hong Xiao <jinjie_he@outlook.com>"]
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/halo-hx/Kafka-Desktop-Manager"
