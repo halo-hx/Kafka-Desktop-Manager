@@ -1,10 +1,15 @@
 version: 2
+
+# Dependency update PRs are disabled here (open-pull-requests-limit: 0).
+# Security advisory PRs are NOT affected by this limit and will still be created
+# automatically when a vulnerability is detected.
+# To re-enable routine version-bump PRs, raise the limit on a specific ecosystem.
 updates:
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 0
     labels:
       - dependencies
       - frontend
@@ -13,7 +18,7 @@ updates:
     directory: /src-tauri
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 0
     labels:
       - dependencies
       - rust
@@ -22,6 +27,7 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    open-pull-requests-limit: 0
     labels:
       - dependencies
       - ci
