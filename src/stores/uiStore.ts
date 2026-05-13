@@ -186,12 +186,14 @@ export const useUIStore = create<UIStore>((set, get) => ({
     const idx = tabs.findIndex((t) => t.id === id);
     if (idx === -1) return;
     const toRemoveIds = new Set(
-      tabs.slice(idx + 1).filter((t) => t.closable).map((t) => t.id),
+      tabs
+        .slice(idx + 1)
+        .filter((t) => t.closable)
+        .map((t) => t.id),
     );
     if (toRemoveIds.size === 0) return;
     const nextTabs = tabs.filter((t) => !toRemoveIds.has(t.id));
-    const nextActive =
-      activeTabId && toRemoveIds.has(activeTabId) ? id : activeTabId;
+    const nextActive = activeTabId && toRemoveIds.has(activeTabId) ? id : activeTabId;
     set({ tabs: nextTabs, activeTabId: nextActive });
   },
 
@@ -209,12 +211,7 @@ export const useUIStore = create<UIStore>((set, get) => ({
 
   reorderTabs: (fromIndex, toIndex) => {
     const { tabs } = get();
-    if (
-      fromIndex < 0 ||
-      toIndex < 0 ||
-      fromIndex >= tabs.length ||
-      toIndex >= tabs.length
-    ) {
+    if (fromIndex < 0 || toIndex < 0 || fromIndex >= tabs.length || toIndex >= tabs.length) {
       return;
     }
     const next = [...tabs];

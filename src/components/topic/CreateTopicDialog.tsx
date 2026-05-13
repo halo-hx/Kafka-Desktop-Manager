@@ -61,10 +61,12 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
     else if (!/^[a-zA-Z0-9._-]+$/.test(n)) e.name = t('createTopic.nameCharsetError');
 
     const p = Number(partitions);
-    if (!Number.isInteger(p) || p < 1 || p > 10000) e.partitions = t('createTopic.partitionsRangeError');
+    if (!Number.isInteger(p) || p < 1 || p > 10000)
+      e.partitions = t('createTopic.partitionsRangeError');
 
     const r = Number(replicationFactor);
-    if (!Number.isInteger(r) || r < 1) e.replicationFactor = t('createTopic.replicationFactorPositiveError');
+    if (!Number.isInteger(r) || r < 1)
+      e.replicationFactor = t('createTopic.replicationFactorPositiveError');
 
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -96,7 +98,12 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
     } catch (err) {
       console.warn('[CreateTopicDialog]', err);
       setErrors({
-        submit: typeof err === 'string' ? err : err instanceof Error ? err.message : t('createTopic.createFailed'),
+        submit:
+          typeof err === 'string'
+            ? err
+            : err instanceof Error
+              ? err.message
+              : t('createTopic.createFailed'),
       });
     } finally {
       setSubmitting(false);
@@ -149,7 +156,9 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
             justifyContent: 'space-between',
           }}
         >
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 600 }}>{t('createTopic.title')}</h2>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 600 }}>
+            {t('createTopic.title')}
+          </h2>
           <button
             type="button"
             aria-label={t('common.close')}
@@ -177,7 +186,15 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
 
         <div style={{ padding: 'var(--space-5)', overflowY: 'auto', flex: 1 }}>
           <div style={{ marginBottom: 14 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 6 }}>
+            <label
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--color-text-muted)',
+                display: 'block',
+                marginBottom: 6,
+              }}
+            >
               {t('createTopic.topicName')}
             </label>
             <input
@@ -193,12 +210,26 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
                 e.currentTarget.style.borderColor = 'var(--color-border)';
               }}
             />
-            {errors.name && <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.name}</p>}
+            {errors.name && (
+              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                {errors.name}
+              </p>
+            )}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+          <div
+            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}
+          >
             <div>
-              <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 6 }}>
+              <label
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'var(--color-text-muted)',
+                  display: 'block',
+                  marginBottom: 6,
+                }}
+              >
                 {t('createTopic.partitions')}
               </label>
               <input
@@ -216,11 +247,21 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
                 }}
               />
               {errors.partitions && (
-                <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.partitions}</p>
+                <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                  {errors.partitions}
+                </p>
               )}
             </div>
             <div>
-              <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 6 }}>
+              <label
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'var(--color-text-muted)',
+                  display: 'block',
+                  marginBottom: 6,
+                }}
+              >
                 {t('createTopic.replicationFactor')}
               </label>
               <input
@@ -237,12 +278,23 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
                 }}
               />
               {errors.replicationFactor && (
-                <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.replicationFactor}</p>
+                <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                  {errors.replicationFactor}
+                </p>
               )}
             </div>
           </div>
 
-          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', marginBottom: 8 }}>{t('createTopic.advancedConfigOptional')}</p>
+          <p
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              marginBottom: 8,
+            }}
+          >
+            {t('createTopic.advancedConfigOptional')}
+          </p>
           <div
             style={{
               border: '1px solid var(--color-border-subtle)',
@@ -282,7 +334,9 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
                       <input
                         value={row.key}
                         onChange={(e) =>
-                          setExtra((rows) => rows.map((r) => (r.id === row.id ? { ...r, key: e.target.value } : r)))
+                          setExtra((rows) =>
+                            rows.map((r) => (r.id === row.id ? { ...r, key: e.target.value } : r)),
+                          )
                         }
                         placeholder="retention.ms"
                         style={{ ...inputStyle, fontSize: 12, fontFamily: 'var(--font-heading)' }}
@@ -298,7 +352,11 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
                       <input
                         value={row.value}
                         onChange={(e) =>
-                          setExtra((rows) => rows.map((r) => (r.id === row.id ? { ...r, value: e.target.value } : r)))
+                          setExtra((rows) =>
+                            rows.map((r) =>
+                              r.id === row.id ? { ...r, value: e.target.value } : r,
+                            ),
+                          )
                         }
                         placeholder="604800000"
                         style={{ ...inputStyle, fontSize: 12, fontFamily: 'var(--font-heading)' }}
@@ -366,8 +424,16 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
             <Plus size={14} strokeWidth={2} aria-hidden />
             {t('createTopic.addConfig')}
           </button>
-          {errors.config && <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>{errors.config}</p>}
-          {errors.submit && <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>{errors.submit}</p>}
+          {errors.config && (
+            <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>
+              {errors.config}
+            </p>
+          )}
+          {errors.submit && (
+            <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>
+              {errors.submit}
+            </p>
+          )}
         </div>
 
         <div
@@ -415,7 +481,13 @@ export function CreateTopicDialog({ open, clusterId, onClose, onCreated }: Creat
               transition: 'opacity var(--transition-fast)',
             }}
           >
-            {submitting && <Loader2 size={16} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} />}
+            {submitting && (
+              <Loader2
+                size={16}
+                strokeWidth={2}
+                style={{ animation: 'km-spin 1s linear infinite' }}
+              />
+            )}
             {submitting ? t('createTopic.creating') : t('createTopic.create')}
           </button>
         </div>

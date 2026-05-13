@@ -59,7 +59,14 @@ export interface TopicInfo {
 
 export interface ConsumerGroupInfo {
   groupId: string;
-  state: 'Active' | 'Stable' | 'Empty' | 'Rebalancing' | 'Dead' | 'PreparingRebalance' | 'CompletingRebalance';
+  state:
+    | 'Active'
+    | 'Stable'
+    | 'Empty'
+    | 'Rebalancing'
+    | 'Dead'
+    | 'PreparingRebalance'
+    | 'CompletingRebalance';
   memberCount: number;
   subscribedTopicCount: number;
   totalLag: number;

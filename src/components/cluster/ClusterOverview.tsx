@@ -3,15 +3,7 @@
  * Design: ui-ux-pro-max · Palette: Code Dark + Run Green
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  AlertCircle,
-  Database,
-  Loader2,
-  RefreshCw,
-  Search,
-  Server,
-  Settings,
-} from 'lucide-react';
+import { AlertCircle, Database, Loader2, RefreshCw, Search, Server, Settings } from 'lucide-react';
 import { useClusterStore } from '../../stores/clusterStore';
 import { useConnectionStore } from '../../stores/connectionStore';
 import { useUIStore } from '../../stores/uiStore';
@@ -40,7 +32,16 @@ function StatCard({
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       onClick={onClick}
-      onKeyDown={clickable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(); } } : undefined}
+      onKeyDown={
+        clickable
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick?.();
+              }
+            }
+          : undefined
+      }
       style={{
         flex: 1,
         padding: '16px 20px',
@@ -53,14 +54,22 @@ function StatCard({
         cursor: clickable ? 'pointer' : 'default',
         transition: 'background var(--transition-fast), border-color var(--transition-fast)',
       }}
-      onMouseEnter={clickable ? (e) => {
-        e.currentTarget.style.background = 'var(--color-surface-2)';
-        e.currentTarget.style.borderColor = 'var(--color-primary)';
-      } : undefined}
-      onMouseLeave={clickable ? (e) => {
-        e.currentTarget.style.background = 'var(--color-surface)';
-        e.currentTarget.style.borderColor = 'var(--color-border-subtle)';
-      } : undefined}
+      onMouseEnter={
+        clickable
+          ? (e) => {
+              e.currentTarget.style.background = 'var(--color-surface-2)';
+              e.currentTarget.style.borderColor = 'var(--color-primary)';
+            }
+          : undefined
+      }
+      onMouseLeave={
+        clickable
+          ? (e) => {
+              e.currentTarget.style.background = 'var(--color-surface)';
+              e.currentTarget.style.borderColor = 'var(--color-border-subtle)';
+            }
+          : undefined
+      }
     >
       <span
         style={{
@@ -153,7 +162,11 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
   const openBrokerTab = (brokerId: number) => {
     const conn = getConnection(clusterId);
     const prefix = conn?.name?.trim() || overview?.clusterName?.trim() || t('common.cluster');
-    openTab({ type: 'broker-detail', clusterId, brokerId }, `${prefix} · Broker ${brokerId}`, 'server');
+    openTab(
+      { type: 'broker-detail', clusterId, brokerId },
+      `${prefix} · Broker ${brokerId}`,
+      'server',
+    );
   };
 
   if (loading && !overview && !overviewError) {
@@ -198,7 +211,14 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
         }}
       >
         <AlertCircle size={40} color="var(--color-error)" aria-hidden />
-        <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', maxWidth: 420, fontSize: 14 }}>
+        <p
+          style={{
+            color: 'var(--color-text-muted)',
+            textAlign: 'center',
+            maxWidth: 420,
+            fontSize: 14,
+          }}
+        >
           {overviewError}
         </p>
         <button
@@ -276,7 +296,11 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
             fontSize: 13,
           }}
         >
-          <AlertCircle size={18} color="var(--color-error)" style={{ flexShrink: 0, marginTop: 2 }} />
+          <AlertCircle
+            size={18}
+            color="var(--color-error)"
+            style={{ flexShrink: 0, marginTop: 2 }}
+          />
           <span style={{ flex: 1 }}>{overviewError}</span>
           <button
             type="button"
@@ -316,7 +340,9 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
             <Database size={20} strokeWidth={2} aria-hidden />
             {overview.clusterName}
           </h1>
-          <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>{t('overview.pageSubtitle')}</p>
+          <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
+            {t('overview.pageSubtitle')}
+          </p>
         </div>
         <div style={{ flex: 1 }} />
         <button
@@ -347,7 +373,9 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = 'var(--color-surface)';
-            e.currentTarget.style.color = loading ? 'var(--color-text-faint)' : 'var(--color-text-muted)';
+            e.currentTarget.style.color = loading
+              ? 'var(--color-text-faint)'
+              : 'var(--color-text-muted)';
           }}
         >
           {loading ? (
@@ -361,10 +389,28 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
 
       {/* Stats row */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 28 }}>
-        <StatCard label={t('overview.statBrokers')} value={overview.brokers.length} color="#0EA5E9" />
-        <StatCard label={t('overview.statTopics')} value={overview.topicCount} color="var(--color-primary)" onClick={onNavigate ? () => onNavigate('topics') : undefined} />
-        <StatCard label={t('overview.statPartitions')} value={overview.partitionCount} color="#8B5CF6" />
-        <StatCard label={t('overview.statConsumers')} value={overview.consumerGroupCount} color="#10B981" onClick={onNavigate ? () => onNavigate('consumers') : undefined} />
+        <StatCard
+          label={t('overview.statBrokers')}
+          value={overview.brokers.length}
+          color="#0EA5E9"
+        />
+        <StatCard
+          label={t('overview.statTopics')}
+          value={overview.topicCount}
+          color="var(--color-primary)"
+          onClick={onNavigate ? () => onNavigate('topics') : undefined}
+        />
+        <StatCard
+          label={t('overview.statPartitions')}
+          value={overview.partitionCount}
+          color="#8B5CF6"
+        />
+        <StatCard
+          label={t('overview.statConsumers')}
+          value={overview.consumerGroupCount}
+          color="#10B981"
+          onClick={onNavigate ? () => onNavigate('consumers') : undefined}
+        />
       </div>
 
       {/* Broker table */}
@@ -396,7 +442,13 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ background: 'var(--color-surface)' }}>
-                {[t('overview.id'), t('overview.host'), t('overview.port'), t('overview.rack'), t('overview.role')].map((h, colIdx) => (
+                {[
+                  t('overview.id'),
+                  t('overview.host'),
+                  t('overview.port'),
+                  t('overview.rack'),
+                  t('overview.role'),
+                ].map((h, colIdx) => (
                   <th
                     key={h}
                     style={{
@@ -475,7 +527,9 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
                   >
                     {broker.port}
                   </td>
-                  <td style={{ padding: '9px 14px', fontSize: 12, color: 'var(--color-text-muted)' }}>
+                  <td
+                    style={{ padding: '9px 14px', fontSize: 12, color: 'var(--color-text-muted)' }}
+                  >
                     {broker.rack || '—'}
                   </td>
                   <td style={{ padding: '9px 14px' }}>
@@ -541,7 +595,15 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
 
       {/* Cluster configs */}
       <section aria-labelledby="config-heading">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            marginBottom: 10,
+            flexWrap: 'wrap',
+          }}
+        >
           <h2
             id="config-heading"
             style={{
@@ -669,28 +731,38 @@ export function ClusterOverview({ clusterId, onNavigate }: Props) {
             </div>
           ))}
           {filteredConfigs.length === 0 && (
-            <p style={{ padding: '16px', textAlign: 'center', color: 'var(--color-text-faint)', fontSize: 12 }}>
-              {Object.keys(overview.configs).length === 0 ? t('overview.noClusterConfigs') : t('overview.noMatchingConfigs')}
+            <p
+              style={{
+                padding: '16px',
+                textAlign: 'center',
+                color: 'var(--color-text-faint)',
+                fontSize: 12,
+              }}
+            >
+              {Object.keys(overview.configs).length === 0
+                ? t('overview.noClusterConfigs')
+                : t('overview.noMatchingConfigs')}
             </p>
           )}
         </div>
       </section>
 
-      {editOpen && (() => {
-        const controller = overview.brokers.find((b) => b.isController);
-        if (!controller) return null;
-        return (
-          <ClusterConfigEditDialog
-            open={editOpen}
-            clusterId={clusterId}
-            brokerId={controller.id}
-            onClose={() => setEditOpen(false)}
-            onApplied={() => {
-              void loadOverview(clusterId);
-            }}
-          />
-        );
-      })()}
+      {editOpen &&
+        (() => {
+          const controller = overview.brokers.find((b) => b.isController);
+          if (!controller) return null;
+          return (
+            <ClusterConfigEditDialog
+              open={editOpen}
+              clusterId={clusterId}
+              brokerId={controller.id}
+              onClose={() => setEditOpen(false)}
+              onApplied={() => {
+                void loadOverview(clusterId);
+              }}
+            />
+          );
+        })()}
     </div>
   );
 }

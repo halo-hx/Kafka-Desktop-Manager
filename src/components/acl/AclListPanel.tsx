@@ -70,9 +70,7 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
     setError(null);
     try {
       const raw = await invoke<unknown[]>('list_acls', { clusterId });
-      const list = Array.isArray(raw)
-        ? (raw.map(normalizeAcl).filter(Boolean) as AclEntry[])
-        : [];
+      const list = Array.isArray(raw) ? (raw.map(normalizeAcl).filter(Boolean) as AclEntry[]) : [];
       setRows(list);
     } catch (e) {
       const msg = typeof e === 'string' ? e : e instanceof Error ? e.message : String(e);
@@ -235,7 +233,14 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
             }}
           />
         </div>
-        <div style={{ display: 'inline-flex', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--color-border)' }}>
+        <div
+          style={{
+            display: 'inline-flex',
+            borderRadius: 'var(--radius-md)',
+            overflow: 'hidden',
+            border: '1px solid var(--color-border)',
+          }}
+        >
           <button
             type="button"
             onClick={() => setGroupMode('principal')}
@@ -245,7 +250,8 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
               fontWeight: 600,
               border: 'none',
               cursor: 'pointer',
-              background: groupMode === 'principal' ? 'var(--color-surface-2)' : 'var(--color-surface)',
+              background:
+                groupMode === 'principal' ? 'var(--color-surface-2)' : 'var(--color-surface)',
               color: groupMode === 'principal' ? 'var(--color-text)' : 'var(--color-text-muted)',
             }}
           >
@@ -261,7 +267,8 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
               border: 'none',
               borderLeft: '1px solid var(--color-border)',
               cursor: 'pointer',
-              background: groupMode === 'resource' ? 'var(--color-surface-2)' : 'var(--color-surface)',
+              background:
+                groupMode === 'resource' ? 'var(--color-surface-2)' : 'var(--color-surface)',
               color: groupMode === 'resource' ? 'var(--color-text)' : 'var(--color-text-muted)',
             }}
           >
@@ -285,7 +292,10 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
             fontSize: 13,
           }}
         >
-          <RefreshCw size={16} style={{ animation: loading ? 'km-spin 0.9s linear infinite' : undefined }} />
+          <RefreshCw
+            size={16}
+            style={{ animation: loading ? 'km-spin 0.9s linear infinite' : undefined }}
+          />
           {t('acl.refresh')}
         </button>
       </header>
@@ -296,15 +306,16 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
             marginBottom: 'var(--space-4)',
             padding: 'var(--space-3) var(--space-4)',
             borderRadius: 'var(--radius-md)',
-            border: error === 'ERR_ACL_NOT_SUPPORTED'
-              ? '1px solid var(--color-border)'
-              : '1px solid rgba(239, 68, 68, 0.45)',
-            background: error === 'ERR_ACL_NOT_SUPPORTED'
-              ? 'var(--color-surface-2)'
-              : 'rgba(239, 68, 68, 0.1)',
-            color: error === 'ERR_ACL_NOT_SUPPORTED'
-              ? 'var(--color-text-muted)'
-              : 'var(--color-error)',
+            border:
+              error === 'ERR_ACL_NOT_SUPPORTED'
+                ? '1px solid var(--color-border)'
+                : '1px solid rgba(239, 68, 68, 0.45)',
+            background:
+              error === 'ERR_ACL_NOT_SUPPORTED'
+                ? 'var(--color-surface-2)'
+                : 'rgba(239, 68, 68, 0.1)',
+            color:
+              error === 'ERR_ACL_NOT_SUPPORTED' ? 'var(--color-text-muted)' : 'var(--color-error)',
             fontSize: 13,
             whiteSpace: 'pre-wrap',
           }}
@@ -323,7 +334,10 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
       >
         {loading && rows.length === 0 ? (
           <div style={{ padding: 48, textAlign: 'center', color: 'var(--color-text-muted)' }}>
-            <Loader2 size={28} style={{ animation: 'km-spin 0.9s linear infinite', display: 'inline-block' }} />
+            <Loader2
+              size={28}
+              style={{ animation: 'km-spin 0.9s linear infinite', display: 'inline-block' }}
+            />
           </div>
         ) : grouped.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 48, color: 'var(--color-text-faint)' }}>
@@ -390,10 +404,18 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
                       }}
                       className="km-acl-row"
                     >
-                      <td style={{ padding: '9px 12px', fontFamily: 'var(--font-heading)', fontSize: 12 }}>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 12,
+                        }}
+                      >
                         {r.principal}
                       </td>
-                      <td style={{ padding: '9px 12px', color: 'var(--color-text-muted)' }}>{r.resourceType}</td>
+                      <td style={{ padding: '9px 12px', color: 'var(--color-text-muted)' }}>
+                        {r.resourceType}
+                      </td>
                       <td
                         style={{
                           padding: '9px 12px',
@@ -405,7 +427,13 @@ export function AclListPanel({ clusterId }: { clusterId: string }) {
                         {r.resourceName}
                       </td>
                       <td style={{ padding: '9px 12px' }}>{r.patternType}</td>
-                      <td style={{ padding: '9px 12px', fontFamily: 'var(--font-heading)', fontSize: 12 }}>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 12,
+                        }}
+                      >
                         {r.operation}
                       </td>
                       <td style={{ padding: '9px 12px' }}>

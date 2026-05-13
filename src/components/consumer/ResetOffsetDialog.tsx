@@ -7,12 +7,7 @@ import { AlertTriangle, Loader2, X } from 'lucide-react';
 import { useT } from '../../i18n';
 import type { TranslationKey } from '../../i18n';
 
-export type ResetStrategy =
-  | 'earliest'
-  | 'latest'
-  | 'datetime'
-  | 'specific'
-  | 'shift';
+export type ResetStrategy = 'earliest' | 'latest' | 'datetime' | 'specific' | 'shift';
 
 export interface ResetOffsetDialogProps {
   open: boolean;
@@ -50,12 +45,20 @@ const inputStyle: CSSProperties = {
   outline: 'none',
 };
 
-function toBackendParams(strategy: ResetStrategy, datetime: string, partitionOffsets: string, shiftN: string) {
+function toBackendParams(
+  strategy: ResetStrategy,
+  datetime: string,
+  partitionOffsets: string,
+  shiftN: string,
+) {
   const backendStrategy =
-    strategy === 'datetime' ? 'timestamp' :
-    strategy === 'specific' ? 'offset' :
-    strategy === 'shift' ? 'offset' :
-    strategy;
+    strategy === 'datetime'
+      ? 'timestamp'
+      : strategy === 'specific'
+        ? 'offset'
+        : strategy === 'shift'
+          ? 'offset'
+          : strategy;
   let value: number | null = null;
   if (strategy === 'datetime' && datetime) {
     value = new Date(datetime).getTime();
@@ -130,7 +133,12 @@ export function ResetOffsetDialog({
 
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      const { backendStrategy, value } = toBackendParams(strategy, datetime, partitionOffsets, shiftN);
+      const { backendStrategy, value } = toBackendParams(
+        strategy,
+        datetime,
+        partitionOffsets,
+        shiftN,
+      );
       setPreviewing(true);
       setSubmitErr(null);
       invoke<PreviewRow[]>('preview_reset_offsets', {
@@ -145,7 +153,13 @@ export function ResetOffsetDialog({
           setPreviewLoaded(true);
         })
         .catch((e) => {
-          setSubmitErr(typeof e === 'string' ? e : e instanceof Error ? e.message : t('resetOffset.previewFailed'));
+          setSubmitErr(
+            typeof e === 'string'
+              ? e
+              : e instanceof Error
+                ? e.message
+                : t('resetOffset.previewFailed'),
+          );
         })
         .finally(() => {
           setPreviewing(false);
@@ -157,9 +171,10 @@ export function ResetOffsetDialog({
 
   if (!open) return null;
 
-  const topicOptions = topics.length > 0
-    ? topics.map((topic) => ({ label: topic, value: topic }))
-    : [{ label: t('resetOffset.noTopicsAvailable'), value: '' }];
+  const topicOptions =
+    topics.length > 0
+      ? topics.map((topic) => ({ label: topic, value: topic }))
+      : [{ label: t('resetOffset.noTopicsAvailable'), value: '' }];
 
   const handleConfirm = async () => {
     setSubmitting(true);
@@ -178,7 +193,12 @@ export function ResetOffsetDialog({
         if (!targetTopic) {
           throw new Error(t('resetOffset.selectTopicError'));
         }
-        const { backendStrategy, value } = toBackendParams(strategy, datetime, partitionOffsets, shiftN);
+        const { backendStrategy, value } = toBackendParams(
+          strategy,
+          datetime,
+          partitionOffsets,
+          shiftN,
+        );
         await invoke('reset_consumer_group_offsets', {
           clusterId,
           groupId,
@@ -190,7 +210,9 @@ export function ResetOffsetDialog({
       onClose();
     } catch (e) {
       console.warn('[ResetOffsetDialog]', e);
-      setSubmitErr(typeof e === 'string' ? e : e instanceof Error ? e.message : t('resetOffset.resetFailed'));
+      setSubmitErr(
+        typeof e === 'string' ? e : e instanceof Error ? e.message : t('resetOffset.resetFailed'),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -241,12 +263,21 @@ export function ResetOffsetDialog({
           }}
         >
           <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 600, marginBottom: 6 }}>
+            <h2
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 15,
+                fontWeight: 600,
+                marginBottom: 6,
+              }}
+            >
               {t('resetOffset.title')}
             </h2>
             <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
               {t('resetOffset.groupLabel')}:{' '}
-              <span style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-text)' }}>{groupId}</span>
+              <span style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-text)' }}>
+                {groupId}
+              </span>
             </p>
           </div>
           <button
@@ -262,8 +293,12 @@ export function ResetOffsetDialog({
               display: 'flex',
               transition: 'color var(--transition-fast)',
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-text)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-faint)'; }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text-faint)';
+            }}
           >
             <X size={18} strokeWidth={2} />
           </button>
@@ -271,14 +306,26 @@ export function ResetOffsetDialog({
 
         <div style={{ padding: 'var(--space-5)', overflowY: 'auto', flex: 1 }}>
           <div style={{ marginBottom: 'var(--space-4)' }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 8 }}>
+            <label
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--color-text-muted)',
+                display: 'block',
+                marginBottom: 8,
+              }}
+            >
               {t('resetOffset.topic')}
             </label>
             <select
               value={targetTopic}
               onChange={(e) => setTargetTopic(e.target.value)}
               aria-label={t('resetOffset.selectTopic')}
-              style={{ ...inputStyle, cursor: 'pointer', transition: 'border-color var(--transition-fast)' }}
+              style={{
+                ...inputStyle,
+                cursor: 'pointer',
+                transition: 'border-color var(--transition-fast)',
+              }}
             >
               {topicOptions.map((o) => (
                 <option key={o.value || o.label} value={o.value}>
@@ -288,7 +335,14 @@ export function ResetOffsetDialog({
             </select>
           </div>
 
-          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', marginBottom: 'var(--space-2)' }}>
+          <p
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              marginBottom: 'var(--space-2)',
+            }}
+          >
             {t('resetOffset.strategy')}
           </p>
 
@@ -376,12 +430,25 @@ export function ResetOffsetDialog({
               lineHeight: 1.5,
             }}
           >
-            <AlertTriangle size={18} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} aria-hidden />
+            <AlertTriangle
+              size={18}
+              strokeWidth={2}
+              style={{ flexShrink: 0, marginTop: 2 }}
+              aria-hidden
+            />
             <span>{t('resetOffset.warning')}</span>
           </div>
 
           {/* Preview table - header always visible, data auto-loaded */}
-          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', marginTop: 'var(--space-4)', marginBottom: 8 }}>
+          <p
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              marginTop: 'var(--space-4)',
+              marginBottom: 8,
+            }}
+          >
             {t('resetOffset.preview')}
           </p>
           <div
@@ -392,9 +459,19 @@ export function ResetOffsetDialog({
               overflow: 'auto',
             }}
           >
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }} aria-label={t('resetOffset.preview')}>
+            <table
+              style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}
+              aria-label={t('resetOffset.preview')}
+            >
               <thead>
-                <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
+                <tr
+                  style={{
+                    background: 'var(--color-surface)',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                  }}
+                >
                   {PREVIEW_HEADERS.map(({ key, align }) => (
                     <th
                       key={key}
@@ -416,8 +493,20 @@ export function ResetOffsetDialog({
                 {previewing ? (
                   <tr>
                     <td colSpan={5} style={{ padding: 20, textAlign: 'center' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'var(--color-text-muted)', fontSize: 12 }}>
-                        <Loader2 size={14} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} />
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 8,
+                          color: 'var(--color-text-muted)',
+                          fontSize: 12,
+                        }}
+                      >
+                        <Loader2
+                          size={14}
+                          strokeWidth={2}
+                          style={{ animation: 'km-spin 1s linear infinite' }}
+                        />
                         {t('resetOffset.previewLoading')}
                       </span>
                     </td>
@@ -428,36 +517,91 @@ export function ResetOffsetDialog({
                       key={`${row.topic}-${row.partition}`}
                       style={{ background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)' }}
                     >
-                      <td style={{ padding: '7px 10px', fontFamily: 'var(--font-heading)' }}>{row.topic}</td>
-                      <td style={{ padding: '7px 10px', textAlign: 'right', fontFamily: 'var(--font-heading)', color: 'var(--color-text-muted)' }}>
+                      <td style={{ padding: '7px 10px', fontFamily: 'var(--font-heading)' }}>
+                        {row.topic}
+                      </td>
+                      <td
+                        style={{
+                          padding: '7px 10px',
+                          textAlign: 'right',
+                          fontFamily: 'var(--font-heading)',
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
                         {row.partition}
                       </td>
-                      <td style={{ padding: '7px 10px', textAlign: 'right', fontFamily: 'var(--font-heading)', color: 'var(--color-text-muted)' }}>
+                      <td
+                        style={{
+                          padding: '7px 10px',
+                          textAlign: 'right',
+                          fontFamily: 'var(--font-heading)',
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
                         {row.current_offset >= 0 ? row.current_offset.toLocaleString() : '—'}
                       </td>
-                      <td style={{ padding: '7px 10px', textAlign: 'right', fontFamily: 'var(--font-heading)', fontWeight: 700, color: 'var(--color-primary)' }}>
+                      <td
+                        style={{
+                          padding: '7px 10px',
+                          textAlign: 'right',
+                          fontFamily: 'var(--font-heading)',
+                          fontWeight: 700,
+                          color: 'var(--color-primary)',
+                        }}
+                      >
                         {row.target_offset.toLocaleString()}
                       </td>
-                      <td style={{ padding: '7px 10px', textAlign: 'right', fontFamily: 'var(--font-heading)', color: 'var(--color-text-faint)' }}>
+                      <td
+                        style={{
+                          padding: '7px 10px',
+                          textAlign: 'right',
+                          fontFamily: 'var(--font-heading)',
+                          color: 'var(--color-text-faint)',
+                        }}
+                      >
                         {row.end_offset.toLocaleString()}
                       </td>
                     </tr>
                   ))
                 ) : previewLoaded ? (
                   <tr>
-                    <td colSpan={5} style={{ padding: 16, textAlign: 'center', color: 'var(--color-text-faint)', fontSize: 12 }}>
+                    <td
+                      colSpan={5}
+                      style={{
+                        padding: 16,
+                        textAlign: 'center',
+                        color: 'var(--color-text-faint)',
+                        fontSize: 12,
+                      }}
+                    >
                       {t('resetOffset.noPartitionData')}
                     </td>
                   </tr>
                 ) : !targetTopic ? (
                   <tr>
-                    <td colSpan={5} style={{ padding: 16, textAlign: 'center', color: 'var(--color-text-faint)', fontSize: 12 }}>
+                    <td
+                      colSpan={5}
+                      style={{
+                        padding: 16,
+                        textAlign: 'center',
+                        color: 'var(--color-text-faint)',
+                        fontSize: 12,
+                      }}
+                    >
                       {t('resetOffset.selectTopicFirst')}
                     </td>
                   </tr>
                 ) : (
                   <tr>
-                    <td colSpan={5} style={{ padding: 16, textAlign: 'center', color: 'var(--color-text-faint)', fontSize: 12 }}>
+                    <td
+                      colSpan={5}
+                      style={{
+                        padding: 16,
+                        textAlign: 'center',
+                        color: 'var(--color-text-faint)',
+                        fontSize: 12,
+                      }}
+                    >
                       {t('resetOffset.previewAutoHint')}
                     </td>
                   </tr>
@@ -518,7 +662,13 @@ export function ResetOffsetDialog({
               gap: 8,
             }}
           >
-            {submitting && <Loader2 size={16} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} />}
+            {submitting && (
+              <Loader2
+                size={16}
+                strokeWidth={2}
+                style={{ animation: 'km-spin 1s linear infinite' }}
+              />
+            )}
             {t('resetOffset.confirmReset')}
           </button>
         </div>

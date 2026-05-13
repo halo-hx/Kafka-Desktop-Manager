@@ -4,10 +4,22 @@ import tsparser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import prettier from 'eslint-config-prettier';
+import globals from 'globals';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', 'src-tauri/**', 'dist-ssr/**', '*.config.ts', '*.config.js'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'src-tauri/**',
+      'dist-ssr/**',
+      'e2e/**',
+      'playwright.config.ts',
+      '*.config.ts',
+      '*.config.js',
+      'design-system/**',
+      'public/**',
+    ],
   },
   js.configs.recommended,
   {
@@ -20,16 +32,8 @@ export default [
         ecmaFeatures: { jsx: true },
       },
       globals: {
-        window: 'readonly',
-        document: 'readonly',
-        console: 'readonly',
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        fetch: 'readonly',
-        localStorage: 'readonly',
-        sessionStorage: 'readonly',
+        ...globals.browser,
+        ...globals.es2021,
       },
     },
     plugins: {
@@ -43,8 +47,11 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'react/display-name': 'off',
+      'no-undef': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
     },
     settings: {
       react: { version: 'detect' },

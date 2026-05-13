@@ -27,25 +27,26 @@ const backdrop: React.CSSProperties = {
 
 function StepIndicator({ step, labels }: { step: number; labels: string[] }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, flexWrap: 'wrap' }}>
+    <div
+      style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, flexWrap: 'wrap' }}
+    >
       {labels.map((lb, i) => {
         const n = i + 1;
         const active = step === n;
         const done = step > n;
         return (
           <React.Fragment key={lb}>
-            {i > 0 && (
-              <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}>
-                {' '}
-                →{' '}
-              </span>
-            )}
+            {i > 0 && <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}> → </span>}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                color: active ? 'var(--color-primary)' : done ? 'var(--color-text-muted)' : 'var(--color-text-faint)',
+                color: active
+                  ? 'var(--color-primary)'
+                  : done
+                    ? 'var(--color-text-muted)'
+                    : 'var(--color-text-faint)',
                 fontSize: 13,
               }}
             >
@@ -140,7 +141,11 @@ export function ExportTopicDataDialog({
   );
 
   const stepLabels = useMemo(
-    () => [t('dataExport.stepPickSource'), t('dataExport.stepFormat'), t('dataExport.stepConfirmRun')],
+    () => [
+      t('dataExport.stepPickSource'),
+      t('dataExport.stepFormat'),
+      t('dataExport.stepConfirmRun'),
+    ],
     [t],
   );
 
@@ -229,9 +234,19 @@ export function ExportTopicDataDialog({
   } | null => {
     switch (rangeChoice) {
       case 'oldest_n':
-        return { range_mode: 'oldest', count: Math.max(1, countLimit), offset_start: null, timestamp_ms: null };
+        return {
+          range_mode: 'oldest',
+          count: Math.max(1, countLimit),
+          offset_start: null,
+          timestamp_ms: null,
+        };
       case 'newest_n':
-        return { range_mode: 'newest', count: Math.max(1, countLimit), offset_start: null, timestamp_ms: null };
+        return {
+          range_mode: 'newest',
+          count: Math.max(1, countLimit),
+          offset_start: null,
+          timestamp_ms: null,
+        };
       case 'all':
         return {
           range_mode: 'oldest',
@@ -275,7 +290,8 @@ export function ExportTopicDataDialog({
 
   const validateStep2 = (): string | null => {
     if (!targetDir) return t('dataExport.errPickDir');
-    if (!includeKey && !includeValue && !includeHeaders) return t('dataExport.errPickExportContent');
+    if (!includeKey && !includeValue && !includeHeaders)
+      return t('dataExport.errPickExportContent');
     return null;
   };
 
@@ -356,8 +372,7 @@ export function ExportTopicDataDialog({
 
   if (!openDlg) return null;
 
-  const canNext =
-    step === 1 ? !validateStep1() : step === 2 ? !validateStep2() : true;
+  const canNext = step === 1 ? !validateStep1() : step === 2 ? !validateStep2() : true;
 
   return (
     <div
@@ -459,7 +474,10 @@ export function ExportTopicDataDialog({
                 {partitionMode === 'specific' && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 8 }}>
                     {partitionList.map((p) => (
-                      <label key={p} style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 12 }}>
+                      <label
+                        key={p}
+                        style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 12 }}
+                      >
                         <input
                           type="checkbox"
                           checked={!!partitionChecks[p]}
@@ -490,7 +508,9 @@ export function ExportTopicDataDialog({
                 </select>
               </label>
 
-              {(rangeChoice === 'oldest_n' || rangeChoice === 'newest_n' || rangeChoice === 'time_range') && (
+              {(rangeChoice === 'oldest_n' ||
+                rangeChoice === 'newest_n' ||
+                rangeChoice === 'time_range') && (
                 <label style={lab}>
                   {t('dataExport.countLimit')}
                   <input
@@ -520,7 +540,11 @@ export function ExportTopicDataDialog({
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   <label style={{ ...lab, flex: '1 1 160px' }}>
                     {t('dataExport.startOffset')}
-                    <input value={offsetStart} onChange={(e) => setOffsetStart(e.target.value)} style={inp} />
+                    <input
+                      value={offsetStart}
+                      onChange={(e) => setOffsetStart(e.target.value)}
+                      style={inp}
+                    />
                   </label>
                   <label style={{ ...lab, flex: '1 1 160px' }}>
                     {t('dataExport.rowCountShort')}
@@ -539,11 +563,23 @@ export function ExportTopicDataDialog({
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   <label style={{ ...lab, flex: '1 1 200px' }}>
                     {t('dataExport.startTime')}
-                    <input type="datetime-local" step={1} value={timeStart} onChange={(e) => setTimeStart(e.target.value)} style={inp} />
+                    <input
+                      type="datetime-local"
+                      step={1}
+                      value={timeStart}
+                      onChange={(e) => setTimeStart(e.target.value)}
+                      style={inp}
+                    />
                   </label>
                   <label style={{ ...lab, flex: '1 1 200px' }}>
                     {t('dataExport.endTimeOptional')}
-                    <input type="datetime-local" step={1} value={timeEnd} onChange={(e) => setTimeEnd(e.target.value)} style={inp} />
+                    <input
+                      type="datetime-local"
+                      step={1}
+                      value={timeEnd}
+                      onChange={(e) => setTimeEnd(e.target.value)}
+                      style={inp}
+                    />
                   </label>
                 </div>
               )}
@@ -552,15 +588,19 @@ export function ExportTopicDataDialog({
 
           {step === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('dataExport.stepFormat')}</span>
+              <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                {t('dataExport.stepFormat')}
+              </span>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button
                   type="button"
                   onClick={() => setFormat('jsonl')}
                   style={{
                     ...fmtBtn,
-                    borderColor: format === 'jsonl' ? 'var(--color-primary)' : 'var(--color-border)',
-                    background: format === 'jsonl' ? 'var(--color-primary-muted)' : 'var(--color-bg)',
+                    borderColor:
+                      format === 'jsonl' ? 'var(--color-primary)' : 'var(--color-border)',
+                    background:
+                      format === 'jsonl' ? 'var(--color-primary-muted)' : 'var(--color-bg)',
                   }}
                 >
                   <FileJson size={18} /> {t('msgExport.jsonLines')}
@@ -581,23 +621,45 @@ export function ExportTopicDataDialog({
               <fieldset style={fs}>
                 <legend style={leg}>{t('dataExport.contentFields')}</legend>
                 <label style={ck}>
-                  <input type="checkbox" checked={includeKey} onChange={(e) => setIncludeKey(e.target.checked)} style={{ accentColor: 'var(--color-primary)' }} />
+                  <input
+                    type="checkbox"
+                    checked={includeKey}
+                    onChange={(e) => setIncludeKey(e.target.checked)}
+                    style={{ accentColor: 'var(--color-primary)' }}
+                  />
                   {t('messages.key')}
                 </label>
                 <label style={ck}>
-                  <input type="checkbox" checked={includeValue} onChange={(e) => setIncludeValue(e.target.checked)} style={{ accentColor: 'var(--color-primary)' }} />
+                  <input
+                    type="checkbox"
+                    checked={includeValue}
+                    onChange={(e) => setIncludeValue(e.target.checked)}
+                    style={{ accentColor: 'var(--color-primary)' }}
+                  />
                   {t('messages.value')}
                 </label>
                 <label style={ck}>
-                  <input type="checkbox" checked={includeHeaders} onChange={(e) => setIncludeHeaders(e.target.checked)} style={{ accentColor: 'var(--color-primary)' }} />
+                  <input
+                    type="checkbox"
+                    checked={includeHeaders}
+                    onChange={(e) => setIncludeHeaders(e.target.checked)}
+                    style={{ accentColor: 'var(--color-primary)' }}
+                  />
                   {t('messages.headers')}
                 </label>
               </fieldset>
 
               <div>
-                <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('dataExport.targetDir')}</span>
+                <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                  {t('dataExport.targetDir')}
+                </span>
                 <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-                  <input readOnly value={targetDir ?? ''} placeholder={t('dataExport.notSelected')} style={{ ...inp, flex: 1 }} />
+                  <input
+                    readOnly
+                    value={targetDir ?? ''}
+                    placeholder={t('dataExport.notSelected')}
+                    style={{ ...inp, flex: 1 }}
+                  />
                   <button type="button" onClick={() => void pickDirectory()} style={btnSecondary}>
                     {t('dataExport.browseEllipsis')}
                   </button>
@@ -615,7 +677,9 @@ export function ExportTopicDataDialog({
                 </div>
                 <div>
                   <strong>{t('dataExport.summaryPartition')}</strong>
-                  {partitionMode === 'all' ? t('dataExport.partitionAllLabel') : (selectedPartitions ?? []).join(', ')}
+                  {partitionMode === 'all'
+                    ? t('dataExport.partitionAllLabel')
+                    : (selectedPartitions ?? []).join(', ')}
                 </div>
                 <div>
                   <strong>{t('dataExport.summaryRange')}</strong>
@@ -651,7 +715,9 @@ export function ExportTopicDataDialog({
                       }}
                     />
                   </div>
-                  <p style={{ marginTop: 8, fontSize: 12, color: 'var(--color-text-faint)' }}>{progress}%</p>
+                  <p style={{ marginTop: 8, fontSize: 12, color: 'var(--color-text-faint)' }}>
+                    {progress}%
+                  </p>
                 </div>
               )}
 
@@ -666,14 +732,31 @@ export function ExportTopicDataDialog({
                   }}
                 >
                   <div>{t('dataExport.done')}</div>
-                  <div style={{ marginTop: 6 }}>{t('dataExport.msgCount')}{resultRows}</div>
-                  <div>{t('dataExport.bytesApprox', { bytes: (resultBytes ?? 0).toLocaleString() })}</div>
-                  {resultMsg && <div style={{ marginTop: 6, wordBreak: 'break-all', fontSize: 11 }}>{resultMsg}</div>}
+                  <div style={{ marginTop: 6 }}>
+                    {t('dataExport.msgCount')}
+                    {resultRows}
+                  </div>
+                  <div>
+                    {t('dataExport.bytesApprox', { bytes: (resultBytes ?? 0).toLocaleString() })}
+                  </div>
+                  {resultMsg && (
+                    <div style={{ marginTop: 6, wordBreak: 'break-all', fontSize: 11 }}>
+                      {resultMsg}
+                    </div>
+                  )}
                 </div>
               )}
 
               {err && (
-                <div style={{ padding: 10, borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', color: 'var(--color-error)', fontSize: 12 }}>
+                <div
+                  style={{
+                    padding: 10,
+                    borderRadius: 'var(--radius-sm)',
+                    background: 'rgba(239,68,68,0.12)',
+                    color: 'var(--color-error)',
+                    fontSize: 12,
+                  }}
+                >
                   {err}
                 </div>
               )}
@@ -681,14 +764,23 @@ export function ExportTopicDataDialog({
           )}
 
           {validateStep1() && step === 1 && (
-            <p style={{ color: 'var(--color-error)', fontSize: 12, marginTop: 8 }}>{validateStep1()}</p>
+            <p style={{ color: 'var(--color-error)', fontSize: 12, marginTop: 8 }}>
+              {validateStep1()}
+            </p>
           )}
           {validateStep2() && step === 2 && (
-            <p style={{ color: 'var(--color-error)', fontSize: 12, marginTop: 8 }}>{validateStep2()}</p>
+            <p style={{ color: 'var(--color-error)', fontSize: 12, marginTop: 8 }}>
+              {validateStep2()}
+            </p>
           )}
 
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
-            <button type="button" disabled={running || step === 1} onClick={() => setStep((s) => s - 1)} style={btnSecondary}>
+            <button
+              type="button"
+              disabled={running || step === 1}
+              onClick={() => setStep((s) => s - 1)}
+              style={btnSecondary}
+            >
               {t('dataExport.prev')}
             </button>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -761,8 +853,19 @@ const fs: React.CSSProperties = {
   borderRadius: 'var(--radius-sm)',
   padding: 12,
 };
-const leg: React.CSSProperties = { fontSize: 12, color: 'var(--color-text-muted)', padding: '0 6px' };
-const ck: React.CSSProperties = { display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, cursor: 'pointer', color: 'var(--color-text)' };
+const leg: React.CSSProperties = {
+  fontSize: 12,
+  color: 'var(--color-text-muted)',
+  padding: '0 6px',
+};
+const ck: React.CSSProperties = {
+  display: 'flex',
+  gap: 8,
+  alignItems: 'center',
+  fontSize: 13,
+  cursor: 'pointer',
+  color: 'var(--color-text)',
+};
 const fmtBtn: React.CSSProperties = {
   flex: 1,
   padding: '12px 16px',

@@ -100,7 +100,7 @@ fn assign_and_seek(
 
     let count_usize = usize::try_from(count).unwrap_or(usize::MAX).max(1);
     let n = pids.len().max(1);
-    let per_partition_tail: i64 = ((count_usize + n - 1) / n).max(1) as i64;
+    let per_partition_tail: i64 = (count_usize.div_ceil(n)).max(1) as i64;
 
     let mut tpl = TopicPartitionList::new();
 
@@ -120,7 +120,8 @@ fn assign_and_seek(
             }
         }
         "timestamp" => {
-            let ts = timestamp_ms.ok_or_else(|| "timestamp_ms required in timestamp mode".to_string())?;
+            let ts = timestamp_ms
+                .ok_or_else(|| "timestamp_ms required in timestamp mode".to_string())?;
             let mut tpt = TopicPartitionList::new();
             for p in &pids {
                 let _ = tpt.add_partition_offset(topic, *p, Offset::Offset(ts));
@@ -194,17 +195,21 @@ fn fetch_messages_blocking(
     let mut rows: Vec<Value> = Vec::with_capacity(want.min(256));
     let mut eof_count = 0usize;
     let partition_count = {
-        let md = consumer.fetch_metadata(Some(&topic), KAFKA_RPC_TIMEOUT).map_err(|e| e.to_string())?;
-        md.topics().first().map(|t| t.partitions().len()).unwrap_or(1)
+        let md = consumer
+            .fetch_metadata(Some(&topic), KAFKA_RPC_TIMEOUT)
+            .map_err(|e| e.to_string())?;
+        md.topics()
+            .first()
+            .map(|t| t.partitions().len())
+            .unwrap_or(1)
     };
 
     while rows.len() < want && Instant::now() < deadline {
         match consumer.poll(Duration::from_millis(500)) {
-            Some(Ok(msg)) => {
-                if msg.topic() == topic.as_str() {
-                    rows.push(borrowed_message_to_value(&msg));
-                }
+            Some(Ok(msg)) if msg.topic() == topic.as_str() => {
+                rows.push(borrowed_message_to_value(&msg));
             }
+            Some(Ok(_)) => {}
             Some(Err(rdkafka::error::KafkaError::PartitionEOF(p))) => {
                 log::debug!("Partition {p} EOF reached");
                 eof_count += 1;
@@ -232,10 +237,18 @@ pub async fn fetch_messages(
     timestamp_ms: Option<i64>,
     db: State<'_, Database>,
 ) -> Result<Vec<Value>, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let mode = range_mode.unwrap_or_else(|| "newest".into());
     tokio::task::spawn_blocking(move || {
-        fetch_messages_blocking(conn, topic, partition, offset_start, count, mode, timestamp_ms)
+        fetch_messages_blocking(
+            conn,
+            topic,
+            partition,
+            offset_start,
+            count,
+            mode,
+            timestamp_ms,
+        )
     })
     .await
     .map_err(|e| e.to_string())?
@@ -251,7 +264,7 @@ pub async fn send_message(
     headers: Option<HashMap<String, String>>,
     db: State<'_, Database>,
 ) -> Result<Value, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
 
     let mut cfg = create_kafka_config(&conn);
     cfg.set("message.timeout.ms", "60000");
@@ -272,9 +285,7 @@ pub async fn send_message(
     let key_s = key.unwrap_or_default();
     let val_s = value.unwrap_or_default();
 
-    let mut record = FutureRecord::to(topic.as_str())
-        .key(&key_s)
-        .payload(&val_s);
+    let mut record = FutureRecord::to(topic.as_str()).key(&key_s).payload(&val_s);
     if has_headers {
         record = record.headers(oh);
     }

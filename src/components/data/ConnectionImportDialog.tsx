@@ -56,7 +56,13 @@ function normalizeImported(row: unknown): Partial<ClusterConnection> | null {
   };
 }
 
-export function ConnectionImportDialog({ open: openDlg, onClose }: { open: boolean; onClose: () => void }) {
+export function ConnectionImportDialog({
+  open: openDlg,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const t = useT();
   const connections = useConnectionStore((s) => s.connections);
 
@@ -170,7 +176,12 @@ export function ConnectionImportDialog({ open: openDlg, onClose }: { open: boole
   if (!openDlg) return null;
 
   return (
-    <div role="dialog" aria-modal="true" style={backdrop} onMouseDown={(e) => e.target === e.currentTarget && !busy && onClose()}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      style={backdrop}
+      onMouseDown={(e) => e.target === e.currentTarget && !busy && onClose()}
+    >
       <div
         style={{
           width: 'min(520px, 92vw)',
@@ -183,24 +194,59 @@ export function ConnectionImportDialog({ open: openDlg, onClose }: { open: boole
         }}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div style={{ padding: 'var(--space-4)', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div
+          style={{
+            padding: 'var(--space-4)',
+            borderBottom: '1px solid var(--color-border-subtle)',
+            display: 'flex',
+            gap: 10,
+            alignItems: 'center',
+          }}
+        >
           <Upload size={20} color="var(--color-primary)" />
           <h2 style={{ flex: 1, margin: 0, fontSize: 16 }}>{t('connImport.title')}</h2>
-          <button type="button" disabled={busy} onClick={onClose} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--color-text-faint)' }}>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onClose}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              color: 'var(--color-text-faint)',
+            }}
+          >
             <X size={18} />
           </button>
         </div>
-        <div style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div
+          style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}
+        >
           <div style={{ display: 'flex', gap: 8 }}>
-            <input readOnly value={filePath ?? ''} placeholder={t('connImport.filePlaceholder')} style={{ ...inp, flex: 1 }} />
-            <button type="button" onClick={() => void pickFile()} disabled={busy} style={btnSecondary}>
+            <input
+              readOnly
+              value={filePath ?? ''}
+              placeholder={t('connImport.filePlaceholder')}
+              style={{ ...inp, flex: 1 }}
+            />
+            <button
+              type="button"
+              onClick={() => void pickFile()}
+              disabled={busy}
+              style={btnSecondary}
+            >
               {t('connImport.browseEllipsis')}
             </button>
           </div>
 
           <label style={lab}>
             {t('connImport.conflictWhen')}
-            <select value={policy} onChange={(e) => setPolicy(e.target.value as ConflictPolicy)} style={inp} disabled={busy}>
+            <select
+              value={policy}
+              onChange={(e) => setPolicy(e.target.value as ConflictPolicy)}
+              style={inp}
+              disabled={busy}
+            >
               <option value="skip">{t('connImport.policySkipLabel')}</option>
               <option value="override">{t('connImport.policyOverrideLabel')}</option>
               <option value="rename">{t('connImport.policyRenameLabel')}</option>
@@ -208,13 +254,29 @@ export function ConnectionImportDialog({ open: openDlg, onClose }: { open: boole
           </label>
 
           {parseErr && (
-            <div style={{ padding: 10, borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', color: 'var(--color-error)', fontSize: 12 }}>
+            <div
+              style={{
+                padding: 10,
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(239,68,68,0.12)',
+                color: 'var(--color-error)',
+                fontSize: 12,
+              }}
+            >
               {parseErr}
             </div>
           )}
 
-          <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('connImport.preview')}</div>
-          <div style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+          <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+            {t('connImport.preview')}
+          </div>
+          <div
+            style={{
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-sm)',
+              overflow: 'hidden',
+            }}
+          >
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
                 <tr style={{ background: 'var(--color-bg)' }}>
@@ -227,8 +289,19 @@ export function ConnectionImportDialog({ open: openDlg, onClose }: { open: boole
                 {conflictLines.map(({ row, exists }, idx) => (
                   <tr key={idx}>
                     <td style={td}>{row.name}</td>
-                    <td style={{ ...td, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.bootstrapServers}</td>
-                    <td style={{ ...td, color: exists ? 'var(--color-warning)' : 'var(--color-text-faint)' }}>{exists ? t('connImport.conflictYes') : t('connImport.conflictNo')}</td>
+                    <td
+                      style={{ ...td, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}
+                    >
+                      {row.bootstrapServers}
+                    </td>
+                    <td
+                      style={{
+                        ...td,
+                        color: exists ? 'var(--color-warning)' : 'var(--color-text-faint)',
+                      }}
+                    >
+                      {exists ? t('connImport.conflictYes') : t('connImport.conflictNo')}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -262,9 +335,23 @@ const inp: React.CSSProperties = {
   border: '1px solid var(--color-border)',
   borderRadius: 'var(--radius-sm)',
 };
-const lab: React.CSSProperties = { fontSize: 12, color: 'var(--color-text-faint)', display: 'flex', flexDirection: 'column', gap: 6 };
-const th: React.CSSProperties = { padding: '6px 10px', textAlign: 'left', color: 'var(--color-text-faint)', fontWeight: 600 };
-const td: React.CSSProperties = { padding: '6px 10px', borderTop: '1px solid var(--color-border-subtle)' };
+const lab: React.CSSProperties = {
+  fontSize: 12,
+  color: 'var(--color-text-faint)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 6,
+};
+const th: React.CSSProperties = {
+  padding: '6px 10px',
+  textAlign: 'left',
+  color: 'var(--color-text-faint)',
+  fontWeight: 600,
+};
+const td: React.CSSProperties = {
+  padding: '6px 10px',
+  borderTop: '1px solid var(--color-border-subtle)',
+};
 const btnSecondary: React.CSSProperties = {
   padding: '8px 14px',
   background: 'var(--color-bg)',

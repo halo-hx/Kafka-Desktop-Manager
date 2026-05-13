@@ -2,7 +2,10 @@
  * KafkaManager 主布局 — 侧栏 + 标签栏 + 面板路由
  */
 import React, { useEffect } from 'react';
-import { ConnectionDialogProvider, useConnectionDialogContext } from './contexts/connectionDialogContext';
+import {
+  ConnectionDialogProvider,
+  useConnectionDialogContext,
+} from './contexts/connectionDialogContext';
 import { DataDialogProvider } from './contexts/dataDialogContext';
 import { ConnectionDialog } from './components/cluster/ConnectionDialog';
 import { ClusterSidebar } from './components/sidebar/ClusterSidebar';
@@ -137,9 +140,12 @@ function AppInner() {
   const language = useUIStore((s) => s.language);
 
   useEffect(() => {
-    const resolved = theme === 'system'
-      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-      : theme;
+    const resolved =
+      theme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : theme;
     document.documentElement.setAttribute('data-theme', resolved);
 
     if (theme === 'system') {
@@ -161,7 +167,12 @@ function AppInner() {
       <GlobalKeyboardHandler />
       <CommandPalette />
       <div
-        style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--color-bg)' }}
+        style={{
+          display: 'flex',
+          height: '100vh',
+          overflow: 'hidden',
+          background: 'var(--color-bg)',
+        }}
       >
         <a href="#main-content" className="skip-link">
           {t('app.skipToMain')}

@@ -213,7 +213,10 @@ export function SchemaListPanel({ clusterId }: { clusterId: string }) {
               fontSize: 13,
             }}
           >
-            <RefreshCw size={16} style={{ animation: loading ? 'km-spin 0.9s linear infinite' : undefined }} />
+            <RefreshCw
+              size={16}
+              style={{ animation: loading ? 'km-spin 0.9s linear infinite' : undefined }}
+            />
             {t('schema.refresh')}
           </button>
         </div>
@@ -275,7 +278,10 @@ export function SchemaListPanel({ clusterId }: { clusterId: string }) {
           <tbody>
             {loading && filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: 48, textAlign: 'center', color: 'var(--color-text-muted)' }}>
+                <td
+                  colSpan={5}
+                  style={{ padding: 48, textAlign: 'center', color: 'var(--color-text-muted)' }}
+                >
                   <Loader2
                     size={28}
                     style={{ animation: 'km-spin 0.9s linear infinite', display: 'inline-block' }}
@@ -285,7 +291,10 @@ export function SchemaListPanel({ clusterId }: { clusterId: string }) {
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: 36, textAlign: 'center', color: 'var(--color-text-muted)' }}>
+                <td
+                  colSpan={5}
+                  style={{ padding: 36, textAlign: 'center', color: 'var(--color-text-muted)' }}
+                >
                   {search.trim() ? t('schema.noMatch') : t('schema.noSubjects')}
                 </td>
               </tr>
@@ -335,7 +344,9 @@ export function SchemaListPanel({ clusterId }: { clusterId: string }) {
                   >
                     {row.compatibilityLevel}
                   </td>
-                  <td style={{ padding: '10px 14px', color: 'var(--color-text-faint)', fontSize: 12 }}>
+                  <td
+                    style={{ padding: '10px 14px', color: 'var(--color-text-faint)', fontSize: 12 }}
+                  >
                     {row.lastUpdated ?? '—'}
                   </td>
                 </tr>

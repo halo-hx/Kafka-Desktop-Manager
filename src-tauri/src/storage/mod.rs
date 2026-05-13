@@ -114,8 +114,7 @@ impl Database {
 
     /// Creates an in-memory database (useful for testing).
     pub fn new_in_memory() -> Result<Self, AppError> {
-        let conn =
-            Connection::open_in_memory().map_err(|e| AppError::Storage(e.to_string()))?;
+        let conn = Connection::open_in_memory().map_err(|e| AppError::Storage(e.to_string()))?;
         Ok(Self {
             inner: Arc::new(Mutex::new(conn)),
         })

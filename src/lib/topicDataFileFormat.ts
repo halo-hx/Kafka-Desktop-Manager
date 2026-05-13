@@ -162,7 +162,7 @@ export function parseImportFilePreview(
     const pRaw = pi >= 0 ? Number(cells[pi]) : NaN;
     records.push({
       partition: Number.isFinite(pRaw) ? pRaw : null,
-      key: ki >= 0 ? cells[ki] ?? '' : '',
+      key: ki >= 0 ? (cells[ki] ?? '') : '',
       value: cells[vi] ?? '',
       headers,
     });

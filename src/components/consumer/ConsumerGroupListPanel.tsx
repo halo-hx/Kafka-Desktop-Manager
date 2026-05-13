@@ -156,7 +156,9 @@ export function ConsumerGroupListPanel({ clusterId }: { clusterId: string }) {
           >
             {t('consumer.title')}
           </h1>
-          <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>{t('consumer.listSubtitle')}</p>
+          <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
+            {t('consumer.listSubtitle')}
+          </p>
         </div>
         <div
           style={{
@@ -170,7 +172,12 @@ export function ConsumerGroupListPanel({ clusterId }: { clusterId: string }) {
             minWidth: 200,
           }}
         >
-          <Search size={16} strokeWidth={2} style={{ color: 'var(--color-text-faint)', flexShrink: 0 }} aria-hidden />
+          <Search
+            size={16}
+            strokeWidth={2}
+            style={{ color: 'var(--color-text-faint)', flexShrink: 0 }}
+            aria-hidden
+          />
           <input
             type="search"
             placeholder={t('consumer.search')}
@@ -275,7 +282,12 @@ export function ConsumerGroupListPanel({ clusterId }: { clusterId: string }) {
             aria-busy="true"
             aria-label={t('consumer.loadingGroups')}
           >
-            <Loader2 size={22} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} aria-hidden />
+            <Loader2
+              size={22}
+              strokeWidth={2}
+              style={{ animation: 'km-spin 1s linear infinite' }}
+              aria-hidden
+            />
             {t('consumer.loadingGroups')}
           </div>
         ) : filtered.length === 0 ? (
@@ -287,16 +299,31 @@ export function ConsumerGroupListPanel({ clusterId }: { clusterId: string }) {
             }}
             role="status"
           >
-            <Users size={36} strokeWidth={1.5} style={{ marginBottom: 12, opacity: 0.5 }} aria-hidden />
+            <Users
+              size={36}
+              strokeWidth={1.5}
+              style={{ marginBottom: 12, opacity: 0.5 }}
+              aria-hidden
+            />
             <p style={{ fontSize: 14 }}>
               {groups.length === 0 ? t('consumer.noGroups') : t('consumer.noMatch')}
             </p>
             <p style={{ fontSize: 12, marginTop: 6 }}>{t('consumer.emptyHint')}</p>
           </div>
         ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }} aria-label={t('consumer.title')}>
+          <table
+            style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}
+            aria-label={t('consumer.title')}
+          >
             <thead>
-              <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
+              <tr
+                style={{
+                  background: 'var(--color-surface)',
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: 1,
+                }}
+              >
                 {HEADER_DEFS.map(({ key, numeric }) => (
                   <th
                     key={key}

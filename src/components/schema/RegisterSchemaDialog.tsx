@@ -105,7 +105,10 @@ export function RegisterSchemaDialog({
       const path = await open({
         multiple: false,
         filters: [
-          { name: t('registerSchema.fileFilterSchema'), extensions: ['json', 'avsc', 'proto', 'txt'] },
+          {
+            name: t('registerSchema.fileFilterSchema'),
+            extensions: ['json', 'avsc', 'proto', 'txt'],
+          },
           { name: t('registerSchema.fileFilterAll'), extensions: ['*'] },
         ],
       });
@@ -116,7 +119,12 @@ export function RegisterSchemaDialog({
       console.warn('[RegisterSchemaDialog] load file', err);
       setErrors((e) => ({
         ...e,
-        file: typeof err === 'string' ? err : err instanceof Error ? err.message : t('registerSchema.fileReadFailed'),
+        file:
+          typeof err === 'string'
+            ? err
+            : err instanceof Error
+              ? err.message
+              : t('registerSchema.fileReadFailed'),
       }));
     }
   };
@@ -144,7 +152,11 @@ export function RegisterSchemaDialog({
       console.warn('[RegisterSchemaDialog]', err);
       setErrors({
         submit:
-          typeof err === 'string' ? err : err instanceof Error ? err.message : t('registerSchema.registerFailed'),
+          typeof err === 'string'
+            ? err
+            : err instanceof Error
+              ? err.message
+              : t('registerSchema.registerFailed'),
       });
     } finally {
       setSubmitting(false);
@@ -226,8 +238,22 @@ export function RegisterSchemaDialog({
           </button>
         </div>
 
-        <div style={{ padding: 'var(--space-5)', display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', fontSize: 12 }}>
+        <div
+          style={{
+            padding: 'var(--space-5)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-4)',
+          }}
+        >
+          <label
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-2)',
+              fontSize: 12,
+            }}
+          >
             <span style={{ color: 'var(--color-text-muted)' }}>{t('registerSchema.subject')}</span>
             <input
               ref={firstRef}
@@ -241,7 +267,14 @@ export function RegisterSchemaDialog({
             ) : null}
           </label>
 
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', fontSize: 12 }}>
+          <label
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-2)',
+              fontSize: 12,
+            }}
+          >
             <span style={{ color: 'var(--color-text-muted)' }}>{t('registerSchema.type')}</span>
             <select
               value={schemaType}
@@ -254,7 +287,14 @@ export function RegisterSchemaDialog({
             </select>
           </label>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', fontSize: 12 }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-2)',
+              fontSize: 12,
+            }}
+          >
             <span style={{ color: 'var(--color-text-muted)' }}>{t('registerSchema.schema')}</span>
             <textarea
               value={content}
@@ -270,9 +310,15 @@ export function RegisterSchemaDialog({
               }}
               placeholder={t('registerSchema.schemaPlaceholder')}
             />
-            {(errors.content || errors.format || errors.validate || errors.file || errors.submit) && (
+            {(errors.content ||
+              errors.format ||
+              errors.validate ||
+              errors.file ||
+              errors.submit) && (
               <span style={{ color: 'var(--color-error)', fontSize: 11, whiteSpace: 'pre-wrap' }}>
-                {[errors.content, errors.format, errors.validate, errors.file, errors.submit].filter(Boolean).join('\n')}
+                {[errors.content, errors.format, errors.validate, errors.file, errors.submit]
+                  .filter(Boolean)
+                  .join('\n')}
               </span>
             )}
           </div>
@@ -293,11 +339,23 @@ export function RegisterSchemaDialog({
             </button>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: 'var(--space-3)',
+              marginTop: 'var(--space-2)',
+            }}
+          >
             <button type="button" style={btnSecondary} onClick={onClose} disabled={submitting}>
               {t('common.cancel')}
             </button>
-            <button type="button" style={btnPrimary} onClick={() => void handleSubmit()} disabled={submitting}>
+            <button
+              type="button"
+              style={btnPrimary}
+              onClick={() => void handleSubmit()}
+              disabled={submitting}
+            >
               {submitting ? (
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
                   <Loader2 size={16} className="km-spin-reg" /> {t('registerSchema.registering')}

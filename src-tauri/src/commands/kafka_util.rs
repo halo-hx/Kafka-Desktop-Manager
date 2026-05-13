@@ -4,7 +4,7 @@ use crate::error::AppError;
 use crate::storage::{ClusterConnectionRow, Database};
 use rdkafka::config::ClientConfig;
 use rdkafka::consumer::{BaseConsumer, Consumer};
-use rdkafka::metadata::{MetadataBroker, MetadataTopic};
+use rdkafka::metadata::MetadataTopic;
 use serde_json::{json, Value};
 use std::time::Duration;
 
@@ -24,7 +24,10 @@ pub async fn db_run<T: Send + 'static>(
         .map_err(|e| e.to_string())?
 }
 
-pub async fn get_connection_or_err(db: &Database, id: &str) -> Result<ClusterConnectionRow, String> {
+pub async fn get_connection_or_err(
+    db: &Database,
+    id: &str,
+) -> Result<ClusterConnectionRow, String> {
     let db = db.clone();
     let id = id.to_string();
     db_run(db, move |database| {
@@ -53,12 +56,11 @@ fn jaas_kv(jaas: &str, key: &str) -> Option<String> {
     let needle = format!("{key}=");
     let rest = jaas.split(&needle).nth(1)?;
     let rest = rest.trim_start();
-    if rest.starts_with('"') {
-        let closing = rest[1..].find('"')?;
-        Some(rest[1..closing + 1].to_string())
+    if let Some(stripped) = rest.strip_prefix('"') {
+        let closing = stripped.find('"')?;
+        Some(stripped[..closing].to_string())
     } else {
-        rest
-            .split(|c: char| c.is_whitespace() || c == ';')
+        rest.split(|c: char| c.is_whitespace() || c == ';')
             .next()
             .map(|s| s.trim_matches('"').to_string())
             .filter(|s| !s.is_empty())
@@ -138,14 +140,18 @@ fn apply_ssl_client_opts(conn: &ClusterConnectionRow, config: &mut ClientConfig)
 
 pub fn metadata_overview(metadata: &rdkafka::metadata::Metadata) -> Value {
     let controller_id = metadata.orig_broker_id();
-    let brokers_json: Vec<Value> = metadata.brokers().iter().map(|b| {
-        json!({
-            "id": b.id(),
-            "host": b.host(),
-            "port": b.port(),
-            "is_controller": b.id() == controller_id,
+    let brokers_json: Vec<Value> = metadata
+        .brokers()
+        .iter()
+        .map(|b| {
+            json!({
+                "id": b.id(),
+                "host": b.host(),
+                "port": b.port(),
+                "is_controller": b.id() == controller_id,
+            })
         })
-    }).collect();
+        .collect();
     let topics = metadata.topics();
     let mut partition_total: usize = 0;
     for t in topics {

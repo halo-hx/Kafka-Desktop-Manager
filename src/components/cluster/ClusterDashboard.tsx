@@ -3,15 +3,7 @@
  * 连接后右侧显示，内含模块导航：概览 / Topics / 消费组 / Schema / Connect / ACL
  */
 import { useMemo } from 'react';
-import {
-  BookOpen,
-  Database,
-  Link2,
-  Network,
-  Server,
-  Shield,
-  Users,
-} from 'lucide-react';
+import { BookOpen, Database, Link2, Network, Server, Shield, Users } from 'lucide-react';
 import { ClusterOverview } from './ClusterOverview';
 import { TopicListSubPanel } from './TopicListSubPanel';
 import { ConsumerGroupListPanel } from '../consumer/ConsumerGroupListPanel';
@@ -24,7 +16,14 @@ import { useT } from '../../i18n';
 
 type DashboardModule = 'overview' | 'topics' | 'consumers' | 'schema' | 'connect' | 'acl';
 
-const VALID_MODULES: DashboardModule[] = ['overview', 'topics', 'consumers', 'schema', 'connect', 'acl'];
+const VALID_MODULES: DashboardModule[] = [
+  'overview',
+  'topics',
+  'consumers',
+  'schema',
+  'connect',
+  'acl',
+];
 
 function isDashboardModule(v: string | undefined): v is DashboardModule {
   return !!v && (VALID_MODULES as string[]).includes(v);
@@ -51,9 +50,17 @@ export function ClusterDashboard({ clusterId }: Props) {
 
   const modules = useMemo<ModuleDef[]>(
     () => [
-      { id: 'overview', label: t('dashboard.overview'), icon: <Database size={16} strokeWidth={2} /> },
+      {
+        id: 'overview',
+        label: t('dashboard.overview'),
+        icon: <Database size={16} strokeWidth={2} />,
+      },
       { id: 'topics', label: t('dashboard.topics'), icon: <Network size={16} strokeWidth={2} /> },
-      { id: 'consumers', label: t('dashboard.consumers'), icon: <Users size={16} strokeWidth={2} /> },
+      {
+        id: 'consumers',
+        label: t('dashboard.consumers'),
+        icon: <Users size={16} strokeWidth={2} />,
+      },
       { id: 'schema', label: t('dashboard.schema'), icon: <BookOpen size={16} strokeWidth={2} /> },
       { id: 'connect', label: t('dashboard.connect'), icon: <Link2 size={16} strokeWidth={2} /> },
       { id: 'acl', label: t('dashboard.acl'), icon: <Shield size={16} strokeWidth={2} /> },
@@ -89,7 +96,11 @@ export function ClusterDashboard({ clusterId }: Props) {
               gap: 8,
             }}
           >
-            <Server size={16} strokeWidth={2} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
+            <Server
+              size={16}
+              strokeWidth={2}
+              style={{ color: 'var(--color-primary)', flexShrink: 0 }}
+            />
             <span
               style={{
                 fontFamily: 'var(--font-heading)',
@@ -179,7 +190,12 @@ export function ClusterDashboard({ clusterId }: Props) {
 
       {/* Content area */}
       <div style={{ flex: 1, overflow: 'hidden', minWidth: 0 }}>
-        {activeModule === 'overview' && <ClusterOverview clusterId={clusterId} onNavigate={(mod) => setActiveModule(mod as DashboardModule)} />}
+        {activeModule === 'overview' && (
+          <ClusterOverview
+            clusterId={clusterId}
+            onNavigate={(mod) => setActiveModule(mod as DashboardModule)}
+          />
+        )}
         {activeModule === 'topics' && <TopicListSubPanel clusterId={clusterId} />}
         {activeModule === 'consumers' && <ConsumerGroupListPanel clusterId={clusterId} />}
         {activeModule === 'schema' && <SchemaListPanel clusterId={clusterId} />}

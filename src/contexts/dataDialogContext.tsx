@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { ExportTopicDataDialog } from '../components/data/ExportTopicDataDialog';
 import { ImportTopicDataDialog } from '../components/data/ImportTopicDataDialog';
 import { ConnectionExportDialog } from '../components/data/ConnectionExportDialog';
@@ -95,8 +88,14 @@ export function DataDialogProvider({ children }: { children: ReactNode }) {
           onClose={() => setImportTopic(null)}
         />
       )}
-      <ConnectionExportDialog open={connectionExportOpen} onClose={() => setConnectionExportOpen(false)} />
-      <ConnectionImportDialog open={connectionImportOpen} onClose={() => setConnectionImportOpen(false)} />
+      <ConnectionExportDialog
+        open={connectionExportOpen}
+        onClose={() => setConnectionExportOpen(false)}
+      />
+      <ConnectionImportDialog
+        open={connectionImportOpen}
+        onClose={() => setConnectionImportOpen(false)}
+      />
       {crossCopy && (
         <CrossClusterCopyDialog
           open

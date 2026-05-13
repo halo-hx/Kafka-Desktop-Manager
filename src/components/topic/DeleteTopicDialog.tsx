@@ -27,7 +27,13 @@ const inputStyle: CSSProperties = {
   transition: 'border-color var(--transition-fast)',
 };
 
-export function DeleteTopicDialog({ open, clusterId, topicName, onClose, onDeleted }: DeleteTopicDialogProps) {
+export function DeleteTopicDialog({
+  open,
+  clusterId,
+  topicName,
+  onClose,
+  onDeleted,
+}: DeleteTopicDialogProps) {
   const t = useT();
   const [confirmText, setConfirmText] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -57,7 +63,9 @@ export function DeleteTopicDialog({ open, clusterId, topicName, onClose, onDelet
       onClose();
     } catch (e) {
       console.warn('[DeleteTopicDialog]', e);
-      setError(typeof e === 'string' ? e : e instanceof Error ? e.message : t('deleteTopic.deleteFailed'));
+      setError(
+        typeof e === 'string' ? e : e instanceof Error ? e.message : t('deleteTopic.deleteFailed'),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -105,7 +113,14 @@ export function DeleteTopicDialog({ open, clusterId, topicName, onClose, onDelet
             justifyContent: 'space-between',
           }}
         >
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 600, color: 'var(--color-error)' }}>
+          <h2
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 15,
+              fontWeight: 600,
+              color: 'var(--color-error)',
+            }}
+          >
             {t('deleteTopic.title')}
           </h2>
           <button
@@ -133,13 +148,35 @@ export function DeleteTopicDialog({ open, clusterId, topicName, onClose, onDelet
         </div>
 
         <div style={{ padding: 'var(--space-5)' }}>
-          <p style={{ fontSize: 13, color: 'var(--color-text)', marginBottom: 'var(--space-4)', lineHeight: 1.6 }}>
+          <p
+            style={{
+              fontSize: 13,
+              color: 'var(--color-text)',
+              marginBottom: 'var(--space-4)',
+              lineHeight: 1.6,
+            }}
+          >
             {t('deleteTopic.confirm', { name: topicName })}
           </p>
-          <p style={{ fontSize: 13, color: 'var(--color-text)', marginBottom: 'var(--space-4)', lineHeight: 1.6 }}>
+          <p
+            style={{
+              fontSize: 13,
+              color: 'var(--color-text)',
+              marginBottom: 'var(--space-4)',
+              lineHeight: 1.6,
+            }}
+          >
             {t('deleteTopic.warning')}
           </p>
-          <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 6 }}>
+          <label
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              display: 'block',
+              marginBottom: 6,
+            }}
+          >
             {t('deleteTopic.typeToConfirm')}
           </label>
           <input
@@ -155,7 +192,9 @@ export function DeleteTopicDialog({ open, clusterId, topicName, onClose, onDelet
               e.currentTarget.style.borderColor = 'var(--color-border)';
             }}
           />
-          {error && <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>{error}</p>}
+          {error && (
+            <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>{error}</p>
+          )}
         </div>
 
         <div
@@ -202,7 +241,13 @@ export function DeleteTopicDialog({ open, clusterId, topicName, onClose, onDelet
               transition: 'opacity var(--transition-fast), background var(--transition-fast)',
             }}
           >
-            {submitting && <Loader2 size={16} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} />}
+            {submitting && (
+              <Loader2
+                size={16}
+                strokeWidth={2}
+                style={{ animation: 'km-spin 1s linear infinite' }}
+              />
+            )}
             {submitting ? t('deleteTopic.deleting') : t('common.delete')}
           </button>
         </div>

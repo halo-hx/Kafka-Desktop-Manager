@@ -35,7 +35,13 @@ function sanitizeConnection(c: ClusterConnection): Record<string, unknown> {
   return o;
 }
 
-export function ConnectionExportDialog({ open: openDlg, onClose }: { open: boolean; onClose: () => void }) {
+export function ConnectionExportDialog({
+  open: openDlg,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const t = useT();
   const connections = useConnectionStore((s) => s.connections);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
@@ -100,7 +106,12 @@ export function ConnectionExportDialog({ open: openDlg, onClose }: { open: boole
   if (!openDlg) return null;
 
   return (
-    <div role="dialog" aria-modal="true" style={backdrop} onMouseDown={(e) => e.target === e.currentTarget && !busy && onClose()}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      style={backdrop}
+      onMouseDown={(e) => e.target === e.currentTarget && !busy && onClose()}
+    >
       <div
         style={{
           width: 'min(440px, 92vw)',
@@ -112,15 +123,37 @@ export function ConnectionExportDialog({ open: openDlg, onClose }: { open: boole
         }}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div style={{ padding: 'var(--space-4)', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div
+          style={{
+            padding: 'var(--space-4)',
+            borderBottom: '1px solid var(--color-border-subtle)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+          }}
+        >
           <Download size={20} color="var(--color-primary)" />
           <h2 style={{ flex: 1, margin: 0, fontSize: 16 }}>{t('connExport.title')}</h2>
-          <button type="button" disabled={busy} onClick={onClose} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--color-text-faint)' }}>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onClose}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              color: 'var(--color-text-faint)',
+            }}
+          >
             <X size={18} />
           </button>
         </div>
-        <div style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <p style={{ fontSize: 12, color: 'var(--color-text-muted)', lineHeight: 1.55, margin: 0 }}>
+        <div
+          style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}
+        >
+          <p
+            style={{ fontSize: 12, color: 'var(--color-text-muted)', lineHeight: 1.55, margin: 0 }}
+          >
             {t('connExport.description')}
           </p>
           <div style={{ display: 'flex', gap: 12, fontSize: 12 }}>
@@ -153,17 +186,35 @@ export function ConnectionExportDialog({ open: openDlg, onClose }: { open: boole
                   color: 'var(--color-text)',
                 }}
               >
-                <input type="checkbox" checked={!!selected[c.id]} disabled={busy} onChange={(e) => setSelected((s) => ({ ...s, [c.id]: e.target.checked }))} style={{ accentColor: 'var(--color-primary)' }} />
+                <input
+                  type="checkbox"
+                  checked={!!selected[c.id]}
+                  disabled={busy}
+                  onChange={(e) => setSelected((s) => ({ ...s, [c.id]: e.target.checked }))}
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
                 <span style={{ flex: 1 }}>{c.name}</span>
-                <span style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>{c.bootstrapServers}</span>
+                <span style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>
+                  {c.bootstrapServers}
+                </span>
               </label>
             ))}
             {connections.length === 0 && (
-              <div style={{ padding: 12, fontSize: 12, color: 'var(--color-text-faint)' }}>{t('connExport.noConnections')}</div>
+              <div style={{ padding: 12, fontSize: 12, color: 'var(--color-text-faint)' }}>
+                {t('connExport.noConnections')}
+              </div>
             )}
           </div>
           {err && (
-            <div style={{ padding: 10, borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', color: 'var(--color-error)', fontSize: 12 }}>
+            <div
+              style={{
+                padding: 10,
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(239,68,68,0.12)',
+                color: 'var(--color-error)',
+                fontSize: 12,
+              }}
+            >
               {err}
             </div>
           )}

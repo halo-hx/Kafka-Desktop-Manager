@@ -108,7 +108,10 @@ export function ClusterSidebar() {
 
   const [search, setSearch] = useState('');
   const [treeMenu, setTreeMenu] = useState<TreeCtx | null>(null);
-  const [clusterRootMenu, setClusterRootMenu] = useState<{ clientX: number; clientY: number } | null>(null);
+  const [clusterRootMenu, setClusterRootMenu] = useState<{
+    clientX: number;
+    clientY: number;
+  } | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -153,10 +156,7 @@ export function ClusterSidebar() {
   const totalClusters = connections.length;
   const totalConnected = connections.filter((c) => c.status === 'connected').length;
 
-  const selectStyle = (
-    selected: boolean,
-    extra?: React.CSSProperties,
-  ): React.CSSProperties => ({
+  const selectStyle = (selected: boolean, extra?: React.CSSProperties): React.CSSProperties => ({
     display: 'flex',
     alignItems: 'center',
     gap: 8,
@@ -171,11 +171,7 @@ export function ClusterSidebar() {
   });
 
   const openClusterDashboard = (conn: ClusterConnectionRecord) => {
-    openTab(
-      { type: 'cluster-dashboard', clusterId: conn.id },
-      conn.name,
-      'layout-dashboard',
-    );
+    openTab({ type: 'cluster-dashboard', clusterId: conn.id }, conn.name, 'layout-dashboard');
   };
 
   const renderConnectionItem = (conn: ClusterConnectionRecord) => {
@@ -215,7 +211,12 @@ export function ClusterSidebar() {
           onContextMenu={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setTreeMenu({ clientX: e.clientX, clientY: e.clientY, kind: 'connection', connectionId: conn.id });
+            setTreeMenu({
+              clientX: e.clientX,
+              clientY: e.clientY,
+              kind: 'connection',
+              connectionId: conn.id,
+            });
           }}
           style={selectStyle(selected, {
             padding: '6px 12px 6px 28px',
@@ -277,7 +278,12 @@ export function ClusterSidebar() {
           }}
           onContextMenu={(e) => {
             e.preventDefault();
-            setTreeMenu({ clientX: e.clientX, clientY: e.clientY, kind: 'group', groupId: group.id });
+            setTreeMenu({
+              clientX: e.clientX,
+              clientY: e.clientY,
+              kind: 'group',
+              groupId: group.id,
+            });
           }}
           style={{
             display: 'flex',
@@ -309,7 +315,9 @@ export function ClusterSidebar() {
             <ChevronRight size={12} strokeWidth={2.5} aria-hidden />
           </span>
           <Folder size={14} strokeWidth={2} aria-hidden />
-          <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <span
+            style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+          >
             {group.name}
           </span>
           <span style={{ color: 'var(--color-text-faint)', fontWeight: 400, letterSpacing: 0 }}>
@@ -380,9 +388,7 @@ export function ClusterSidebar() {
               }
             }}
             onNewConnection={() => openConnectionDialog()}
-            onOpenSettings={() =>
-              openTab({ type: 'settings' }, t('settings.title'), 'settings')
-            }
+            onOpenSettings={() => openTab({ type: 'settings' }, t('settings.title'), 'settings')}
             totalConnected={totalConnected}
             totalClusters={totalClusters}
             expandLabel={t('sidebar.expandSidebar')}
@@ -401,7 +407,11 @@ export function ClusterSidebar() {
               }}
             >
               <div style={{ display: 'flex', gap: 6, alignItems: 'stretch' }}>
-                <SidebarIconBtn icon={<ChevronLeft size={16} strokeWidth={2} />} label={t('sidebar.collapseSidebar')} onClick={toggleSidebar} />
+                <SidebarIconBtn
+                  icon={<ChevronLeft size={16} strokeWidth={2} />}
+                  label={t('sidebar.collapseSidebar')}
+                  onClick={toggleSidebar}
+                />
                 <button
                   type="button"
                   aria-label={t('sidebar.newConnection')}
@@ -436,8 +446,16 @@ export function ClusterSidebar() {
                   <Plus size={14} strokeWidth={2.5} />
                   {t('sidebar.newConnection')}
                 </button>
-                <SidebarIconBtn icon={<Download size={14} strokeWidth={2} />} label={t('sidebar.exportConfig')} onClick={() => openConnectionExport()} />
-                <SidebarIconBtn icon={<Upload size={14} strokeWidth={2} />} label={t('sidebar.importConfig')} onClick={() => openConnectionImport()} />
+                <SidebarIconBtn
+                  icon={<Download size={14} strokeWidth={2} />}
+                  label={t('sidebar.exportConfig')}
+                  onClick={() => openConnectionExport()}
+                />
+                <SidebarIconBtn
+                  icon={<Upload size={14} strokeWidth={2} />}
+                  label={t('sidebar.importConfig')}
+                  onClick={() => openConnectionImport()}
+                />
               </div>
               <div style={{ position: 'relative' }}>
                 <Search
@@ -470,7 +488,8 @@ export function ClusterSidebar() {
                     fontFamily: 'var(--font-body)',
                     fontSize: 12,
                     outline: 'none',
-                    transition: 'border-color var(--transition-fast), box-shadow var(--transition-fast)',
+                    transition:
+                      'border-color var(--transition-fast), box-shadow var(--transition-fast)',
                   }}
                   onFocus={(e) => {
                     e.currentTarget.style.borderColor = 'var(--color-primary)';
@@ -484,7 +503,10 @@ export function ClusterSidebar() {
               </div>
             </div>
 
-            <nav aria-label={t('sidebar.clusterTree')} style={{ flex: 1, overflowY: 'auto', padding: '8px 6px' }}>
+            <nav
+              aria-label={t('sidebar.clusterTree')}
+              style={{ flex: 1, overflowY: 'auto', padding: '8px 6px' }}
+            >
               <div
                 role="presentation"
                 onContextMenu={(e) => {
@@ -505,7 +527,11 @@ export function ClusterSidebar() {
               >
                 {t('sidebar.clusters')}
               </div>
-              <ul role="tree" aria-label={t('sidebar.clusterConnections')} style={{ listStyle: 'none' }}>
+              <ul
+                role="tree"
+                aria-label={t('sidebar.clusterConnections')}
+                style={{ listStyle: 'none' }}
+              >
                 {favorites.length > 0 && (
                   <li role="treeitem">
                     <div
@@ -530,7 +556,9 @@ export function ClusterSidebar() {
                   </li>
                 )}
                 {sortedGroups.map((g) => renderGroup({ id: g.id, name: g.name }))}
-                {filterConns(ungrouped.filter((c) => !c.isFavorite)).map((conn) => renderConnectionItem(conn))}
+                {filterConns(ungrouped.filter((c) => !c.isFavorite)).map((conn) =>
+                  renderConnectionItem(conn),
+                )}
               </ul>
             </nav>
 
@@ -548,7 +576,8 @@ export function ClusterSidebar() {
             >
               <StatusDot status="connected" />
               <span>
-                <strong style={{ color: 'var(--color-text-muted)' }}>{totalConnected}</strong>/<strong style={{ color: 'var(--color-text-muted)' }}>{totalClusters}</strong>{' '}
+                <strong style={{ color: 'var(--color-text-muted)' }}>{totalConnected}</strong>/
+                <strong style={{ color: 'var(--color-text-muted)' }}>{totalClusters}</strong>{' '}
                 {t('sidebar.connectedCount')}
               </span>
               <button
@@ -696,7 +725,15 @@ export function ClusterSidebar() {
   );
 }
 
-function SidebarIconBtn({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) {
+function SidebarIconBtn({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
@@ -882,9 +919,7 @@ function CollapsedSidebar({
                   background: STATUS_COLORS[conn.status],
                   border: '2px solid var(--color-surface)',
                   boxShadow:
-                    conn.status === 'connected'
-                      ? `0 0 4px ${STATUS_COLORS.connected}`
-                      : 'none',
+                    conn.status === 'connected' ? `0 0 4px ${STATUS_COLORS.connected}` : 'none',
                 }}
               />
             </button>
@@ -1003,7 +1038,9 @@ function MenuBtn({
     <button
       type="button"
       role="menuitem"
-      onClick={() => { onClick(); }}
+      onClick={() => {
+        onClick();
+      }}
       style={{
         display: 'flex',
         gap: 8,

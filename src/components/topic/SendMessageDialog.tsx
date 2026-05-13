@@ -135,8 +135,7 @@ export function SendMessageDialog({
       return;
     }
 
-    const part =
-      partitionMode === 'manual' && partition !== '' ? Number(partition) : null;
+    const part = partitionMode === 'manual' && partition !== '' ? Number(partition) : null;
     if (partitionMode === 'manual' && (Number.isNaN(part) || part! < 0)) {
       setErr(t('sendMsg.partitionInvalid'));
       return;
@@ -190,8 +189,7 @@ export function SendMessageDialog({
       return;
     }
     const sep = batchSep || '|';
-    const part =
-      partitionMode === 'manual' && partition !== '' ? Number(partition) : null;
+    const part = partitionMode === 'manual' && partition !== '' ? Number(partition) : null;
     if (partitionMode === 'manual' && (Number.isNaN(part!) || part! < 0)) {
       setErr(t('sendMsg.partitionInvalid'));
       return;
@@ -217,7 +215,9 @@ export function SendMessageDialog({
       showToast(t('sendMsg.batchSentCount', { count: ok }));
       onClose();
     } catch (e) {
-      setErr(`${e instanceof Error ? e.message : String(e)}${t('sendMsg.batchPartialError', { ok })}`);
+      setErr(
+        `${e instanceof Error ? e.message : String(e)}${t('sendMsg.batchPartialError', { ok })}`,
+      );
     } finally {
       setSending(false);
     }
@@ -286,7 +286,9 @@ export function SendMessageDialog({
           </button>
         </div>
 
-        <div style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div
+          style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}
+        >
           <div style={{ display: 'flex', gap: 8 }}>
             {(['single', 'batch'] as const).map((m) => (
               <button
@@ -352,8 +354,12 @@ export function SendMessageDialog({
             <>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                  <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('sendMsg.key')}</span>
-                  <span style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>{t('sendMsg.formatLabel')}:</span>
+                  <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                    {t('sendMsg.key')}
+                  </span>
+                  <span style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>
+                    {t('sendMsg.formatLabel')}:
+                  </span>
                   <select
                     value={keyFmt}
                     onChange={(e) => setKeyFmt(e.target.value as PayloadFormat)}
@@ -400,8 +406,12 @@ export function SendMessageDialog({
 
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                  <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('sendMsg.value')}</span>
-                  <span style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>{t('sendMsg.formatLabel')}:</span>
+                  <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                    {t('sendMsg.value')}
+                  </span>
+                  <span style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>
+                    {t('sendMsg.formatLabel')}:
+                  </span>
                   <select
                     value={valFmt}
                     onChange={(e) => setValFmt(e.target.value as PayloadFormat)}
@@ -447,7 +457,15 @@ export function SendMessageDialog({
             </>
           ) : (
             <>
-              <label style={{ fontSize: 12, color: 'var(--color-text-faint)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label
+                style={{
+                  fontSize: 12,
+                  color: 'var(--color-text-faint)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 6,
+                }}
+              >
                 {t('sendMsg.batchSeparatorLabel')}
                 <input
                   value={batchSep}
@@ -463,7 +481,15 @@ export function SendMessageDialog({
                   }}
                 />
               </label>
-              <label style={{ fontSize: 12, color: 'var(--color-text-faint)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label
+                style={{
+                  fontSize: 12,
+                  color: 'var(--color-text-faint)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 6,
+                }}
+              >
                 {t('sendMsg.batchLinesHint', { sep: batchSep })}
                 <textarea
                   value={batchText}
@@ -488,7 +514,9 @@ export function SendMessageDialog({
           )}
 
           <div>
-            <div style={{ fontSize: 12, color: 'var(--color-text-muted)', marginBottom: 6 }}>{t('sendMsg.headers')}</div>
+            <div style={{ fontSize: 12, color: 'var(--color-text-muted)', marginBottom: 6 }}>
+              {t('sendMsg.headers')}
+            </div>
             <div
               style={{
                 border: '1px solid var(--color-border)',
@@ -499,8 +527,12 @@ export function SendMessageDialog({
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                 <thead>
                   <tr style={{ background: 'var(--color-bg)' }}>
-                    <th style={{ textAlign: 'left', padding: 8, color: 'var(--color-text-faint)' }}>{t('sendMsg.headerKey')}</th>
-                    <th style={{ textAlign: 'left', padding: 8, color: 'var(--color-text-faint)' }}>{t('sendMsg.headerValue')}</th>
+                    <th style={{ textAlign: 'left', padding: 8, color: 'var(--color-text-faint)' }}>
+                      {t('sendMsg.headerKey')}
+                    </th>
+                    <th style={{ textAlign: 'left', padding: 8, color: 'var(--color-text-faint)' }}>
+                      {t('sendMsg.headerValue')}
+                    </th>
                     <th style={{ width: 40 }} />
                   </tr>
                 </thead>

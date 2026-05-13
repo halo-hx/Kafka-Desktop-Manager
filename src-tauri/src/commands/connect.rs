@@ -31,11 +31,15 @@ fn normalize_base_url(raw: &str) -> String {
 
 pub(crate) fn parse_connect_urls(conn: &ClusterConnectionRow) -> Result<Vec<String>, String> {
     let Some(blob) = &conn.connect_urls else {
-        return Err("Please configure Kafka Connect Worker URL(s) in the connection settings first.".into());
+        return Err(
+            "Please configure Kafka Connect Worker URL(s) in the connection settings first.".into(),
+        );
     };
     let t = blob.trim();
     if t.is_empty() {
-        return Err("Please configure Kafka Connect Worker URL(s) in the connection settings.".into());
+        return Err(
+            "Please configure Kafka Connect Worker URL(s) in the connection settings.".into(),
+        );
     }
     let urls: Vec<String> = if t.starts_with('[') {
         serde_json::from_str::<Vec<String>>(t)
@@ -47,7 +51,7 @@ pub(crate) fn parse_connect_urls(conn: &ClusterConnectionRow) -> Result<Vec<Stri
     } else {
         t.lines()
             .flat_map(|line| line.split(','))
-            .map(|x| normalize_base_url(x))
+            .map(normalize_base_url)
             .filter(|x| !x.is_empty())
             .collect()
     };
@@ -190,8 +194,11 @@ fn parse_connector_list(v: &Value, default_base: &str) -> Vec<Value> {
 }
 
 #[tauri::command]
-pub async fn list_connectors(cluster_id: String, db: State<'_, Database>) -> Result<Vec<Value>, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+pub async fn list_connectors(
+    cluster_id: String,
+    db: State<'_, Database>,
+) -> Result<Vec<Value>, String> {
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let body = connect_request_any(
         &bases,
@@ -215,7 +222,7 @@ pub async fn get_connector_detail(
     name: String,
     db: State<'_, Database>,
 ) -> Result<Value, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let enc = encode(name.trim());
     let cfg_body = connect_request_any(
@@ -236,7 +243,10 @@ pub async fn get_connector_detail(
     let cfg_v: Value = serde_json::from_str(&cfg_body).map_err(|e| e.to_string())?;
     let st_v: Value = serde_json::from_str(&st_body).map_err(|e| e.to_string())?;
 
-    let config_obj = cfg_v.get("config").cloned().unwrap_or(Value::Object(Default::default()));
+    let config_obj = cfg_v
+        .get("config")
+        .cloned()
+        .unwrap_or(Value::Object(Default::default()));
     let config_strings = config_value_to_map(&config_obj);
 
     let typ = cfg_v
@@ -260,7 +270,10 @@ pub async fn get_connector_detail(
     let mut task_rows = Vec::new();
     for t in tasks {
         let task_id = t.get("id").and_then(|x| x.as_i64()).unwrap_or(-1);
-        let tstate = t.get("state").and_then(|x| x.as_str()).unwrap_or("UNASSIGNED");
+        let tstate = t
+            .get("state")
+            .and_then(|x| x.as_str())
+            .unwrap_or("UNASSIGNED");
         let worker_id = t.get("worker_id").and_then(|x| x.as_str()).unwrap_or("");
         let worker_url = worker_id_to_display(worker_id, fallback);
         let err_msg = t
@@ -314,7 +327,7 @@ pub async fn create_connector(
     config: Value,
     db: State<'_, Database>,
 ) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let body = json!({
         "name": name.trim(),
@@ -331,7 +344,7 @@ pub async fn update_connector_config(
     config: Value,
     db: State<'_, Database>,
 ) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let enc = encode(name.trim());
     let path = format!("/connectors/{enc}/config");
@@ -346,7 +359,7 @@ pub async fn validate_connector_config(
     config: Value,
     db: State<'_, Database>,
 ) -> Result<Value, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let class_trim = connector_class.trim();
     if class_trim.is_empty() {
@@ -362,8 +375,12 @@ pub async fn validate_connector_config(
 }
 
 #[tauri::command]
-pub async fn pause_connector(cluster_id: String, name: String, db: State<'_, Database>) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+pub async fn pause_connector(
+    cluster_id: String,
+    name: String,
+    db: State<'_, Database>,
+) -> Result<(), String> {
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let enc = encode(name.trim());
     connect_request_any(
@@ -377,8 +394,12 @@ pub async fn pause_connector(cluster_id: String, name: String, db: State<'_, Dat
 }
 
 #[tauri::command]
-pub async fn resume_connector(cluster_id: String, name: String, db: State<'_, Database>) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+pub async fn resume_connector(
+    cluster_id: String,
+    name: String,
+    db: State<'_, Database>,
+) -> Result<(), String> {
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let enc = encode(name.trim());
     connect_request_any(
@@ -392,8 +413,12 @@ pub async fn resume_connector(cluster_id: String, name: String, db: State<'_, Da
 }
 
 #[tauri::command]
-pub async fn restart_connector(cluster_id: String, name: String, db: State<'_, Database>) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+pub async fn restart_connector(
+    cluster_id: String,
+    name: String,
+    db: State<'_, Database>,
+) -> Result<(), String> {
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let enc = encode(name.trim());
     connect_request_any(
@@ -407,8 +432,12 @@ pub async fn restart_connector(cluster_id: String, name: String, db: State<'_, D
 }
 
 #[tauri::command]
-pub async fn delete_connector(cluster_id: String, name: String, db: State<'_, Database>) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+pub async fn delete_connector(
+    cluster_id: String,
+    name: String,
+    db: State<'_, Database>,
+) -> Result<(), String> {
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let enc = encode(name.trim());
     connect_request_any(
@@ -428,7 +457,7 @@ pub async fn restart_task(
     task_id: i32,
     db: State<'_, Database>,
 ) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let bases = parse_connect_urls(&conn)?;
     let enc = encode(connector.trim());
     let path = format!("/connectors/{enc}/tasks/{task_id}/restart");

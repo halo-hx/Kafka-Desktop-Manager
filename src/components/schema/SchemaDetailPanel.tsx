@@ -115,7 +115,13 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
       }
     } catch (e) {
       console.warn('[SchemaDetailPanel] versions', e);
-      setVersionErr(typeof e === 'string' ? e : e instanceof Error ? e.message : t('schemaDetail.loadVersionsFailed'));
+      setVersionErr(
+        typeof e === 'string'
+          ? e
+          : e instanceof Error
+            ? e.message
+            : t('schemaDetail.loadVersionsFailed'),
+      );
       setVersions([]);
       setSelectedVersion(null);
     } finally {
@@ -310,7 +316,11 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
       setCheckResult({
         isCompatible: false,
         messages: [
-          typeof e === 'string' ? e : e instanceof Error ? e.message : t('schemaDetail.checkFailed'),
+          typeof e === 'string'
+            ? e
+            : e instanceof Error
+              ? e.message
+              : t('schemaDetail.checkFailed'),
         ],
       });
     } finally {
@@ -357,10 +367,19 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
         >
           {subject}
         </h1>
-        <p style={{ marginTop: 6, fontSize: 12, color: 'var(--color-text-muted)' }}>{t('schemaDetail.pageSubtitle')}</p>
+        <p style={{ marginTop: 6, fontSize: 12, color: 'var(--color-text-muted)' }}>
+          {t('schemaDetail.pageSubtitle')}
+        </p>
       </header>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)', marginBottom: 'var(--space-5)' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 'var(--space-2)',
+          marginBottom: 'var(--space-5)',
+        }}
+      >
         {tabBtn('schema', t('schemaDetail.schema'), FileText)}
         {tabBtn('history', t('schemaDetail.tabHistory'), Code)}
         {tabBtn('compat', t('schemaDetail.tabCompat'), ListChecks)}
@@ -382,7 +401,14 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
       ) : null}
 
       {loadingVers && versions.length === 0 ? (
-        <div style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div
+          style={{
+            color: 'var(--color-text-muted)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+          }}
+        >
           <Loader2
             size={20}
             style={{ animation: 'km-spin-d 0.9s linear infinite' }}
@@ -394,7 +420,14 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
 
       {mainTab === 'schema' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--space-3)' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: 'var(--space-3)',
+            }}
+          >
             <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
               <span style={{ color: 'var(--color-text-muted)' }}>{t('schemaDetail.version')}</span>
               <select
@@ -416,8 +449,15 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
               </select>
             </label>
             {detail ? (
-              <span style={{ fontSize: 12, color: 'var(--color-text-muted)', fontFamily: 'var(--font-heading)' }}>
-                {t('schemaDetail.schemaId')}: <strong style={{ color: 'var(--color-text)' }}>{detail.id}</strong>
+              <span
+                style={{
+                  fontSize: 12,
+                  color: 'var(--color-text-muted)',
+                  fontFamily: 'var(--font-heading)',
+                }}
+              >
+                {t('schemaDetail.schemaId')}:{' '}
+                <strong style={{ color: 'var(--color-text)' }}>{detail.id}</strong>
               </span>
             ) : null}
             {detail ? <TypeBadge schemaType={detail.schemaType} /> : null}
@@ -470,7 +510,9 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
             {formattedSchema.trim() ? (
               <HighlightedJson text={formattedSchema} />
             ) : (
-              <span style={{ color: 'var(--color-text-muted)' }}>{t('schemaDetail.noContent')}</span>
+              <span style={{ color: 'var(--color-text-muted)' }}>
+                {t('schemaDetail.noContent')}
+              </span>
             )}
           </pre>
         </div>
@@ -478,7 +520,14 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
 
       {mainTab === 'history' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)', alignItems: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 'var(--space-2)',
+              alignItems: 'center',
+            }}
+          >
             <button
               type="button"
               onClick={() => openDiff()}
@@ -502,7 +551,9 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
             </button>
             {diffOpen && (
               <>
-                <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>{t('schemaDetail.compareTarget')}</span>
+                <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
+                  {t('schemaDetail.compareTarget')}
+                </span>
                 <select
                   value={compareRight ?? ''}
                   onChange={(e) => setCompareRight(Number(e.target.value))}
@@ -541,7 +592,14 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
             )}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: diffOpen ? '1fr 1fr' : '220px 1fr', gap: 'var(--space-4)', minHeight: 360 }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: diffOpen ? '1fr 1fr' : '220px 1fr',
+              gap: 'var(--space-4)',
+              minHeight: 360,
+            }}
+          >
             {!diffOpen && (
               <div
                 style={{
@@ -591,7 +649,9 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
                     {historyDetail ? (
                       <HighlightedJson text={formatSchemaForDisplay(historyDetail.schema)} />
                     ) : (
-                      <span style={{ color: 'var(--color-text-muted)' }}>{t('schemaDetail.selectVersion')}</span>
+                      <span style={{ color: 'var(--color-text-muted)' }}>
+                        {t('schemaDetail.selectVersion')}
+                      </span>
                     )}
                   </pre>
                 )}
@@ -600,7 +660,9 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
             {diffOpen && (
               <>
                 <div>
-                  <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: 6 }}>{`v${selectedVersion ?? ''}`}</div>
+                  <div
+                    style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: 6 }}
+                  >{`v${selectedVersion ?? ''}`}</div>
                   <pre style={{ ...preBox, maxHeight: 480 }}>
                     {diffLoading ? (
                       <Loader2 size={20} style={{ animation: 'km-spin-d 0.9s linear infinite' }} />
@@ -610,7 +672,9 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
                   </pre>
                 </div>
                 <div>
-                  <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: 6 }}>{`v${compareRight ?? ''}`}</div>
+                  <div
+                    style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: 6 }}
+                  >{`v${compareRight ?? ''}`}</div>
                   <pre style={{ ...preBox, maxHeight: 480 }}>
                     {diffLoading ? (
                       <Loader2 size={20} style={{ animation: 'km-spin-d 0.9s linear infinite' }} />
@@ -638,10 +702,19 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
             >
               {t('schemaDetail.compatibilityLevelTitle')}
             </h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)', alignItems: 'center' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 'var(--space-3)',
+                alignItems: 'center',
+              }}
+            >
               <span style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
                 {t('schemaDetail.currentCompat')}
-                <strong style={{ color: 'var(--color-text)', fontFamily: 'var(--font-heading)' }}>{compatLevel}</strong>
+                <strong style={{ color: 'var(--color-text)', fontFamily: 'var(--font-heading)' }}>
+                  {compatLevel}
+                </strong>
               </span>
               <select
                 value={compatDraft}
@@ -695,7 +768,13 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
             >
               {t('schemaDetail.checkCompatibility')}
             </h3>
-            <p style={{ fontSize: 12, color: 'var(--color-text-muted)', marginBottom: 'var(--space-2)' }}>
+            <p
+              style={{
+                fontSize: 12,
+                color: 'var(--color-text-muted)',
+                marginBottom: 'var(--space-2)',
+              }}
+            >
               {t('schemaDetail.checkCompatibilityHint')}
             </p>
             <textarea
@@ -743,13 +822,17 @@ export function SchemaDetailPanel({ clusterId, subject }: { clusterId: string; s
                   padding: 'var(--space-4)',
                   borderRadius: 'var(--radius-md)',
                   border: `1px solid ${checkResult.isCompatible ? 'var(--color-primary)' : 'rgba(239,68,68,0.45)'}`,
-                  background: checkResult.isCompatible ? 'var(--color-primary-muted)' : 'rgba(239,68,68,0.08)',
+                  background: checkResult.isCompatible
+                    ? 'var(--color-primary-muted)'
+                    : 'rgba(239,68,68,0.08)',
                   color: checkResult.isCompatible ? 'var(--color-success)' : 'var(--color-error)',
                   fontSize: 13,
                 }}
               >
                 <div style={{ fontWeight: 700, marginBottom: 8 }}>
-                  {checkResult.isCompatible ? t('schemaDetail.compatible') : t('schemaDetail.incompatible')}
+                  {checkResult.isCompatible
+                    ? t('schemaDetail.compatible')
+                    : t('schemaDetail.incompatible')}
                 </div>
                 {checkResult.messages?.length ? (
                   <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--color-text)' }}>

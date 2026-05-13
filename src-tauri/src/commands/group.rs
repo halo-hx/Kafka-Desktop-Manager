@@ -24,7 +24,10 @@ pub async fn load_connection_groups(db: State<'_, Database>) -> Result<Vec<Value
 }
 
 #[tauri::command]
-pub async fn save_connection_group(db: State<'_, Database>, group: Value) -> Result<String, String> {
+pub async fn save_connection_group(
+    db: State<'_, Database>,
+    group: Value,
+) -> Result<String, String> {
     let inner = group.get("group").cloned().unwrap_or(group);
     let payload: GroupPayload = serde_json::from_value(inner).map_err(|e| e.to_string())?;
 
@@ -49,7 +52,10 @@ pub async fn save_connection_group(db: State<'_, Database>, group: Value) -> Res
 }
 
 #[tauri::command]
-pub async fn delete_connection_group(db: State<'_, Database>, group_id: String) -> Result<(), String> {
+pub async fn delete_connection_group(
+    db: State<'_, Database>,
+    group_id: String,
+) -> Result<(), String> {
     let db = (*db).clone();
     db_run(db, move |database| database.delete_group(&group_id)).await
 }

@@ -146,8 +146,14 @@ export function TabBar() {
             cursor: canScrollLeft ? 'pointer' : 'default',
             transition: 'color var(--transition-fast)',
           }}
-          onMouseEnter={(e) => { if (canScrollLeft) e.currentTarget.style.color = 'var(--color-primary)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = canScrollLeft ? 'var(--color-text-muted)' : 'var(--color-text-faint)'; }}
+          onMouseEnter={(e) => {
+            if (canScrollLeft) e.currentTarget.style.color = 'var(--color-primary)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = canScrollLeft
+              ? 'var(--color-text-muted)'
+              : 'var(--color-text-faint)';
+          }}
         >
           <ChevronLeft size={16} strokeWidth={2} />
         </button>
@@ -208,17 +214,24 @@ export function TabBar() {
                   gap: 7,
                   padding: '0 14px',
                   borderRight: '1px solid var(--color-border-subtle)',
-                  borderBottom: isActive ? '2px solid var(--color-primary)' : '2px solid transparent',
+                  borderBottom: isActive
+                    ? '2px solid var(--color-primary)'
+                    : '2px solid transparent',
                   marginBottom: isActive ? -1 : 0,
                   color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
                   background: isActive ? 'var(--color-primary-muted)' : 'transparent',
                   cursor: 'pointer',
                   userSelect: 'none',
-                  transition: 'color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast)',
+                  transition:
+                    'color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast)',
                   outline: 'none',
                 }}
               >
-                <Icon size={14} strokeWidth={2} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.65 }} />
+                <Icon
+                  size={14}
+                  strokeWidth={2}
+                  style={{ flexShrink: 0, opacity: isActive ? 1 : 0.65 }}
+                />
                 <span
                   style={{
                     flex: 1,
@@ -257,7 +270,8 @@ export function TabBar() {
                       cursor: 'pointer',
                       opacity: showClose ? 1 : 0,
                       pointerEvents: showClose ? 'auto' : 'none',
-                      transition: 'opacity var(--transition-fast), background var(--transition-fast), color var(--transition-fast)',
+                      transition:
+                        'opacity var(--transition-fast), background var(--transition-fast), color var(--transition-fast)',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = 'var(--color-surface-2)';
@@ -294,8 +308,14 @@ export function TabBar() {
             cursor: canScrollRight ? 'pointer' : 'default',
             transition: 'color var(--transition-fast)',
           }}
-          onMouseEnter={(e) => { if (canScrollRight) e.currentTarget.style.color = 'var(--color-primary)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = canScrollRight ? 'var(--color-text-muted)' : 'var(--color-text-faint)'; }}
+          onMouseEnter={(e) => {
+            if (canScrollRight) e.currentTarget.style.color = 'var(--color-primary)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = canScrollRight
+              ? 'var(--color-text-muted)'
+              : 'var(--color-text-faint)';
+          }}
         >
           <ChevronRight size={16} strokeWidth={2} />
         </button>
@@ -343,8 +363,7 @@ export function TabBar() {
                 padding: '8px 14px',
                 background: 'none',
                 border: 'none',
-                color:
-                  index === 3 ? 'var(--color-error)' : 'var(--color-text)',
+                color: index === 3 ? 'var(--color-error)' : 'var(--color-text)',
                 fontFamily: 'var(--font-body)',
                 fontSize: 13,
                 cursor: 'pointer',

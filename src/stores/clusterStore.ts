@@ -1,11 +1,6 @@
 import { create } from 'zustand';
 import { invoke } from '@tauri-apps/api/core';
-import type {
-  BrokerInfo,
-  ClusterOverviewData,
-  ConsumerGroupInfo,
-  TopicInfo,
-} from '../types';
+import type { BrokerInfo, ClusterOverviewData, ConsumerGroupInfo, TopicInfo } from '../types';
 import { snakeToCamel } from '../lib/tauri';
 import { getT } from '../i18n';
 
@@ -25,7 +20,10 @@ interface ClusterStore {
   clearClusterData: (clusterId: string) => void;
 }
 
-async function clusterInvoke<T>(cmd: string, args?: Record<string, unknown>): Promise<T | undefined> {
+async function clusterInvoke<T>(
+  cmd: string,
+  args?: Record<string, unknown>,
+): Promise<T | undefined> {
   try {
     return await invoke<T>(cmd, args);
   } catch (e) {
@@ -137,8 +135,7 @@ export const useClusterStore = create<ClusterStore>((set, get) => ({
         const boxed = snakeToCamel(raw) as { topics?: unknown[] };
         list = Array.isArray(boxed.topics) ? boxed.topics : undefined;
       }
-      const topics =
-        list?.map((row) => normalizeTopic(row)) ?? get().topics[clusterId] ?? [];
+      const topics = list?.map((row) => normalizeTopic(row)) ?? get().topics[clusterId] ?? [];
       set((s) => ({
         topics: { ...s.topics, [clusterId]: topics },
       }));

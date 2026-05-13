@@ -61,12 +61,7 @@ export function MessageExportDialog({
         cols
           .map((c) => {
             if (c === 'headers') return csvEscape(JSON.stringify(m.headers));
-            const v =
-              c === 'key'
-                ? m.key
-                : c === 'value'
-                  ? m.value
-                  : String((m as never)[c] ?? '');
+            const v = c === 'key' ? m.key : c === 'value' ? m.value : String((m as never)[c] ?? '');
             return csvEscape(v);
           })
           .join(','),
@@ -159,12 +154,27 @@ export function MessageExportDialog({
         >
           <Download size={18} color="var(--color-primary)" />
           <strong style={{ flex: 1 }}>{t('msgExport.title')}</strong>
-          <button type="button" aria-label={t('common.close')} disabled={busy} onClick={onClose} style={{ border: 'none', background: 'none', cursor: busy ? 'not-allowed' : 'pointer', color: 'var(--color-text-faint)' }}>
+          <button
+            type="button"
+            aria-label={t('common.close')}
+            disabled={busy}
+            onClick={onClose}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: busy ? 'not-allowed' : 'pointer',
+              color: 'var(--color-text-faint)',
+            }}
+          >
             <X size={18} />
           </button>
         </div>
-        <div style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('msgExport.selectedCount', { count: lineCount })}</p>
+        <div
+          style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 14 }}
+        >
+          <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+            {t('msgExport.selectedCount', { count: lineCount })}
+          </p>
 
           <label style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
             {t('msgExport.format')}
@@ -188,19 +198,72 @@ export function MessageExportDialog({
             </select>
           </label>
 
-          <fieldset style={{ border: `1px solid var(--color-border)`, borderRadius: 'var(--radius-sm)', padding: 12 }}>
-            <legend style={{ fontSize: 12, padding: '0 6px', color: 'var(--color-text-muted)' }}>{t('msgExport.contentFields')}</legend>
+          <fieldset
+            style={{
+              border: `1px solid var(--color-border)`,
+              borderRadius: 'var(--radius-sm)',
+              padding: 12,
+            }}
+          >
+            <legend style={{ fontSize: 12, padding: '0 6px', color: 'var(--color-text-muted)' }}>
+              {t('msgExport.contentFields')}
+            </legend>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, cursor: busy ? 'not-allowed' : 'pointer', color: 'var(--color-text)' }}>
-                <input type="checkbox" disabled={busy} checked={includeKey} onChange={(e) => setIncludeKey(e.target.checked)} style={{ accentColor: 'var(--color-primary)' }} />
+              <label
+                style={{
+                  display: 'flex',
+                  gap: 8,
+                  alignItems: 'center',
+                  fontSize: 12,
+                  cursor: busy ? 'not-allowed' : 'pointer',
+                  color: 'var(--color-text)',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  disabled={busy}
+                  checked={includeKey}
+                  onChange={(e) => setIncludeKey(e.target.checked)}
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
                 {t('sendMsg.key')}
               </label>
-              <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, cursor: busy ? 'not-allowed' : 'pointer', color: 'var(--color-text)' }}>
-                <input type="checkbox" disabled={busy} checked={includeValue} onChange={(e) => setIncludeValue(e.target.checked)} style={{ accentColor: 'var(--color-primary)' }} />
+              <label
+                style={{
+                  display: 'flex',
+                  gap: 8,
+                  alignItems: 'center',
+                  fontSize: 12,
+                  cursor: busy ? 'not-allowed' : 'pointer',
+                  color: 'var(--color-text)',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  disabled={busy}
+                  checked={includeValue}
+                  onChange={(e) => setIncludeValue(e.target.checked)}
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
                 {t('sendMsg.value')}
               </label>
-              <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, cursor: busy ? 'not-allowed' : 'pointer', color: 'var(--color-text)' }}>
-                <input type="checkbox" disabled={busy} checked={includeHeaders} onChange={(e) => setIncludeHeaders(e.target.checked)} style={{ accentColor: 'var(--color-primary)' }} />
+              <label
+                style={{
+                  display: 'flex',
+                  gap: 8,
+                  alignItems: 'center',
+                  fontSize: 12,
+                  cursor: busy ? 'not-allowed' : 'pointer',
+                  color: 'var(--color-text)',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  disabled={busy}
+                  checked={includeHeaders}
+                  onChange={(e) => setIncludeHeaders(e.target.checked)}
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
                 {t('sendMsg.headers')}
               </label>
             </div>
@@ -208,15 +271,40 @@ export function MessageExportDialog({
 
           {busy && (
             <div>
-              <div style={{ height: 6, background: 'var(--color-bg)', borderRadius: 3, overflow: 'hidden', border: '1px solid var(--color-border-subtle)' }}>
-                <div style={{ height: '100%', width: `${progress}%`, background: 'var(--color-primary)', transition: 'width var(--transition-fast)' }} />
+              <div
+                style={{
+                  height: 6,
+                  background: 'var(--color-bg)',
+                  borderRadius: 3,
+                  overflow: 'hidden',
+                  border: '1px solid var(--color-border-subtle)',
+                }}
+              >
+                <div
+                  style={{
+                    height: '100%',
+                    width: `${progress}%`,
+                    background: 'var(--color-primary)',
+                    transition: 'width var(--transition-fast)',
+                  }}
+                />
               </div>
-              <p style={{ marginTop: 6, fontSize: 11, color: 'var(--color-text-faint)' }}>{t('msgExport.writingFile', { progress })}</p>
+              <p style={{ marginTop: 6, fontSize: 11, color: 'var(--color-text-faint)' }}>
+                {t('msgExport.writingFile', { progress })}
+              </p>
             </div>
           )}
 
           {err && (
-            <div style={{ padding: 10, borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', color: 'var(--color-error)', fontSize: 12 }}>
+            <div
+              style={{
+                padding: 10,
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(239,68,68,0.12)',
+                color: 'var(--color-error)',
+                fontSize: 12,
+              }}
+            >
               {err}
             </div>
           )}

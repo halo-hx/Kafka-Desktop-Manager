@@ -218,7 +218,15 @@ export function CommandPalette() {
         action: () => toggleInternalTopics(),
       },
     ],
-    [apple, openConnectionDialog, openTab, resolveCreateTopicCluster, t, toggleInternalTopics, toggleSidebar],
+    [
+      apple,
+      openConnectionDialog,
+      openTab,
+      resolveCreateTopicCluster,
+      t,
+      toggleInternalTopics,
+      toggleSidebar,
+    ],
   );
 
   const resources: ResourceRow[] = useMemo(() => {
@@ -345,7 +353,11 @@ export function CommandPalette() {
         const conn = connections.find((c) => c.id === row.res.clusterId);
         const titlePrefix = conn?.name?.trim() || row.res.clusterId;
         if (row.res.kind === 'cluster') {
-          openTab({ type: 'cluster-overview', clusterId: row.res.clusterId }, titlePrefix, 'layout-dashboard');
+          openTab(
+            { type: 'cluster-overview', clusterId: row.res.clusterId },
+            titlePrefix,
+            'layout-dashboard',
+          );
         } else if (row.res.kind === 'topic') {
           openTab(
             { type: 'topic-data', clusterId: row.res.clusterId, topicName: row.res.label },
@@ -405,150 +417,212 @@ export function CommandPalette() {
   };
 
   const highlightedFlatIndex =
-    selectableRowIndexes[Math.min(Math.max(0, highlightSlot), Math.max(selectableRowIndexes.length - 1, 0))];
+    selectableRowIndexes[
+      Math.min(Math.max(0, highlightSlot), Math.max(selectableRowIndexes.length - 1, 0))
+    ];
 
   const rowTone = (flatIndex: number): Pick<React.CSSProperties, 'background' | 'color'> => ({
-    background:
-      flatIndex === highlightedFlatIndex ? 'var(--color-primary-muted)' : 'transparent',
+    background: flatIndex === highlightedFlatIndex ? 'var(--color-primary-muted)' : 'transparent',
     color: flatIndex === highlightedFlatIndex ? 'var(--color-primary)' : 'var(--color-text)',
   });
 
   return (
     <>
       {open && (
-      <div
-        ref={backdropRef}
-        role="presentation"
-        onClick={(ev) => {
-          if (ev.target === backdropRef.current) setPaletteOpen(false);
-        }}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 8000,
-          background: 'rgba(15, 23, 42, 0.62)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          paddingTop: '18vh',
-          transition: 'opacity var(--transition-fast)',
-        }}
-      >
         <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={t('command.palette')}
-          data-palette-panel=""
-          tabIndex={-1}
-          onKeyDown={onDialogKeyDown}
+          ref={backdropRef}
+          role="presentation"
+          onClick={(ev) => {
+            if (ev.target === backdropRef.current) setPaletteOpen(false);
+          }}
           style={{
-            width: 'min(600px, calc(100vw - 48px))',
-            maxHeight: 'min(70vh, 520px)',
+            position: 'fixed',
+            inset: 0,
+            zIndex: 8000,
+            background: 'rgba(15, 23, 42, 0.62)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             display: 'flex',
-            flexDirection: 'column',
-            background: 'var(--color-surface)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: '0 24px 64px rgba(0,0,0,0.45)',
-            overflow: 'hidden',
-            outline: 'none',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            paddingTop: '18vh',
+            transition: 'opacity var(--transition-fast)',
           }}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('command.palette')}
+            data-palette-panel=""
+            tabIndex={-1}
+            onKeyDown={onDialogKeyDown}
             style={{
-              padding: '10px 12px',
-              borderBottom: '1px solid var(--color-border-subtle)',
+              width: 'min(600px, calc(100vw - 48px))',
+              maxHeight: 'min(70vh, 520px)',
               display: 'flex',
-              alignItems: 'center',
-              gap: 8,
+              flexDirection: 'column',
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: '0 24px 64px rgba(0,0,0,0.45)',
+              overflow: 'hidden',
+              outline: 'none',
             }}
           >
-            <Search size={18} color="var(--color-text-muted)" aria-hidden />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setHighlightSlot(0);
+            <div
+              style={{
+                padding: '10px 12px',
+                borderBottom: '1px solid var(--color-border-subtle)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
               }}
-              placeholder={t('command.searchPlaceholder')}
-              aria-label={t('command.searchLabel')}
+            >
+              <Search size={18} color="var(--color-text-muted)" aria-hidden />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setHighlightSlot(0);
+                }}
+                placeholder={t('command.searchPlaceholder')}
+                aria-label={t('command.searchLabel')}
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'var(--color-text)',
+                  outline: 'none',
+                  fontSize: 14,
+                  fontFamily: 'var(--font-body)',
+                }}
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+              />
+            </div>
+
+            <div
+              role="listbox"
+              aria-activedescendant={
+                selectableRowIndexes[highlightSlot] !== undefined
+                  ? `palette-row-${selectableRowIndexes[highlightSlot]}`
+                  : undefined
+              }
               style={{
                 flex: 1,
-                border: 'none',
-                background: 'transparent',
-                color: 'var(--color-text)',
-                outline: 'none',
-                fontSize: 14,
-                fontFamily: 'var(--font-body)',
+                overflowY: 'auto',
+                padding: '4px 6px',
               }}
-              autoCapitalize="off"
-              autoCorrect="off"
-              spellCheck={false}
-            />
-          </div>
-
-          <div
-            role="listbox"
-            aria-activedescendant={
-              selectableRowIndexes[highlightSlot] !== undefined
-                ? `palette-row-${selectableRowIndexes[highlightSlot]}`
-                : undefined
-            }
-            style={{
-              flex: 1,
-              overflowY: 'auto',
-              padding: '4px 6px',
-            }}
-          >
-            {flatRows.length === 0 && (
-              <div style={{ padding: 28, color: 'var(--color-text-faint)', textAlign: 'center', fontSize: 13 }}>
-                {t('command.noMatch')}
-              </div>
-            )}
-            {flatRows.map((row, flatIndex) => {
-              if (row.type === 'header') {
-                const HIcon = row.icon ?? Command;
-                return (
-                  <div
-                    key={`h-${flatIndex}-${row.title}`}
-                    role="presentation"
-                    style={{
-                      padding: '8px 10px 4px',
-                      fontSize: 11,
-                      fontWeight: 600,
-                      letterSpacing: '0.04em',
-                      color: 'var(--color-text-faint)',
-                      textTransform: 'uppercase',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      fontFamily: 'var(--font-body)',
-                    }}
-                  >
-                    <HIcon size={12} aria-hidden />
-                    {row.title}
-                  </div>
-                );
-              }
-              if (row.type === 'command') {
-                const Icon = row.def.icon;
+            >
+              {flatRows.length === 0 && (
+                <div
+                  style={{
+                    padding: 28,
+                    color: 'var(--color-text-faint)',
+                    textAlign: 'center',
+                    fontSize: 13,
+                  }}
+                >
+                  {t('command.noMatch')}
+                </div>
+              )}
+              {flatRows.map((row, flatIndex) => {
+                if (row.type === 'header') {
+                  const HIcon = row.icon ?? Command;
+                  return (
+                    <div
+                      key={`h-${flatIndex}-${row.title}`}
+                      role="presentation"
+                      style={{
+                        padding: '8px 10px 4px',
+                        fontSize: 11,
+                        fontWeight: 600,
+                        letterSpacing: '0.04em',
+                        color: 'var(--color-text-faint)',
+                        textTransform: 'uppercase',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6,
+                        fontFamily: 'var(--font-body)',
+                      }}
+                    >
+                      <HIcon size={12} aria-hidden />
+                      {row.title}
+                    </div>
+                  );
+                }
+                if (row.type === 'command') {
+                  const Icon = row.def.icon;
+                  const isHi = flatIndex === highlightedFlatIndex;
+                  return (
+                    <button
+                      key={`${flatIndex}-${row.def.id}`}
+                      ref={isHi ? highlightedRowRef : undefined}
+                      type="button"
+                      role="option"
+                      id={`palette-row-${flatIndex}`}
+                      tabIndex={isHi ? 0 : -1}
+                      aria-selected={isHi}
+                      onMouseEnter={() => setHighlightSlot(selectableRowIndexes.indexOf(flatIndex))}
+                      onClick={() => runRow(row)}
+                      style={{
+                        width: '100%',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '10px 10px',
+                        borderRadius: 'var(--radius-sm)',
+                        textAlign: 'left',
+                        fontSize: 13,
+                        transition: `background var(--transition-fast), color var(--transition-fast)`,
+                        ...rowTone(flatIndex),
+                      }}
+                    >
+                      <Icon size={17} aria-hidden strokeWidth={2} />
+                      <span style={{ flex: 1, fontFamily: 'var(--font-body)' }}>
+                        {row.def.label}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 11,
+                          color: 'var(--color-text-faint)',
+                        }}
+                      >
+                        {row.def.shortcut ?? ''}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          padding: '2px 6px',
+                          borderRadius: 'var(--radius-sm)',
+                          background: 'var(--color-surface-2)',
+                          color: 'var(--color-text-muted)',
+                          fontFamily: 'var(--font-body)',
+                        }}
+                      >
+                        {row.def.category}
+                      </span>
+                    </button>
+                  );
+                }
+                const Icon = row.res.icon;
                 const isHi = flatIndex === highlightedFlatIndex;
                 return (
                   <button
-                    key={`${flatIndex}-${row.def.id}`}
+                    key={row.res.id}
                     ref={isHi ? highlightedRowRef : undefined}
                     type="button"
                     role="option"
                     id={`palette-row-${flatIndex}`}
                     tabIndex={isHi ? 0 : -1}
                     aria-selected={isHi}
-                    onMouseEnter={() =>
-                      setHighlightSlot(selectableRowIndexes.indexOf(flatIndex))
-                    }
+                    onMouseEnter={() => setHighlightSlot(selectableRowIndexes.indexOf(flatIndex))}
                     onClick={() => runRow(row)}
                     style={{
                       width: '100%',
@@ -566,82 +640,26 @@ export function CommandPalette() {
                     }}
                   >
                     <Icon size={17} aria-hidden strokeWidth={2} />
-                    <span style={{ flex: 1, fontFamily: 'var(--font-body)' }}>{row.def.label}</span>
                     <span
                       style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 11,
-                        color: 'var(--color-text-faint)',
-                      }}
-                    >
-                      {row.def.shortcut ?? ''}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: 10,
-                        padding: '2px 6px',
-                        borderRadius: 'var(--radius-sm)',
-                        background: 'var(--color-surface-2)',
-                        color: 'var(--color-text-muted)',
+                        flex: 1,
                         fontFamily: 'var(--font-body)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      {row.def.category}
+                      {row.res.label}
+                    </span>
+                    <span style={{ flexShrink: 0, fontSize: 11, color: 'var(--color-text-muted)' }}>
+                      （{row.res.sub}）
                     </span>
                   </button>
                 );
-              }
-              const Icon = row.res.icon;
-              const isHi = flatIndex === highlightedFlatIndex;
-              return (
-                <button
-                  key={row.res.id}
-                  ref={isHi ? highlightedRowRef : undefined}
-                  type="button"
-                  role="option"
-                  id={`palette-row-${flatIndex}`}
-                  tabIndex={isHi ? 0 : -1}
-                  aria-selected={isHi}
-                  onMouseEnter={() =>
-                    setHighlightSlot(selectableRowIndexes.indexOf(flatIndex))
-                  }
-                  onClick={() => runRow(row)}
-                  style={{
-                    width: '100%',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    padding: '10px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    textAlign: 'left',
-                    fontSize: 13,
-                    transition: `background var(--transition-fast), color var(--transition-fast)`,
-                    ...rowTone(flatIndex),
-                  }}
-                >
-                  <Icon size={17} aria-hidden strokeWidth={2} />
-                  <span
-                    style={{
-                      flex: 1,
-                      fontFamily: 'var(--font-body)',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {row.res.label}
-                  </span>
-                  <span style={{ flexShrink: 0, fontSize: 11, color: 'var(--color-text-muted)' }}>
-                    （{row.res.sub}）
-                  </span>
-                </button>
-              );
-            })}
+              })}
+            </div>
           </div>
         </div>
-      </div>
       )}
 
       {createTopicClusterId && (

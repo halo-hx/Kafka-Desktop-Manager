@@ -125,7 +125,10 @@ export function ClusterConfigEditDialog({ open, clusterId, brokerId, onClose, on
         brokerId,
         changes: changes.map((c) => ({ name: c.name, value: c.value })),
       });
-      setToast({ kind: 'ok', text: t('overview.editConfig.applySuccess', { count: changes.length }) });
+      setToast({
+        kind: 'ok',
+        text: t('overview.editConfig.applySuccess', { count: changes.length }),
+      });
       setConfirmOpen(false);
       onApplied?.();
       // 重新拉取以反映最新值
@@ -271,7 +274,14 @@ export function ClusterConfigEditDialog({ open, clusterId, brokerId, onClose, on
             />
           </div>
           <label
-            style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--color-text-muted)', cursor: 'pointer' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 12,
+              color: 'var(--color-text-muted)',
+              cursor: 'pointer',
+            }}
           >
             <input
               type="checkbox"
@@ -282,7 +292,14 @@ export function ClusterConfigEditDialog({ open, clusterId, brokerId, onClose, on
             {t('overview.editConfig.showOnlyEditable')}
           </label>
           <label
-            style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--color-text-muted)', cursor: 'pointer' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 12,
+              color: 'var(--color-text-muted)',
+              cursor: 'pointer',
+            }}
           >
             <input
               type="checkbox"
@@ -310,11 +327,7 @@ export function ClusterConfigEditDialog({ open, clusterId, brokerId, onClose, on
               gap: 4,
             }}
           >
-            {loading ? (
-              <Loader2 className="animate-km-spin" size={12} />
-            ) : (
-              <RefreshCw size={12} />
-            )}
+            {loading ? <Loader2 className="animate-km-spin" size={12} /> : <RefreshCw size={12} />}
             {t('common.refresh')}
           </button>
         </div>
@@ -357,7 +370,11 @@ export function ClusterConfigEditDialog({ open, clusterId, brokerId, onClose, on
                 gap: 8,
               }}
             >
-              <AlertCircle size={16} color="var(--color-error)" style={{ flexShrink: 0, marginTop: 1 }} />
+              <AlertCircle
+                size={16}
+                color="var(--color-error)"
+                style={{ flexShrink: 0, marginTop: 1 }}
+              />
               {error}
             </div>
           )}
@@ -426,10 +443,20 @@ export function ClusterConfigEditDialog({ open, clusterId, brokerId, onClose, on
                     {entry.name}
                   </div>
                   <div style={{ display: 'flex', gap: 4, marginTop: 3, flexWrap: 'wrap' }}>
-                    {entry.read_only && <Badge color="#9CA3AF">{t('overview.editConfig.readonlyBadge')}</Badge>}
-                    {entry.is_default && <Badge color="#6B7280">{t('overview.editConfig.defaultBadge')}</Badge>}
-                    {entry.sensitive && <Badge color="#F59E0B">{t('overview.editConfig.sensitiveBadge')}</Badge>}
-                    {isEdited && <Badge color="var(--color-primary)">{t('overview.editConfig.modifiedBadge')}</Badge>}
+                    {entry.read_only && (
+                      <Badge color="#9CA3AF">{t('overview.editConfig.readonlyBadge')}</Badge>
+                    )}
+                    {entry.is_default && (
+                      <Badge color="#6B7280">{t('overview.editConfig.defaultBadge')}</Badge>
+                    )}
+                    {entry.sensitive && (
+                      <Badge color="#F59E0B">{t('overview.editConfig.sensitiveBadge')}</Badge>
+                    )}
+                    {isEdited && (
+                      <Badge color="var(--color-primary)">
+                        {t('overview.editConfig.modifiedBadge')}
+                      </Badge>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -532,9 +559,13 @@ export function ClusterConfigEditDialog({ open, clusterId, brokerId, onClose, on
             style={{
               padding: '6px 14px',
               background:
-                changes.length === 0 || applying ? 'var(--color-primary-muted)' : 'var(--color-primary)',
+                changes.length === 0 || applying
+                  ? 'var(--color-primary-muted)'
+                  : 'var(--color-primary)',
               color:
-                changes.length === 0 || applying ? 'var(--color-primary)' : 'var(--color-primary-text)',
+                changes.length === 0 || applying
+                  ? 'var(--color-primary)'
+                  : 'var(--color-primary-text)',
               border: 'none',
               borderRadius: 'var(--radius-sm)',
               cursor: changes.length === 0 || applying ? 'not-allowed' : 'pointer',

@@ -71,7 +71,13 @@ function lagColor(lag: number): string {
   return 'var(--color-error)';
 }
 
-export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: string; groupId: string }) {
+export function ConsumerGroupDetailPanel({
+  clusterId,
+  groupId,
+}: {
+  clusterId: string;
+  groupId: string;
+}) {
   const t = useT();
   const loadConsumerGroups = useClusterStore((s) => s.loadConsumerGroups);
   const groups = useClusterStore((s) => s.consumerGroups[clusterId] ?? EMPTY_GROUPS);
@@ -92,7 +98,10 @@ export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: st
     setLoading(true);
     try {
       await loadConsumerGroups(clusterId);
-      const result = await invoke<DescribeResult>('describe_consumer_group', { clusterId, groupId });
+      const result = await invoke<DescribeResult>('describe_consumer_group', {
+        clusterId,
+        groupId,
+      });
       setOffsets(
         result.offsets.map((o) => ({
           topic: o.topic,
@@ -139,7 +148,11 @@ export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: st
     } catch (e) {
       console.warn('[ConsumerGroupDetailPanel] delete_consumer_group:', e);
       setActionError(
-        typeof e === 'string' ? e : e instanceof Error ? e.message : t('consumerDetail.deleteFailed'),
+        typeof e === 'string'
+          ? e
+          : e instanceof Error
+            ? e.message
+            : t('consumerDetail.deleteFailed'),
       );
     } finally {
       setDeleting(false);
@@ -179,7 +192,12 @@ export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: st
         <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
           {t('consumerDetail.status')}: {info ? t(STATE_I18N[info.state]) : t('common.loading')}
           {loading && (
-            <Loader2 size={12} strokeWidth={2} style={{ marginLeft: 8, animation: 'km-spin 1s linear infinite' }} aria-hidden />
+            <Loader2
+              size={12}
+              strokeWidth={2}
+              style={{ marginLeft: 8, animation: 'km-spin 1s linear infinite' }}
+              aria-hidden
+            />
           )}
         </p>
       </header>
@@ -187,7 +205,12 @@ export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: st
       <div
         role="tablist"
         aria-label={t('consumerDetail.title')}
-        style={{ display: 'flex', gap: 4, marginBottom: 'var(--space-4)', borderBottom: '1px solid var(--color-border-subtle)' }}
+        style={{
+          display: 'flex',
+          gap: 4,
+          marginBottom: 'var(--space-4)',
+          borderBottom: '1px solid var(--color-border-subtle)',
+        }}
       >
         {tabDefs.map(({ id, labelKey }) => (
           <button
@@ -247,125 +270,149 @@ export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: st
           aria-label={t('consumerDetail.offsets')}
         >
           {offsets.length === 0 && !loading ? (
-            <p style={{ color: 'var(--color-text-faint)', fontSize: 13 }}>{t('consumerDetail.noOffsetsCommitted')}</p>
+            <p style={{ color: 'var(--color-text-faint)', fontSize: 13 }}>
+              {t('consumerDetail.noOffsetsCommitted')}
+            </p>
           ) : (
-          <div
-            style={{
-              border: '1px solid var(--color-border-subtle)',
-              borderRadius: 'var(--radius-md)',
-              overflow: 'auto',
-            }}
-          >
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead>
-                <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
-                  {OFFSET_HEADERS.map(({ key, align }) => (
-                    <th
-                      key={key}
-                      style={{
-                        padding: '8px 12px',
-                        textAlign: align,
-                        fontSize: 11,
-                        fontWeight: 600,
-                        color: 'var(--color-text-faint)',
-                        borderBottom: '1px solid var(--color-border-subtle)',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {t(key)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {offsets.map((r, i) => (
+            <div
+              style={{
+                border: '1px solid var(--color-border-subtle)',
+                borderRadius: 'var(--radius-md)',
+                overflow: 'auto',
+              }}
+            >
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                <thead>
                   <tr
-                    key={`${r.topic}-${r.partition}`}
                     style={{
-                      background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)',
-                      transition: 'background var(--transition-fast)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'var(--color-surface-2)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background =
-                        i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)';
+                      background: 'var(--color-surface)',
+                      position: 'sticky',
+                      top: 0,
+                      zIndex: 1,
                     }}
                   >
-                    <td style={{ padding: '9px 12px', fontFamily: 'var(--font-heading)', fontSize: 12 }}>{r.topic}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'center', fontFamily: 'var(--font-heading)', color: 'var(--color-text-muted)' }}>
-                      {r.partition}
-                    </td>
-                    <td
+                    {OFFSET_HEADERS.map(({ key, align }) => (
+                      <th
+                        key={key}
+                        style={{
+                          padding: '8px 12px',
+                          textAlign: align,
+                          fontSize: 11,
+                          fontWeight: 600,
+                          color: 'var(--color-text-faint)',
+                          borderBottom: '1px solid var(--color-border-subtle)',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {t(key)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {offsets.map((r, i) => (
+                    <tr
+                      key={`${r.topic}-${r.partition}`}
                       style={{
-                        padding: '9px 12px',
-                        textAlign: 'right',
-                        fontFamily: 'var(--font-heading)',
+                        background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)',
+                        transition: 'background var(--transition-fast)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'var(--color-surface-2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background =
+                          i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)';
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 12,
+                        }}
+                      >
+                        {r.topic}
+                      </td>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          textAlign: 'center',
+                          fontFamily: 'var(--font-heading)',
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
+                        {r.partition}
+                      </td>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          textAlign: 'right',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 12,
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
+                        {r.startOffset}
+                      </td>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          textAlign: 'right',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 12,
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
+                        {r.endOffset}
+                      </td>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          textAlign: 'right',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 12,
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
+                        {r.consumerOffset}
+                      </td>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          textAlign: 'center',
+                          fontFamily: 'var(--font-heading)',
+                          fontWeight: 700,
+                          color: lagColor(r.lag),
+                        }}
+                      >
+                        {r.lag.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr style={{ background: 'rgba(59,130,246,0.06)' }}>
+                    <td
+                      colSpan={6}
+                      style={{
+                        padding: '10px 12px',
                         fontSize: 12,
+                        fontWeight: 600,
                         color: 'var(--color-text-muted)',
+                        borderTop: '1px solid var(--color-border-subtle)',
                       }}
                     >
-                      {r.startOffset}
-                    </td>
-                    <td
-                      style={{
-                        padding: '9px 12px',
-                        textAlign: 'right',
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 12,
-                        color: 'var(--color-text-muted)',
-                      }}
-                    >
-                      {r.endOffset}
-                    </td>
-                    <td
-                      style={{
-                        padding: '9px 12px',
-                        textAlign: 'right',
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 12,
-                        color: 'var(--color-text-muted)',
-                      }}
-                    >
-                      {r.consumerOffset}
-                    </td>
-                    <td
-                      style={{
-                        padding: '9px 12px',
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-heading)',
-                        fontWeight: 700,
-                        color: lagColor(r.lag),
-                      }}
-                    >
-                      {r.lag.toLocaleString()}
+                      {t('consumerDetail.offsetFooter', {
+                        totalPartitions,
+                        totalLag: totalLag.toLocaleString(),
+                        avgLag: avgLag.toLocaleString(),
+                      })}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr style={{ background: 'rgba(59,130,246,0.06)' }}>
-                  <td
-                    colSpan={6}
-                    style={{
-                      padding: '10px 12px',
-                      fontSize: 12,
-                      fontWeight: 600,
-                      color: 'var(--color-text-muted)',
-                      borderTop: '1px solid var(--color-border-subtle)',
-                    }}
-                  >
-                    {t('consumerDetail.offsetFooter', {
-                      totalPartitions,
-                      totalLag: totalLag.toLocaleString(),
-                      avgLag: avgLag.toLocaleString(),
-                    })}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                </tfoot>
+              </table>
+            </div>
           )}
         </section>
       )}
@@ -378,59 +425,98 @@ export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: st
           aria-label={t('consumerDetail.members')}
         >
           {members.length === 0 && !loading ? (
-            <p style={{ color: 'var(--color-text-faint)', fontSize: 13 }}>{t('consumerDetail.noActiveMembers')}</p>
+            <p style={{ color: 'var(--color-text-faint)', fontSize: 13 }}>
+              {t('consumerDetail.noActiveMembers')}
+            </p>
           ) : (
-          <div
-            style={{
-              border: '1px solid var(--color-border-subtle)',
-              borderRadius: 'var(--radius-md)',
-              overflow: 'auto',
-            }}
-          >
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead>
-                <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
-                  {(['consumerDetail.memberId', 'consumerDetail.clientId', 'consumerDetail.host'] as const).map((key) => (
-                    <th
-                      key={key}
-                      style={{
-                        padding: '8px 12px',
-                        textAlign: 'left',
-                        fontSize: 11,
-                        fontWeight: 600,
-                        color: 'var(--color-text-faint)',
-                        borderBottom: '1px solid var(--color-border-subtle)',
-                      }}
-                    >
-                      {t(key)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {members.map((m, i) => (
+            <div
+              style={{
+                border: '1px solid var(--color-border-subtle)',
+                borderRadius: 'var(--radius-md)',
+                overflow: 'auto',
+              }}
+            >
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                <thead>
                   <tr
-                    key={m.memberId}
                     style={{
-                      background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)',
-                      transition: 'background var(--transition-fast)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'var(--color-surface-2)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background =
-                        i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)';
+                      background: 'var(--color-surface)',
+                      position: 'sticky',
+                      top: 0,
+                      zIndex: 1,
                     }}
                   >
-                    <td style={{ padding: '9px 12px', fontFamily: 'var(--font-heading)', fontSize: 12 }}>{m.memberId}</td>
-                    <td style={{ padding: '9px 12px', fontSize: 12, color: 'var(--color-text-muted)' }}>{m.clientId}</td>
-                    <td style={{ padding: '9px 12px', fontSize: 12, color: 'var(--color-text-muted)' }}>{m.host}</td>
+                    {(
+                      [
+                        'consumerDetail.memberId',
+                        'consumerDetail.clientId',
+                        'consumerDetail.host',
+                      ] as const
+                    ).map((key) => (
+                      <th
+                        key={key}
+                        style={{
+                          padding: '8px 12px',
+                          textAlign: 'left',
+                          fontSize: 11,
+                          fontWeight: 600,
+                          color: 'var(--color-text-faint)',
+                          borderBottom: '1px solid var(--color-border-subtle)',
+                        }}
+                      >
+                        {t(key)}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {members.map((m, i) => (
+                    <tr
+                      key={m.memberId}
+                      style={{
+                        background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)',
+                        transition: 'background var(--transition-fast)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'var(--color-surface-2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background =
+                          i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)';
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 12,
+                        }}
+                      >
+                        {m.memberId}
+                      </td>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          fontSize: 12,
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
+                        {m.clientId}
+                      </td>
+                      <td
+                        style={{
+                          padding: '9px 12px',
+                          fontSize: 12,
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
+                        {m.host}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </section>
       )}
@@ -497,7 +583,11 @@ export function ConsumerGroupDetailPanel({ clusterId, groupId }: { clusterId: st
             }}
           >
             {deleting ? (
-              <Loader2 size={18} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} />
+              <Loader2
+                size={18}
+                strokeWidth={2}
+                style={{ animation: 'km-spin 1s linear infinite' }}
+              />
             ) : (
               <Trash2 size={18} strokeWidth={2} aria-hidden />
             )}

@@ -250,7 +250,8 @@ const zh = {
   'overview.viewACL': '查看 ACL',
   'overview.editConfig': '编辑集群配置',
   'overview.editConfig.title': '编辑集群配置',
-  'overview.editConfig.subtitle': '基于 Broker {brokerId}（控制器）· IncrementalAlterConfigs 仅提交已修改项',
+  'overview.editConfig.subtitle':
+    '基于 Broker {brokerId}（控制器）· IncrementalAlterConfigs 仅提交已修改项',
   'overview.editConfig.searchPlaceholder': '搜索配置项…',
   'overview.editConfig.showOnlyEditable': '仅显示可编辑',
   'overview.editConfig.showOnlyChanged': '仅显示已修改',
@@ -267,7 +268,8 @@ const zh = {
   'overview.editConfig.applySuccess': '已提交 {count} 项配置变更',
   'overview.editConfig.applyError': '应用配置失败：{error}',
   'overview.editConfig.confirmTitle': '确认提交集群配置变更？',
-  'overview.editConfig.confirmMessage': '将向 Broker {brokerId} 发送以下变更，部分参数可能需要重启生效：',
+  'overview.editConfig.confirmMessage':
+    '将向 Broker {brokerId} 发送以下变更，部分参数可能需要重启生效：',
   'overview.editConfig.confirm': '确认提交',
   'overview.editConfig.noControllerError': '未找到控制器 Broker，无法编辑集群配置',
   'overview.resolving': '正在解析节点地址…',
@@ -467,8 +469,7 @@ const zh = {
   'messages.rangeOldest': '最早消息',
   'messages.rangeOffset': '指定 Offset',
   'messages.rangeTimestamp': '指定时间',
-  'messages.emptyStateHint':
-    '点击「{fetch}」加载历史消息，或开启「{realtime}」模式。',
+  'messages.emptyStateHint': '点击「{fetch}」加载历史消息，或开启「{realtime}」模式。',
   'messages.fetchMessages': '获取消息',
   'messages.realtimeMode': '实时模式',
 
@@ -559,14 +560,17 @@ const zh = {
   'consumerDetail.settings': '设置',
   'consumerDetail.startOffset': 'Start Offset',
   'consumerDetail.consumerOffset': 'Consumer Offset',
-  'consumerDetail.offsetFooter': '总分区数 {totalPartitions} · 总 Lag {totalLag} · 平均 Lag {avgLag}',
+  'consumerDetail.offsetFooter':
+    '总分区数 {totalPartitions} · 总 Lag {totalLag} · 平均 Lag {avgLag}',
   'consumerDetail.noOffsetsCommitted': '该消费组暂无已提交的 Offset 记录。',
   'consumerDetail.noActiveMembers': '当前无活跃成员。',
   'consumerDetail.deleteConfirm': '确定要删除该 Consumer Group 吗？此操作不可撤销。',
   'consumerDetail.deleteFailed': '删除失败：后端命令可能尚未实现',
   'consumerDetail.deleteGroup': '删除 Consumer Group',
-  'consumerDetail.resetOffsetDisabledTitle': '仅在消费组为空或失效（Empty / Dead）时允许重置 Offset',
-  'consumerDetail.resetOffsetUnavailable': '「重置 Offset」在成员活跃或再均衡时不可用。请停止消费者或等待分组进入 Empty / Dead 状态。',
+  'consumerDetail.resetOffsetDisabledTitle':
+    '仅在消费组为空或失效（Empty / Dead）时允许重置 Offset',
+  'consumerDetail.resetOffsetUnavailable':
+    '「重置 Offset」在成员活跃或再均衡时不可用。请停止消费者或等待分组进入 Empty / Dead 状态。',
 
   // ── Reset Offset Dialog ──
   'resetOffset.title': '重置 Offset',

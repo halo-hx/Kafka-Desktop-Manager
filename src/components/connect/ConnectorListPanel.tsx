@@ -11,10 +11,7 @@ import { useUIStore } from '../../stores/uiStore';
 import { CreateConnectorDialog } from './CreateConnectorDialog';
 
 function StateBadge({ state }: { state: ConnectorInfo['state'] }) {
-  const map: Record<
-    ConnectorInfo['state'],
-    { bg: string; fg: string; border: string }
-  > = {
+  const map: Record<ConnectorInfo['state'], { bg: string; fg: string; border: string }> = {
     RUNNING: {
       bg: 'rgba(34, 197, 94, 0.12)',
       fg: 'var(--color-success)',
@@ -128,7 +125,9 @@ export function ConnectorListPanel({ clusterId }: { clusterId: string }) {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return connectors;
-    return connectors.filter((c) => c.name.toLowerCase().includes(q) || c.workerUrl.toLowerCase().includes(q));
+    return connectors.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.workerUrl.toLowerCase().includes(q),
+    );
   }, [connectors, search]);
 
   const openDetail = (c: ConnectorInfo) => {
@@ -201,7 +200,12 @@ export function ConnectorListPanel({ clusterId }: { clusterId: string }) {
             minWidth: 200,
           }}
         >
-          <Search size={16} strokeWidth={2} style={{ color: 'var(--color-text-faint)', flexShrink: 0 }} aria-hidden />
+          <Search
+            size={16}
+            strokeWidth={2}
+            style={{ color: 'var(--color-text-faint)', flexShrink: 0 }}
+            aria-hidden
+          />
           <input
             type="search"
             placeholder={t('connect.searchWorkersPlaceholder')}
@@ -282,7 +286,12 @@ export function ConnectorListPanel({ clusterId }: { clusterId: string }) {
               color: 'var(--color-text-muted)',
             }}
           >
-            <Loader2 size={22} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} aria-hidden />
+            <Loader2
+              size={22}
+              strokeWidth={2}
+              style={{ animation: 'km-spin 1s linear infinite' }}
+              aria-hidden
+            />
             {t('connect.loadingConnectors')}
           </div>
         ) : filtered.length === 0 ? (
@@ -293,13 +302,27 @@ export function ConnectorListPanel({ clusterId }: { clusterId: string }) {
               color: 'var(--color-text-faint)',
             }}
           >
-            <Plug size={36} strokeWidth={1.5} style={{ marginBottom: 12, opacity: 0.5 }} aria-hidden />
-            <p style={{ fontSize: 14 }}>{connectors.length === 0 ? t('connect.noConnectors') : t('connect.noMatch')}</p>
+            <Plug
+              size={36}
+              strokeWidth={1.5}
+              style={{ marginBottom: 12, opacity: 0.5 }}
+              aria-hidden
+            />
+            <p style={{ fontSize: 14 }}>
+              {connectors.length === 0 ? t('connect.noConnectors') : t('connect.noMatch')}
+            </p>
           </div>
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
-              <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
+              <tr
+                style={{
+                  background: 'var(--color-surface)',
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: 1,
+                }}
+              >
                 {[
                   t('connect.name'),
                   t('connect.type'),

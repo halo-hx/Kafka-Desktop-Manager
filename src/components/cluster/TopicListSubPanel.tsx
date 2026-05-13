@@ -3,15 +3,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
-import {
-  ChevronDown,
-  ChevronUp,
-  Eye,
-  Loader2,
-  Network,
-  RefreshCw,
-  Search,
-} from 'lucide-react';
+import { ChevronDown, ChevronUp, Eye, Loader2, Network, RefreshCw, Search } from 'lucide-react';
 import { useClusterStore } from '../../stores/clusterStore';
 import { useUIStore } from '../../stores/uiStore';
 import type { TopicInfo } from '../../types';
@@ -58,14 +50,19 @@ export function TopicListSubPanel({ clusterId }: Props) {
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    else { setSortField(field); setSortDir('asc'); }
+    else {
+      setSortField(field);
+      setSortDir('asc');
+    }
   };
 
   const SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) return null;
-    return sortDir === 'asc'
-      ? <ChevronUp size={12} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
-      : <ChevronDown size={12} style={{ verticalAlign: 'middle', marginLeft: 2 }} />;
+    return sortDir === 'asc' ? (
+      <ChevronUp size={12} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
+    ) : (
+      <ChevronDown size={12} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
+    );
   };
 
   const openTopicData = (topic: TopicInfo) => {
@@ -87,7 +84,14 @@ export function TopicListSubPanel({ clusterId }: Props) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontFamily: 'var(--font-body)' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        fontFamily: 'var(--font-body)',
+      }}
+    >
       {/* Toolbar */}
       <div
         style={{
@@ -99,7 +103,11 @@ export function TopicListSubPanel({ clusterId }: Props) {
           flexWrap: 'wrap',
         }}
       >
-        <Network size={16} strokeWidth={2} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
+        <Network
+          size={16}
+          strokeWidth={2}
+          style={{ color: 'var(--color-primary)', flexShrink: 0 }}
+        />
         <h2
           style={{
             fontSize: 14,
@@ -111,9 +119,7 @@ export function TopicListSubPanel({ clusterId }: Props) {
         >
           {t('topicList.title')}
         </h2>
-        <span style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
-          ({filtered.length})
-        </span>
+        <span style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>({filtered.length})</span>
 
         <div style={{ flex: 1 }} />
 
@@ -189,9 +195,7 @@ export function TopicListSubPanel({ clusterId }: Props) {
             fontSize: 12,
           }}
         >
-          {loading
-            ? <Loader2 size={12} className="animate-km-spin" />
-            : <RefreshCw size={12} />}
+          {loading ? <Loader2 size={12} className="animate-km-spin" /> : <RefreshCw size={12} />}
           {t('common.refresh')}
         </button>
       </div>
@@ -200,14 +204,22 @@ export function TopicListSubPanel({ clusterId }: Props) {
       <div style={{ flex: 1, overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
-            <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
+            <tr
+              style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}
+            >
               <th style={thStyle} onClick={() => toggleSort('name')}>
                 {t('topicList.columnName')} <SortIcon field="name" />
               </th>
-              <th style={{ ...thStyle, textAlign: 'right', width: 100 }} onClick={() => toggleSort('partitionCount')}>
+              <th
+                style={{ ...thStyle, textAlign: 'right', width: 100 }}
+                onClick={() => toggleSort('partitionCount')}
+              >
                 {t('topicList.columnPartitionCount')} <SortIcon field="partitionCount" />
               </th>
-              <th style={{ ...thStyle, textAlign: 'right', width: 100 }} onClick={() => toggleSort('replicationFactor')}>
+              <th
+                style={{ ...thStyle, textAlign: 'right', width: 100 }}
+                onClick={() => toggleSort('replicationFactor')}
+              >
                 {t('topicList.columnReplicationFactor')} <SortIcon field="replicationFactor" />
               </th>
               <th style={{ ...thStyle, textAlign: 'center', width: 80 }}>
@@ -221,13 +233,22 @@ export function TopicListSubPanel({ clusterId }: Props) {
           <tbody>
             {loading && filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: 48, textAlign: 'center', color: 'var(--color-text-muted)' }}>
-                  <Loader2 size={28} style={{ animation: 'km-spin 0.9s linear infinite', display: 'inline-block' }} />
+                <td
+                  colSpan={5}
+                  style={{ padding: 48, textAlign: 'center', color: 'var(--color-text-muted)' }}
+                >
+                  <Loader2
+                    size={28}
+                    style={{ animation: 'km-spin 0.9s linear infinite', display: 'inline-block' }}
+                  />
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: 36, textAlign: 'center', color: 'var(--color-text-muted)' }}>
+                <td
+                  colSpan={5}
+                  style={{ padding: 36, textAlign: 'center', color: 'var(--color-text-muted)' }}
+                >
                   {search ? t('topicList.noMatch') : t('topicList.noTopics')}
                 </td>
               </tr>
@@ -250,41 +271,73 @@ export function TopicListSubPanel({ clusterId }: Props) {
                     transition: 'background var(--transition-fast)',
                     borderTop: '1px solid var(--color-border-subtle)',
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-2)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)'; }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--color-surface-2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background =
+                      i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)';
+                  }}
                 >
-                  <td style={{ padding: '9px 14px', fontFamily: 'var(--font-heading)', fontSize: 12, color: 'var(--color-text)' }}>
+                  <td
+                    style={{
+                      padding: '9px 14px',
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: 12,
+                      color: 'var(--color-text)',
+                    }}
+                  >
                     {topic.name}
                   </td>
-                  <td style={{ padding: '9px 14px', textAlign: 'right', fontFamily: 'var(--font-heading)', fontSize: 12, color: 'var(--color-text-muted)' }}>
+                  <td
+                    style={{
+                      padding: '9px 14px',
+                      textAlign: 'right',
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: 12,
+                      color: 'var(--color-text-muted)',
+                    }}
+                  >
                     {topic.partitionCount}
                   </td>
-                  <td style={{ padding: '9px 14px', textAlign: 'right', fontFamily: 'var(--font-heading)', fontSize: 12, color: 'var(--color-text-muted)' }}>
+                  <td
+                    style={{
+                      padding: '9px 14px',
+                      textAlign: 'right',
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: 12,
+                      color: 'var(--color-text-muted)',
+                    }}
+                  >
                     {topic.replicationFactor}
                   </td>
                   <td style={{ padding: '9px 14px', textAlign: 'center' }}>
                     {topic.isInternal ? (
-                      <span style={{
-                        padding: '2px 8px',
-                        fontSize: 10,
-                        fontWeight: 600,
-                        borderRadius: 10,
-                        background: 'rgba(245,158,11,0.12)',
-                        color: '#F59E0B',
-                        border: '1px solid rgba(245,158,11,0.25)',
-                      }}>
+                      <span
+                        style={{
+                          padding: '2px 8px',
+                          fontSize: 10,
+                          fontWeight: 600,
+                          borderRadius: 10,
+                          background: 'rgba(245,158,11,0.12)',
+                          color: '#F59E0B',
+                          border: '1px solid rgba(245,158,11,0.25)',
+                        }}
+                      >
                         {t('topicList.badgeInternal')}
                       </span>
                     ) : (
-                      <span style={{
-                        padding: '2px 8px',
-                        fontSize: 10,
-                        fontWeight: 600,
-                        borderRadius: 10,
-                        background: 'var(--color-primary-muted)',
-                        color: 'var(--color-primary)',
-                        border: '1px solid var(--color-primary)',
-                      }}>
+                      <span
+                        style={{
+                          padding: '2px 8px',
+                          fontSize: 10,
+                          fontWeight: 600,
+                          borderRadius: 10,
+                          background: 'var(--color-primary-muted)',
+                          color: 'var(--color-primary)',
+                          border: '1px solid var(--color-primary)',
+                        }}
+                      >
                         {t('topicList.badgeUser')}
                       </span>
                     )}

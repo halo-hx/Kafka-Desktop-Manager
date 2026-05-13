@@ -54,21 +54,19 @@ export function SettingsPanel() {
   );
 
   const themeOptions = useMemo(
-    () =>
-      [
-        ['light', t('settings.theme.light')] as const,
-        ['dark', t('settings.theme.dark')] as const,
-        ['system', t('settings.theme.system')] as const,
-      ],
+    () => [
+      ['light', t('settings.theme.light')] as const,
+      ['dark', t('settings.theme.dark')] as const,
+      ['system', t('settings.theme.system')] as const,
+    ],
     [t],
   );
 
   const jsonIndentOptions = useMemo(
-    () =>
-      [
-        [2, t('settings.jsonIndent.2spaces')] as const,
-        [4, t('settings.jsonIndent.4spaces')] as const,
-      ],
+    () => [
+      [2, t('settings.jsonIndent.2spaces')] as const,
+      [4, t('settings.jsonIndent.4spaces')] as const,
+    ],
     [t],
   );
   const theme = useUIStore((s) => s.theme);
@@ -151,7 +149,13 @@ export function SettingsPanel() {
                 ).map(([val, lbl]) => (
                   <label
                     key={val}
-                    style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      cursor: 'pointer',
+                      fontSize: 13,
+                    }}
                   >
                     <input
                       type="radio"
@@ -174,7 +178,13 @@ export function SettingsPanel() {
                 {themeOptions.map(([val, lbl]) => (
                   <label
                     key={val}
-                    style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      cursor: 'pointer',
+                      fontSize: 13,
+                    }}
                   >
                     <input
                       type="radio"
@@ -192,7 +202,15 @@ export function SettingsPanel() {
             </section>
 
             <section style={sectionStyle}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  cursor: 'pointer',
+                  fontSize: 13,
+                }}
+              >
                 <input
                   type="checkbox"
                   checked={s.autoConnectOnStartup}
@@ -211,7 +229,10 @@ export function SettingsPanel() {
                 value={s.notificationToastSeconds}
                 onChange={(e) =>
                   s.patch({
-                    notificationToastSeconds: Math.min(120, Math.max(1, Number(e.target.value) || 1)),
+                    notificationToastSeconds: Math.min(
+                      120,
+                      Math.max(1, Number(e.target.value) || 1),
+                    ),
                   })
                 }
                 style={{
@@ -236,7 +257,13 @@ export function SettingsPanel() {
                 {jsonIndentOptions.map(([n, lbl]) => (
                   <label
                     key={n}
-                    style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      cursor: 'pointer',
+                      fontSize: 13,
+                    }}
                   >
                     <input
                       type="radio"
@@ -263,7 +290,15 @@ export function SettingsPanel() {
             </section>
 
             <section style={sectionStyle}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  cursor: 'pointer',
+                  fontSize: 13,
+                }}
+              >
                 <input
                   type="checkbox"
                   checked={s.autoFormatJson}
@@ -279,7 +314,13 @@ export function SettingsPanel() {
                 {([8, 16, 32] as const).map((n) => (
                   <label
                     key={n}
-                    style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      cursor: 'pointer',
+                      fontSize: 13,
+                    }}
                   >
                     <input
                       type="radio"
@@ -303,7 +344,9 @@ export function SettingsPanel() {
                 value={s.defaultMessageLoadCount}
                 onChange={(e) =>
                   s.patch({
-                    defaultMessageLoadCount: Number(e.target.value) as AppUserSettings['defaultMessageLoadCount'],
+                    defaultMessageLoadCount: Number(
+                      e.target.value,
+                    ) as AppUserSettings['defaultMessageLoadCount'],
                   })
                 }
                 style={{
@@ -353,7 +396,8 @@ export function SettingsPanel() {
                 value={s.timestampDisplayFormat}
                 onChange={(e) =>
                   s.patch({
-                    timestampDisplayFormat: e.target.value as AppUserSettings['timestampDisplayFormat'],
+                    timestampDisplayFormat: e.target
+                      .value as AppUserSettings['timestampDisplayFormat'],
                   })
                 }
                 style={{
@@ -459,7 +503,12 @@ export function SettingsPanel() {
               <tbody>
                 {shortcutRows.map(([op, keys]) => (
                   <tr key={op}>
-                    <td style={{ padding: '10px 12px', borderBottom: '1px solid var(--color-border-subtle)' }}>
+                    <td
+                      style={{
+                        padding: '10px 12px',
+                        borderBottom: '1px solid var(--color-border-subtle)',
+                      }}
+                    >
                       {op}
                     </td>
                     <td
@@ -480,8 +529,22 @@ export function SettingsPanel() {
         )}
 
         {tab === 'about' && (
-          <div style={{ fontSize: 14, color: 'var(--color-text-muted)', lineHeight: 1.7, maxWidth: 480 }}>
-            <p style={{ marginBottom: 'var(--space-3)', color: 'var(--color-text)', fontWeight: 600, fontSize: 18 }}>
+          <div
+            style={{
+              fontSize: 14,
+              color: 'var(--color-text-muted)',
+              lineHeight: 1.7,
+              maxWidth: 480,
+            }}
+          >
+            <p
+              style={{
+                marginBottom: 'var(--space-3)',
+                color: 'var(--color-text)',
+                fontWeight: 600,
+                fontSize: 18,
+              }}
+            >
               KafkaManager
             </p>
             <p style={{ marginBottom: 'var(--space-2)' }}>

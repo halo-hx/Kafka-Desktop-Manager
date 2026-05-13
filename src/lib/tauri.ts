@@ -10,7 +10,9 @@ export async function tauriInvoke<T>(cmd: string, args?: Record<string, unknown>
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value) && !(value instanceof Date);
+  return (
+    typeof value === 'object' && value !== null && !Array.isArray(value) && !(value instanceof Date)
+  );
 }
 
 function camelToSnakeKey(key: string): string {

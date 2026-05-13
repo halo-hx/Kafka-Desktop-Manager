@@ -12,7 +12,9 @@ import { useT } from '../../i18n';
 
 function StepIndicator({ step, labels }: { step: number; labels: string[] }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, flexWrap: 'wrap' }}>
+    <div
+      style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, flexWrap: 'wrap' }}
+    >
       {labels.map((lb, i) => {
         const n = i + 1;
         const active = step === n;
@@ -25,7 +27,11 @@ function StepIndicator({ step, labels }: { step: number; labels: string[] }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                color: active ? 'var(--color-primary)' : done ? 'var(--color-text-muted)' : 'var(--color-text-faint)',
+                color: active
+                  ? 'var(--color-primary)'
+                  : done
+                    ? 'var(--color-text-muted)'
+                    : 'var(--color-text-faint)',
                 fontSize: 13,
               }}
             >
@@ -81,7 +87,11 @@ export function ImportTopicDataDialog({
   const loadTopics = useClusterStore((s) => s.loadTopics);
 
   const stepLabels = useMemo(
-    () => [t('dataImport.stepPickSource'), t('dataImport.stepPickTarget'), t('dataImport.stepConfirmRun')],
+    () => [
+      t('dataImport.stepPickSource'),
+      t('dataImport.stepPickTarget'),
+      t('dataImport.stepConfirmRun'),
+    ],
     [t],
   );
 
@@ -178,8 +188,7 @@ export function ImportTopicDataDialog({
 
   const runImport = async () => {
     setErr(null);
-    const topic =
-      createTopic ? newTopicName.trim() : targetTopic.trim();
+    const topic = createTopic ? newTopicName.trim() : targetTopic.trim();
     if (!topic) return;
 
     setRunning(true);
@@ -279,7 +288,12 @@ export function ImportTopicDataDialog({
             type="button"
             disabled={running}
             onClick={onClose}
-            style={{ border: 'none', background: 'none', cursor: running ? 'not-allowed' : 'pointer', color: 'var(--color-text-faint)' }}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: running ? 'not-allowed' : 'pointer',
+              color: 'var(--color-text-faint)',
+            }}
           >
             <X size={18} />
           </button>
@@ -290,15 +304,19 @@ export function ImportTopicDataDialog({
 
           {step === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('dataImport.fileFormat')}</span>
+              <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                {t('dataImport.fileFormat')}
+              </span>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button
                   type="button"
                   onClick={() => setFormat('jsonl')}
                   style={{
                     ...fmtBtn,
-                    borderColor: format === 'jsonl' ? 'var(--color-primary)' : 'var(--color-border)',
-                    background: format === 'jsonl' ? 'var(--color-primary-muted)' : 'var(--color-bg)',
+                    borderColor:
+                      format === 'jsonl' ? 'var(--color-primary)' : 'var(--color-border)',
+                    background:
+                      format === 'jsonl' ? 'var(--color-primary-muted)' : 'var(--color-bg)',
                   }}
                 >
                   <FileJson size={18} /> {t('msgExport.jsonLines')}
@@ -316,17 +334,34 @@ export function ImportTopicDataDialog({
                 </button>
               </div>
               <div>
-                <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('dataImport.file')}</span>
+                <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                  {t('dataImport.file')}
+                </span>
                 <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-                  <input readOnly value={filePath ?? ''} placeholder={t('dataExport.notSelected')} style={{ ...inp, flex: 1 }} />
+                  <input
+                    readOnly
+                    value={filePath ?? ''}
+                    placeholder={t('dataExport.notSelected')}
+                    style={{ ...inp, flex: 1 }}
+                  />
                   <button type="button" onClick={() => void pickFile()} style={btnSecondary}>
                     {t('dataImport.browseEllipsis')}
                   </button>
                 </div>
               </div>
-              {parseError && <div style={{ color: 'var(--color-error)', fontSize: 12 }}>{parseError}</div>}
-              <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{t('dataImport.previewUpTo10')}</div>
-              <div style={{ overflowX: 'auto', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)' }}>
+              {parseError && (
+                <div style={{ color: 'var(--color-error)', fontSize: 12 }}>{parseError}</div>
+              )}
+              <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                {t('dataImport.previewUpTo10')}
+              </div>
+              <div
+                style={{
+                  overflowX: 'auto',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--radius-sm)',
+                }}
+              >
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
                   <thead>
                     <tr style={{ background: 'var(--color-bg)' }}>
@@ -340,15 +375,35 @@ export function ImportTopicDataDialog({
                     {previewRows.map((r, idx) => (
                       <tr key={idx}>
                         <td style={td}>{r.partition ?? '—'}</td>
-                        <td style={{ ...td, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.key || t('dataImport.emptyKeySymbol')}</td>
-                        <td style={{ ...td, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.value}</td>
+                        <td
+                          style={{
+                            ...td,
+                            maxWidth: 120,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {r.key || t('dataImport.emptyKeySymbol')}
+                        </td>
+                        <td
+                          style={{
+                            ...td,
+                            maxWidth: 220,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {r.value}
+                        </td>
                         <td style={td}>{Object.keys(r.headers).length}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
                 {previewRows.length === 0 && (
-                  <div style={{ padding: 16, color: 'var(--color-text-faint)', fontSize: 12 }}>{t('dataImport.noPreview')}</div>
+                  <div style={{ padding: 16, color: 'var(--color-text-faint)', fontSize: 12 }}>
+                    {t('dataImport.noPreview')}
+                  </div>
                 )}
               </div>
             </div>
@@ -369,12 +424,20 @@ export function ImportTopicDataDialog({
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <label style={lab}>
                     {t('dataImport.topicNameLabel')}
-                    <input value={newTopicName} onChange={(e) => setNewTopicName(e.target.value)} style={inp} />
+                    <input
+                      value={newTopicName}
+                      onChange={(e) => setNewTopicName(e.target.value)}
+                      style={inp}
+                    />
                   </label>
                   <div style={{ display: 'flex', gap: 10 }}>
                     <label style={{ ...lab, flex: 1 }}>
                       {t('dataImport.partitionCount')}
-                      <input value={newPartitions} onChange={(e) => setNewPartitions(e.target.value)} style={inp} />
+                      <input
+                        value={newPartitions}
+                        onChange={(e) => setNewPartitions(e.target.value)}
+                        style={inp}
+                      />
                     </label>
                     <label style={{ ...lab, flex: 1 }}>
                       {t('dataImport.replicationFactor')}
@@ -385,7 +448,11 @@ export function ImportTopicDataDialog({
               ) : (
                 <label style={lab}>
                   {t('dataImport.targetTopicLabel')}
-                  <select value={targetTopic} onChange={(e) => setTargetTopic(e.target.value)} style={sel}>
+                  <select
+                    value={targetTopic}
+                    onChange={(e) => setTargetTopic(e.target.value)}
+                    style={sel}
+                  >
                     <option value="">{t('dataImport.selectEllipsis')}</option>
                     {(topics ?? []).map((topic) => (
                       <option key={topic.name} value={topic.name}>
@@ -424,7 +491,15 @@ export function ImportTopicDataDialog({
           )}
 
           {step === 3 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, fontSize: 13, color: 'var(--color-text-muted)' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 14,
+                fontSize: 13,
+                color: 'var(--color-text-muted)',
+              }}
+            >
               <div>
                 <strong>{t('dataImport.summaryFile')}</strong> {filePath}
               </div>
@@ -455,22 +530,48 @@ export function ImportTopicDataDialog({
                       border: '1px solid var(--color-border-subtle)',
                     }}
                   >
-                    <div style={{ height: '100%', width: `${progress}%`, background: 'var(--color-primary)', transition: 'width var(--transition-fast)' }} />
+                    <div
+                      style={{
+                        height: '100%',
+                        width: `${progress}%`,
+                        background: 'var(--color-primary)',
+                        transition: 'width var(--transition-fast)',
+                      }}
+                    />
                   </div>
                   <p style={{ marginTop: 8, fontSize: 12 }}>
-                    {t('dataImport.progressFmt', { progress, sent: sent ?? 0, failed: failed ?? 0 })}
+                    {t('dataImport.progressFmt', {
+                      progress,
+                      sent: sent ?? 0,
+                      failed: failed ?? 0,
+                    })}
                   </p>
                 </div>
               )}
 
               {!running && sent !== null && records.length > 0 && progress >= 100 && (
-                <div style={{ padding: 12, borderRadius: 'var(--radius-sm)', background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}>
+                <div
+                  style={{
+                    padding: 12,
+                    borderRadius: 'var(--radius-sm)',
+                    background: 'var(--color-primary-muted)',
+                    color: 'var(--color-primary)',
+                  }}
+                >
                   {t('dataImport.doneFmt', { sent: sent ?? 0, failed: failed ?? 0 })}
                 </div>
               )}
 
               {err && (
-                <div style={{ padding: 10, borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', color: 'var(--color-error)', fontSize: 12 }}>
+                <div
+                  style={{
+                    padding: 10,
+                    borderRadius: 'var(--radius-sm)',
+                    background: 'rgba(239,68,68,0.12)',
+                    color: 'var(--color-error)',
+                    fontSize: 12,
+                  }}
+                >
                   {err}
                 </div>
               )}
@@ -478,12 +579,19 @@ export function ImportTopicDataDialog({
           )}
 
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
-            <button type="button" disabled={running || step === 1} onClick={() => setStep((s) => s - 1)} style={btnSecondary}>
+            <button
+              type="button"
+              disabled={running || step === 1}
+              onClick={() => setStep((s) => s - 1)}
+              style={btnSecondary}
+            >
               {t('dataImport.prev')}
             </button>
             <div style={{ display: 'flex', gap: 8 }}>
               <button type="button" disabled={running} onClick={onClose} style={btnSecondary}>
-                {step === 3 && !running && progress >= 100 ? t('dataImport.close') : t('dataImport.cancel')}
+                {step === 3 && !running && progress >= 100
+                  ? t('dataImport.close')
+                  : t('dataImport.cancel')}
               </button>
               {step < 3 ? (
                 <button
@@ -539,14 +647,24 @@ const inp: React.CSSProperties = {
   borderRadius: 'var(--radius-sm)',
 };
 const sel = inp;
-const lab: React.CSSProperties = { fontSize: 12, color: 'var(--color-text-faint)', display: 'flex', flexDirection: 'column', gap: 6 };
+const lab: React.CSSProperties = {
+  fontSize: 12,
+  color: 'var(--color-text-faint)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 6,
+};
 const th: React.CSSProperties = {
   padding: '6px 8px',
   textAlign: 'left',
   borderBottom: '1px solid var(--color-border-subtle)',
   color: 'var(--color-text-faint)',
 };
-const td: React.CSSProperties = { padding: '6px 8px', borderBottom: '1px solid var(--color-border-subtle)', color: 'var(--color-text)' };
+const td: React.CSSProperties = {
+  padding: '6px 8px',
+  borderBottom: '1px solid var(--color-border-subtle)',
+  color: 'var(--color-text)',
+};
 const btnSecondary: React.CSSProperties = {
   padding: '8px 14px',
   background: 'var(--color-bg)',

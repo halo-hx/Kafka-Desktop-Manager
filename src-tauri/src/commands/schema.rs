@@ -64,8 +64,8 @@ fn schema_registry_base(conn: &ClusterConnectionRow) -> Result<String, String> {
 }
 
 fn build_client(conn: &ClusterConnectionRow) -> Result<Client, String> {
-    use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
     use base64::Engine;
+    use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 
     let mut headers = HeaderMap::new();
     if let (Some(user), Some(pass)) = (
@@ -73,7 +73,8 @@ fn build_client(conn: &ClusterConnectionRow) -> Result<Client, String> {
         conn.schema_registry_password.as_deref(),
     ) {
         if !user.is_empty() {
-            let encoded = base64::engine::general_purpose::STANDARD.encode(format!("{user}:{pass}"));
+            let encoded =
+                base64::engine::general_purpose::STANDARD.encode(format!("{user}:{pass}"));
             if let Ok(val) = HeaderValue::from_str(&format!("Basic {encoded}")) {
                 headers.insert(AUTHORIZATION, val);
             }
@@ -136,19 +137,20 @@ async fn put_json_no_body(client: &Client, url: &str, body: &Value) -> Result<()
 }
 
 fn json_string_field(v: &Value, keys: &[&str]) -> Option<String> {
-    keys.iter().find_map(|k| v.get(*k)?.as_str().map(|s| s.to_string()))
+    keys.iter()
+        .find_map(|k| v.get(*k)?.as_str().map(|s| s.to_string()))
 }
 
 fn json_i32(v: &Value, keys: &[&str]) -> Option<i32> {
-    keys.iter().find_map(|k| {
-        v.get(*k)?.as_i64().and_then(|n| i32::try_from(n).ok())
-    })
+    keys.iter()
+        .find_map(|k| v.get(*k)?.as_i64().and_then(|n| i32::try_from(n).ok()))
 }
 
 async fn fetch_global_compat(client: &Client, base: &str) -> String {
     let url = format!("{base}/config");
     match get_json(client, &url).await {
-        Ok(v) => json_string_field(&v, &["compatibilityLevel", "compatibility"]).unwrap_or_else(|| "UNKNOWN".into()),
+        Ok(v) => json_string_field(&v, &["compatibilityLevel", "compatibility"])
+            .unwrap_or_else(|| "UNKNOWN".into()),
         Err(_) => "UNKNOWN".into(),
     }
 }
@@ -157,7 +159,8 @@ async fn fetch_subject_compat(client: &Client, base: &str, subject: &str) -> Str
     let url = format!("{base}/config/{}", encode(subject));
     match client.get(&url).send().await {
         Ok(r) if r.status().is_success() => match r.json::<Value>().await {
-            Ok(v) => json_string_field(&v, &["compatibilityLevel", "compatibility"]).unwrap_or_else(|| "UNKNOWN".into()),
+            Ok(v) => json_string_field(&v, &["compatibilityLevel", "compatibility"])
+                .unwrap_or_else(|| "UNKNOWN".into()),
             Err(_) => "UNKNOWN".into(),
         },
         Ok(r) if r.status().as_u16() == 404 => fetch_global_compat(client, base).await,
@@ -214,9 +217,8 @@ async fn assemble_subject_info(
 
     let schema_type =
         json_string_field(&latest, &["schemaType", "schema_type"]).unwrap_or_else(|| "AVRO".into());
-    let latest_version = json_i32(&latest, &["version"]).unwrap_or_else(|| {
-        version_nums.iter().copied().max().unwrap_or(1)
-    });
+    let latest_version = json_i32(&latest, &["version"])
+        .unwrap_or_else(|| version_nums.iter().copied().max().unwrap_or(1));
 
     Ok(SchemaSubjectInfoOut {
         subject,
@@ -252,7 +254,10 @@ pub async fn list_subjects(
         async move { assemble_subject_info(c, b, subject).await }
     });
 
-    let mut rows = join_all(futs).await.into_iter().collect::<Result<Vec<_>, _>>()?;
+    let mut rows = join_all(futs)
+        .await
+        .into_iter()
+        .collect::<Result<Vec<_>, _>>()?;
     rows.sort_by(|a, b| a.subject.cmp(&b.subject));
     Ok(rows)
 }

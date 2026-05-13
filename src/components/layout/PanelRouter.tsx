@@ -34,31 +34,49 @@ export function PanelRouter() {
       return <ClusterOverview clusterId={activeTab.panel.clusterId} />;
     case 'broker-detail':
       return (
-        <BrokerDetailPanel clusterId={activeTab.panel.clusterId} brokerId={activeTab.panel.brokerId} />
+        <BrokerDetailPanel
+          clusterId={activeTab.panel.clusterId}
+          brokerId={activeTab.panel.brokerId}
+        />
       );
     case 'topic-data':
       return (
-        <TopicDataPanel clusterId={activeTab.panel.clusterId} topicName={activeTab.panel.topicName} />
+        <TopicDataPanel
+          clusterId={activeTab.panel.clusterId}
+          topicName={activeTab.panel.topicName}
+        />
       );
     case 'topic-properties':
       return (
-        <TopicPropertiesPanel clusterId={activeTab.panel.clusterId} topicName={activeTab.panel.topicName} />
+        <TopicPropertiesPanel
+          clusterId={activeTab.panel.clusterId}
+          topicName={activeTab.panel.topicName}
+        />
       );
     case 'topic-partitions':
       return (
-        <TopicPartitionsPanel clusterId={activeTab.panel.clusterId} topicName={activeTab.panel.topicName} />
+        <TopicPartitionsPanel
+          clusterId={activeTab.panel.clusterId}
+          topicName={activeTab.panel.topicName}
+        />
       );
     case 'consumer-group-list':
       return <ConsumerGroupListPanel clusterId={activeTab.panel.clusterId} />;
     case 'consumer-group-detail':
       return (
-        <ConsumerGroupDetailPanel clusterId={activeTab.panel.clusterId} groupId={activeTab.panel.groupId} />
+        <ConsumerGroupDetailPanel
+          clusterId={activeTab.panel.clusterId}
+          groupId={activeTab.panel.groupId}
+        />
       );
     case 'schema-registry':
       return <SchemaListPanel clusterId={activeTab.panel.clusterId} />;
     case 'schema-detail':
       return (
-        <SchemaDetailPanel clusterId={activeTab.panel.clusterId} subject={activeTab.panel.subject} />
+        <SchemaDetailPanel
+          clusterId={activeTab.panel.clusterId}
+          subject={activeTab.panel.subject}
+        />
       );
     case 'kafka-connect':
       return <ConnectorListPanel clusterId={activeTab.panel.clusterId} />;

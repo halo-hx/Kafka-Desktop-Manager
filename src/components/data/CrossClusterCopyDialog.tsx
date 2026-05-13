@@ -219,7 +219,15 @@ export function CrossClusterCopyDialog({
         }
       }
 
-      const rows = await invokeFetchSlice(sourceClusterId, topicName, null, count, range_mode, offset_start, timestamp_ms);
+      const rows = await invokeFetchSlice(
+        sourceClusterId,
+        topicName,
+        null,
+        count,
+        range_mode,
+        offset_start,
+        timestamp_ms,
+      );
       let batch = dedupe(rows);
       if (endMs !== undefined) {
         batch = batch.filter((m) => {
@@ -262,7 +270,12 @@ export function CrossClusterCopyDialog({
   if (!openDlg) return null;
 
   return (
-    <div role="dialog" aria-modal="true" style={backdrop} onMouseDown={(e) => e.target === e.currentTarget && !running && onClose()}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      style={backdrop}
+      onMouseDown={(e) => e.target === e.currentTarget && !running && onClose()}
+    >
       <div
         style={{
           width: 'min(480px, 92vw)',
@@ -275,14 +288,34 @@ export function CrossClusterCopyDialog({
         }}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div style={{ padding: 'var(--space-4)', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div
+          style={{
+            padding: 'var(--space-4)',
+            borderBottom: '1px solid var(--color-border-subtle)',
+            display: 'flex',
+            gap: 10,
+            alignItems: 'center',
+          }}
+        >
           <Copy size={20} color="var(--color-primary)" />
           <h2 style={{ flex: 1, margin: 0, fontSize: 16 }}>{t('crossCopy.dialogHeading')}</h2>
-          <button type="button" disabled={running} onClick={onClose} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--color-text-faint)' }}>
+          <button
+            type="button"
+            disabled={running}
+            onClick={onClose}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              color: 'var(--color-text-faint)',
+            }}
+          >
             <X size={18} />
           </button>
         </div>
-        <div style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div
+          style={{ padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 12 }}
+        >
           <div style={{ fontSize: 13, color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
             <div>
               <strong>{t('crossCopy.sourcePrefix')}</strong>
@@ -292,7 +325,12 @@ export function CrossClusterCopyDialog({
 
           <label style={lab}>
             {t('crossCopy.targetClusterLabel')}
-            <select value={targetClusterId} onChange={(e) => setTargetClusterId(e.target.value)} style={inp} disabled={running}>
+            <select
+              value={targetClusterId}
+              onChange={(e) => setTargetClusterId(e.target.value)}
+              style={inp}
+              disabled={running}
+            >
               <option value="">{t('crossCopy.selectConnectedCluster')}</option>
               {targetChoices.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -304,29 +342,55 @@ export function CrossClusterCopyDialog({
 
           <label style={lab}>
             {t('crossCopy.targetTopicLabel')}
-            <input value={targetTopic} onChange={(e) => setTargetTopic(e.target.value)} style={inp} disabled={running} />
+            <input
+              value={targetTopic}
+              onChange={(e) => setTargetTopic(e.target.value)}
+              style={inp}
+              disabled={running}
+            />
           </label>
 
           <label style={{ ...lab, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <input type="checkbox" checked={createIfMissing} onChange={(e) => setCreateIfMissing(e.target.checked)} disabled={running} style={{ accentColor: 'var(--color-primary)' }} />
+            <input
+              type="checkbox"
+              checked={createIfMissing}
+              onChange={(e) => setCreateIfMissing(e.target.checked)}
+              disabled={running}
+              style={{ accentColor: 'var(--color-primary)' }}
+            />
             {t('crossCopy.createIfMissing')}
           </label>
           {createIfMissing && (
             <div style={{ display: 'flex', gap: 10 }}>
               <label style={{ ...lab, flex: 1 }}>
                 {t('crossCopy.partitions')}
-                <input value={newPartitions} onChange={(e) => setNewPartitions(e.target.value)} style={inp} disabled={running} />
+                <input
+                  value={newPartitions}
+                  onChange={(e) => setNewPartitions(e.target.value)}
+                  style={inp}
+                  disabled={running}
+                />
               </label>
               <label style={{ ...lab, flex: 1 }}>
                 {t('crossCopy.replicationFactor')}
-                <input value={newRf} onChange={(e) => setNewRf(e.target.value)} style={inp} disabled={running} />
+                <input
+                  value={newRf}
+                  onChange={(e) => setNewRf(e.target.value)}
+                  style={inp}
+                  disabled={running}
+                />
               </label>
             </div>
           )}
 
           <label style={lab}>
             {t('crossCopy.copyRangeLabel')}
-            <select value={copyRange} onChange={(e) => setCopyRange(e.target.value as CopyRange)} style={inp} disabled={running}>
+            <select
+              value={copyRange}
+              onChange={(e) => setCopyRange(e.target.value as CopyRange)}
+              style={inp}
+              disabled={running}
+            >
               <option value="all">{t('crossCopy.rangeAllCapped')}</option>
               <option value="latest_n">{t('crossCopy.rangeLatestN')}</option>
               <option value="time_range">{t('crossCopy.rangeTimeRange')}</option>
@@ -335,35 +399,75 @@ export function CrossClusterCopyDialog({
           {copyRange === 'all' && (
             <label style={lab}>
               {t('crossCopy.maxMessageCount')}
-              <input type="number" min={1} value={maxAll} onChange={(e) => setMaxAll(Math.max(1, Number(e.target.value) || 1))} style={inp} disabled={running} />
+              <input
+                type="number"
+                min={1}
+                value={maxAll}
+                onChange={(e) => setMaxAll(Math.max(1, Number(e.target.value) || 1))}
+                style={inp}
+                disabled={running}
+              />
             </label>
           )}
           {copyRange === 'latest_n' && (
             <label style={lab}>
               {t('crossCopy.nCount')}
-              <input type="number" min={1} value={latestN} onChange={(e) => setLatestN(Math.max(1, Number(e.target.value) || 1))} style={inp} disabled={running} />
+              <input
+                type="number"
+                min={1}
+                value={latestN}
+                onChange={(e) => setLatestN(Math.max(1, Number(e.target.value) || 1))}
+                style={inp}
+                disabled={running}
+              />
             </label>
           )}
           {copyRange === 'time_range' && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
               <label style={{ ...lab, flex: '1 1 180px' }}>
                 {t('crossCopy.startTime')}
-                <input type="datetime-local" step={1} value={timeStart} onChange={(e) => setTimeStart(e.target.value)} style={inp} disabled={running} />
+                <input
+                  type="datetime-local"
+                  step={1}
+                  value={timeStart}
+                  onChange={(e) => setTimeStart(e.target.value)}
+                  style={inp}
+                  disabled={running}
+                />
               </label>
               <label style={{ ...lab, flex: '1 1 180px' }}>
                 {t('crossCopy.endTimeOptional')}
-                <input type="datetime-local" step={1} value={timeEnd} onChange={(e) => setTimeEnd(e.target.value)} style={inp} disabled={running} />
+                <input
+                  type="datetime-local"
+                  step={1}
+                  value={timeEnd}
+                  onChange={(e) => setTimeEnd(e.target.value)}
+                  style={inp}
+                  disabled={running}
+                />
               </label>
               <label style={{ ...lab, flex: '1 1 140px' }}>
                 {t('crossCopy.fetchCountCap')}
-                <input type="number" min={1} value={rangeCount} onChange={(e) => setRangeCount(Math.max(1, Number(e.target.value) || 1))} style={inp} disabled={running} />
+                <input
+                  type="number"
+                  min={1}
+                  value={rangeCount}
+                  onChange={(e) => setRangeCount(Math.max(1, Number(e.target.value) || 1))}
+                  style={inp}
+                  disabled={running}
+                />
               </label>
             </div>
           )}
 
           <label style={lab}>
             {t('crossCopy.rateLimit')}
-            <select value={rateOpt} onChange={(e) => setRateOpt(e.target.value as RateOpt)} style={inp} disabled={running}>
+            <select
+              value={rateOpt}
+              onChange={(e) => setRateOpt(e.target.value as RateOpt)}
+              style={inp}
+              disabled={running}
+            >
               <option value="none">{t('crossCopy.rateUnlimited')}</option>
               <option value="100">100</option>
               <option value="500">500</option>
@@ -374,14 +478,36 @@ export function CrossClusterCopyDialog({
           {rateOpt === 'custom' && (
             <label style={lab}>
               {t('crossCopy.customMsgsPerSec')}
-              <input type="number" min={1} value={customRate} onChange={(e) => setCustomRate(Math.max(1, Number(e.target.value) || 1))} style={inp} disabled={running} />
+              <input
+                type="number"
+                min={1}
+                value={customRate}
+                onChange={(e) => setCustomRate(Math.max(1, Number(e.target.value) || 1))}
+                style={inp}
+                disabled={running}
+              />
             </label>
           )}
 
           {running && (
             <div>
-              <div style={{ height: 8, background: 'var(--color-bg)', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--color-border)' }}>
-                <div style={{ height: '100%', width: `${progress}%`, background: 'var(--color-primary)', transition: 'width var(--transition-fast)' }} />
+              <div
+                style={{
+                  height: 8,
+                  background: 'var(--color-bg)',
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  border: '1px solid var(--color-border)',
+                }}
+              >
+                <div
+                  style={{
+                    height: '100%',
+                    width: `${progress}%`,
+                    background: 'var(--color-primary)',
+                    transition: 'width var(--transition-fast)',
+                  }}
+                />
               </div>
               <p style={{ marginTop: 8, fontSize: 12, color: 'var(--color-text-muted)' }}>
                 {t('crossCopy.progressFmt', { progress, total, done, fail })}
@@ -391,7 +517,13 @@ export function CrossClusterCopyDialog({
                 onClick={() => {
                   cancelled.current = true;
                 }}
-                style={{ ...btnSecondary, marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                style={{
+                  ...btnSecondary,
+                  marginTop: 8,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
               >
                 <Square size={14} />
                 {t('crossCopy.cancelRun')}
@@ -400,7 +532,15 @@ export function CrossClusterCopyDialog({
           )}
 
           {err && (
-            <div style={{ padding: 10, borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', color: 'var(--color-error)', fontSize: 12 }}>
+            <div
+              style={{
+                padding: 10,
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(239,68,68,0.12)',
+                color: 'var(--color-error)',
+                fontSize: 12,
+              }}
+            >
               {err}
             </div>
           )}
@@ -410,7 +550,11 @@ export function CrossClusterCopyDialog({
               {t('crossCopy.close')}
             </button>
             {!running && (
-              <button type="button" onClick={() => void runCopy()} style={{ ...btnPrimary, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <button
+                type="button"
+                onClick={() => void runCopy()}
+                style={{ ...btnPrimary, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              >
                 <Copy size={16} />
                 {t('crossCopy.startCopyCta')}
               </button>
@@ -422,7 +566,13 @@ export function CrossClusterCopyDialog({
   );
 }
 
-const lab: React.CSSProperties = { fontSize: 12, color: 'var(--color-text-faint)', display: 'flex', flexDirection: 'column', gap: 6 };
+const lab: React.CSSProperties = {
+  fontSize: 12,
+  color: 'var(--color-text-faint)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 6,
+};
 const inp: React.CSSProperties = {
   padding: '8px 10px',
   background: 'var(--color-bg)',

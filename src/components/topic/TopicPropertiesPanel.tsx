@@ -126,7 +126,13 @@ function normalizeConfigPayload(raw: unknown): TopicConfigRow[] | null {
   return null;
 }
 
-export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: string; topicName: string }) {
+export function TopicPropertiesPanel({
+  clusterId,
+  topicName,
+}: {
+  clusterId: string;
+  topicName: string;
+}) {
   const t = useT();
   const [keySer, setKeySer] = useState<SerializationType>('String');
   const [valueSer, setValueSer] = useState<SerializationType>('String');
@@ -159,7 +165,11 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
       console.warn('[TopicPropertiesPanel] get_topic_config:', e);
       setRows(PLACEHOLDER_CONFIGS);
       setFetchError(
-        typeof e === 'string' ? e : e instanceof Error ? e.message : t('topicProps.fetchErrorGeneric'),
+        typeof e === 'string'
+          ? e
+          : e instanceof Error
+            ? e.message
+            : t('topicProps.fetchErrorGeneric'),
       );
     } finally {
       setLoading(false);
@@ -194,13 +204,16 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
   };
 
   const saveEdit = () => {
-    setRows((prev) => prev.map((r) => (draft[r.key] !== undefined ? { ...r, value: draft[r.key] } : r)));
+    setRows((prev) =>
+      prev.map((r) => (draft[r.key] !== undefined ? { ...r, value: draft[r.key] } : r)),
+    );
     setEditMode(false);
     setDraft({});
     // 实际持久化需对接 alter_topic_configs 等后端命令
   };
 
-  const isChanged = (key: string) => editMode && draft[key] !== undefined && draft[key] !== rows.find((r) => r.key === key)?.value;
+  const isChanged = (key: string) =>
+    editMode && draft[key] !== undefined && draft[key] !== rows.find((r) => r.key === key)?.value;
 
   return (
     <div
@@ -226,7 +239,9 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
         >
           {topicName}
         </h1>
-        <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>{t('topicProps.pageSubtitle')}</p>
+        <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
+          {t('topicProps.pageSubtitle')}
+        </p>
       </header>
 
       {fetchError && (
@@ -262,7 +277,14 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, maxWidth: 480 }}>
           <div>
-            <label style={{ fontSize: 11, color: 'var(--color-text-faint)', display: 'block', marginBottom: 6 }}>
+            <label
+              style={{
+                fontSize: 11,
+                color: 'var(--color-text-faint)',
+                display: 'block',
+                marginBottom: 6,
+              }}
+            >
               {t('messages.key')}
             </label>
             <select
@@ -278,7 +300,14 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
             </select>
           </div>
           <div>
-            <label style={{ fontSize: 11, color: 'var(--color-text-faint)', display: 'block', marginBottom: 6 }}>
+            <label
+              style={{
+                fontSize: 11,
+                color: 'var(--color-text-faint)',
+                display: 'block',
+                marginBottom: 6,
+              }}
+            >
               {t('messages.value')}
             </label>
             <select
@@ -306,7 +335,14 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
             marginBottom: 'var(--space-3)',
           }}
         >
-          <h2 style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-text-muted)', marginRight: 8 }}>
+          <h2
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              marginRight: 8,
+            }}
+          >
             {t('topicProps.config')}
           </h2>
           <input
@@ -384,7 +420,12 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
                 color: 'var(--color-text-muted)',
               }}
             >
-              <Loader2 size={22} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} aria-hidden />
+              <Loader2
+                size={22}
+                strokeWidth={2}
+                style={{ animation: 'km-spin 1s linear infinite' }}
+                aria-hidden
+              />
               {t('topicProps.loadingConfig')}
             </div>
           ) : filtered.length === 0 ? (
@@ -401,8 +442,19 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
           ) : (
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
-                <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
-                  {[t('topicProps.configName'), t('topicProps.configValue'), t('topicProps.configSource')].map((h) => (
+                <tr
+                  style={{
+                    background: 'var(--color-surface)',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                  }}
+                >
+                  {[
+                    t('topicProps.configName'),
+                    t('topicProps.configValue'),
+                    t('topicProps.configSource'),
+                  ].map((h) => (
                     <th
                       key={h}
                       style={{
@@ -427,12 +479,11 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
                     <tr
                       key={r.key}
                       style={{
-                        background:
-                          changed
-                            ? 'rgba(59, 130, 246, 0.08)'
-                            : i % 2 === 0
-                              ? 'transparent'
-                              : 'rgba(255,255,255,0.015)',
+                        background: changed
+                          ? 'rgba(59, 130, 246, 0.08)'
+                          : i % 2 === 0
+                            ? 'transparent'
+                            : 'rgba(255,255,255,0.015)',
                         transition: 'background var(--transition-fast)',
                       }}
                       onMouseEnter={(e) => {
@@ -468,7 +519,13 @@ export function TopicPropertiesPanel({ clusterId, topicName }: { clusterId: stri
                             }}
                           />
                         ) : (
-                          <span style={{ fontFamily: 'var(--font-heading)', fontSize: 12, color: 'var(--color-text-muted)' }}>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-heading)',
+                              fontSize: 12,
+                              color: 'var(--color-text-muted)',
+                            }}
+                          >
                             {r.value}
                           </span>
                         )}

@@ -189,7 +189,10 @@ fn tc_int_004_list_consumer_groups() {
         .fetch_group_list(None, Duration::from_secs(10))
         .expect("获取 group list 失败");
 
-    println!("[TC-INT-004] 发现 {} 个 consumer group:", groups.groups().len());
+    println!(
+        "[TC-INT-004] 发现 {} 个 consumer group:",
+        groups.groups().len()
+    );
     for g in groups.groups() {
         println!(
             "  name={}, state={}, protocol={}",
@@ -200,7 +203,7 @@ fn tc_int_004_list_consumer_groups() {
     }
     // 至少包含我们自己的临时 group
     assert!(
-        groups.groups().len() >= 1,
+        !groups.groups().is_empty(),
         "至少应发现 1 个 consumer group"
     );
 }
@@ -269,16 +272,12 @@ fn tc_int_005_sqlite_connection_crud() {
     updated.name = "Updated Local".into();
     updated.updated_at = "2025-06-01T00:00:00Z".into();
     db.save_connection(&updated).expect("更新连接失败");
-    let reloaded = db
-        .get_connection("test-conn-1")
-        .expect("获取失败")
-        .unwrap();
+    let reloaded = db.get_connection("test-conn-1").expect("获取失败").unwrap();
     assert_eq!(reloaded.name, "Updated Local");
     println!("[TC-INT-005] 更新连接 OK: name={}", reloaded.name);
 
     // 删除
-    db.delete_connection("test-conn-1")
-        .expect("删除连接失败");
+    db.delete_connection("test-conn-1").expect("删除连接失败");
     let after_delete = db.list_connections().expect("列出连接失败");
     assert_eq!(after_delete.len(), 0, "删除后应没有连接");
     println!("[TC-INT-005] 删除连接 OK");
@@ -410,10 +409,7 @@ async fn tc_int_008_batch_produce_and_offsets() {
         .fetch_watermarks(topic_name, 0, Duration::from_secs(5))
         .expect("获取 watermarks 失败");
     println!("[TC-INT-008] watermarks: low={low}, high={high}");
-    assert!(
-        high - low >= batch_size as i64,
-        "high-low 应 >= 批量大小"
-    );
+    assert!(high - low >= batch_size as i64, "high-low 应 >= 批量大小");
 
     let _ = admin.delete_topics(&[topic_name], &opts).await;
     println!("[TC-INT-008] 清理完成");
@@ -490,25 +486,29 @@ fn tc_int_010_sqlite_favorite_and_color_tag() {
     db.save_connection(&conn).expect("保存连接失败");
 
     // 设为收藏
-    db.update_favorite("fav-test-1", true).expect("设置收藏失败");
+    db.update_favorite("fav-test-1", true)
+        .expect("设置收藏失败");
     let loaded = db.get_connection("fav-test-1").unwrap().unwrap();
     assert!(loaded.is_favorite, "应为已收藏");
     println!("[TC-INT-010] 设为收藏 OK");
 
     // 取消收藏
-    db.update_favorite("fav-test-1", false).expect("取消收藏失败");
+    db.update_favorite("fav-test-1", false)
+        .expect("取消收藏失败");
     let loaded = db.get_connection("fav-test-1").unwrap().unwrap();
     assert!(!loaded.is_favorite, "应为未收藏");
     println!("[TC-INT-010] 取消收藏 OK");
 
     // 设置颜色标签
-    db.update_color_tag("fav-test-1", Some("blue")).expect("设置颜色失败");
+    db.update_color_tag("fav-test-1", Some("blue"))
+        .expect("设置颜色失败");
     let loaded = db.get_connection("fav-test-1").unwrap().unwrap();
     assert_eq!(loaded.color_tag, Some("blue".into()));
     println!("[TC-INT-010] 设置颜色标签 OK");
 
     // 清除颜色标签
-    db.update_color_tag("fav-test-1", None).expect("清除颜色失败");
+    db.update_color_tag("fav-test-1", None)
+        .expect("清除颜色失败");
     let loaded = db.get_connection("fav-test-1").unwrap().unwrap();
     assert_eq!(loaded.color_tag, None);
     println!("[TC-INT-010] 清除颜色标签 OK");
@@ -531,35 +531,36 @@ fn tc_int_011_sqlite_connection_ordering() {
     let db = Database::new_in_memory().expect("创建内存数据库失败");
     db.init_tables().expect("初始化表失败");
 
-    let make_conn = |id: &str, name: &str, fav: bool| kafka_manager_lib::storage::ClusterConnectionRow {
-        id: id.into(),
-        name: name.into(),
-        group_id: None,
-        bootstrap_servers: "localhost:9092".into(),
-        kafka_version: "3.7".into(),
-        zookeeper_host: None,
-        zookeeper_port: None,
-        zk_chroot_path: None,
-        cluster_mode: "AUTO_DETECT".into(),
-        security_protocol: "PLAINTEXT".into(),
-        sasl_mechanism: None,
-        sasl_jaas_config: None,
-        ssl_ca_cert_path: None,
-        ssl_client_cert_path: None,
-        ssl_client_key_path: None,
-        ssl_client_key_password: None,
-        ssl_verify_hostname: true,
-        schema_registry_url: None,
-        schema_registry_username: None,
-        schema_registry_password: None,
-        connect_urls: None,
-        created_at: "2025-01-01T00:00:00Z".into(),
-        updated_at: "2025-01-01T00:00:00Z".into(),
-        last_connected_at: None,
-        is_favorite: fav,
-        color_tag: None,
-        notes: None,
-    };
+    let make_conn =
+        |id: &str, name: &str, fav: bool| kafka_manager_lib::storage::ClusterConnectionRow {
+            id: id.into(),
+            name: name.into(),
+            group_id: None,
+            bootstrap_servers: "localhost:9092".into(),
+            kafka_version: "3.7".into(),
+            zookeeper_host: None,
+            zookeeper_port: None,
+            zk_chroot_path: None,
+            cluster_mode: "AUTO_DETECT".into(),
+            security_protocol: "PLAINTEXT".into(),
+            sasl_mechanism: None,
+            sasl_jaas_config: None,
+            ssl_ca_cert_path: None,
+            ssl_client_cert_path: None,
+            ssl_client_key_path: None,
+            ssl_client_key_password: None,
+            ssl_verify_hostname: true,
+            schema_registry_url: None,
+            schema_registry_username: None,
+            schema_registry_password: None,
+            connect_urls: None,
+            created_at: "2025-01-01T00:00:00Z".into(),
+            updated_at: "2025-01-01T00:00:00Z".into(),
+            last_connected_at: None,
+            is_favorite: fav,
+            color_tag: None,
+            notes: None,
+        };
 
     db.save_connection(&make_conn("c1", "Zeta", false)).unwrap();
     db.save_connection(&make_conn("c2", "Alpha", true)).unwrap();
@@ -570,7 +571,10 @@ fn tc_int_011_sqlite_connection_ordering() {
     assert_eq!(all[0].name, "Alpha", "收藏项应排最前");
     assert_eq!(all[1].name, "Beta", "按名称排序");
     assert_eq!(all[2].name, "Zeta", "按名称排序");
-    println!("[TC-INT-011] 连接排序 OK: {:?}", all.iter().map(|c| &c.name).collect::<Vec<_>>());
+    println!(
+        "[TC-INT-011] 连接排序 OK: {:?}",
+        all.iter().map(|c| &c.name).collect::<Vec<_>>()
+    );
 
     for c in &all {
         db.delete_connection(&c.id).unwrap();
@@ -680,12 +684,24 @@ fn tc_int_013_sqlite_last_connected_at() {
     };
     db.save_connection(&conn).unwrap();
 
-    assert_eq!(db.get_connection("last-conn-test").unwrap().unwrap().last_connected_at, None);
+    assert_eq!(
+        db.get_connection("last-conn-test")
+            .unwrap()
+            .unwrap()
+            .last_connected_at,
+        None
+    );
 
     db.update_last_connected("last-conn-test").unwrap();
     let updated = db.get_connection("last-conn-test").unwrap().unwrap();
-    assert!(updated.last_connected_at.is_some(), "last_connected_at 应已设置");
-    println!("[TC-INT-013] last_connected_at = {:?}", updated.last_connected_at);
+    assert!(
+        updated.last_connected_at.is_some(),
+        "last_connected_at 应已设置"
+    );
+    println!(
+        "[TC-INT-013] last_connected_at = {:?}",
+        updated.last_connected_at
+    );
 
     db.delete_connection("last-conn-test").unwrap();
 }
@@ -700,7 +716,13 @@ fn tc_int_014_sqlite_settings_batch_and_override() {
     let db = Database::new_in_memory().expect("创建内存数据库失败");
     db.init_tables().expect("初始化表失败");
 
-    let keys = ["editor.fontSize", "editor.tabSize", "editor.wordWrap", "message.maxFetch", "message.dateFormat"];
+    let keys = [
+        "editor.fontSize",
+        "editor.tabSize",
+        "editor.wordWrap",
+        "message.maxFetch",
+        "message.dateFormat",
+    ];
     let values = ["14", "4", "true", "100", "yyyy-MM-dd HH:mm:ss"];
 
     for (k, v) in keys.iter().zip(values.iter()) {
@@ -768,8 +790,16 @@ fn tc_int_016_topic_multi_partition() {
     cfg2.set("group.id", "km-test-multi-part-verify");
     let consumer: BaseConsumer = cfg2.create().expect("创建 consumer 失败");
 
-    let md = consumer.fetch_metadata(Some(topic_name), Duration::from_secs(10)).unwrap();
-    let partitions = md.topics().iter().find(|t| t.name() == topic_name).unwrap().partitions().len();
+    let md = consumer
+        .fetch_metadata(Some(topic_name), Duration::from_secs(10))
+        .unwrap();
+    let partitions = md
+        .topics()
+        .iter()
+        .find(|t| t.name() == topic_name)
+        .unwrap()
+        .partitions()
+        .len();
     assert_eq!(partitions, 4, "应有 4 个分区");
     println!("[TC-INT-016] 多分区 topic 验证 OK: {} 分区", partitions);
 
@@ -798,15 +828,24 @@ async fn tc_int_017_produce_with_headers() {
     let producer: FutureProducer = pcfg.create().expect("创建 producer 失败");
 
     let headers = OwnedHeaders::new()
-        .insert(Header { key: "source", value: Some("integration-test") })
-        .insert(Header { key: "trace-id", value: Some("abc-123") });
+        .insert(Header {
+            key: "source",
+            value: Some("integration-test"),
+        })
+        .insert(Header {
+            key: "trace-id",
+            value: Some("abc-123"),
+        });
 
     let record = FutureRecord::to(topic_name)
         .key("header-test-key")
         .payload("header-test-value")
         .headers(headers);
 
-    let (partition, offset) = producer.send(record, Timeout::After(Duration::from_secs(10))).await.expect("发送消息失败");
+    let (partition, offset) = producer
+        .send(record, Timeout::After(Duration::from_secs(10)))
+        .await
+        .expect("发送消息失败");
     println!("[TC-INT-017] 生产含 headers: partition={partition}, offset={offset}");
 
     // Consume and verify
@@ -891,12 +930,13 @@ fn tc_int_019_sqlite_group_sort_order() {
     let db = Database::new_in_memory().expect("创建内存数据库失败");
     db.init_tables().expect("初始化表失败");
 
-    let make_group = |id: &str, name: &str, order: i32| kafka_manager_lib::storage::ConnectionGroupRow {
-        id: id.into(),
-        name: name.into(),
-        sort_order: order,
-        parent_id: None,
-    };
+    let make_group =
+        |id: &str, name: &str, order: i32| kafka_manager_lib::storage::ConnectionGroupRow {
+            id: id.into(),
+            name: name.into(),
+            sort_order: order,
+            parent_id: None,
+        };
 
     db.save_group(&make_group("z-id", "Zebra", 2)).unwrap();
     db.save_group(&make_group("a-id", "Alpha", 0)).unwrap();
@@ -906,7 +946,10 @@ fn tc_int_019_sqlite_group_sort_order() {
     assert_eq!(groups[0].name, "Alpha");
     assert_eq!(groups[1].name, "Mango");
     assert_eq!(groups[2].name, "Zebra");
-    println!("[TC-INT-019] 分组排序 OK: {:?}", groups.iter().map(|g| &g.name).collect::<Vec<_>>());
+    println!(
+        "[TC-INT-019] 分组排序 OK: {:?}",
+        groups.iter().map(|g| &g.name).collect::<Vec<_>>()
+    );
 
     for g in &groups {
         db.delete_group(&g.id).unwrap();

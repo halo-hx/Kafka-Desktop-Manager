@@ -11,16 +11,27 @@ use tauri::State;
 const ACL_MSG: &str = "ERR_ACL_NOT_SUPPORTED";
 
 #[tauri::command]
-pub async fn list_acls(_cluster_id: String, _db: State<'_, Database>) -> Result<Vec<Value>, String> {
+pub async fn list_acls(
+    _cluster_id: String,
+    _db: State<'_, Database>,
+) -> Result<Vec<Value>, String> {
     Err(ACL_MSG.into())
 }
 
 #[tauri::command]
-pub async fn create_acl(_cluster_id: String, _acl: Value, _db: State<'_, Database>) -> Result<(), String> {
+pub async fn create_acl(
+    _cluster_id: String,
+    _acl: Value,
+    _db: State<'_, Database>,
+) -> Result<(), String> {
     Err(ACL_MSG.into())
 }
 
 #[tauri::command]
-pub async fn delete_acl(_cluster_id: String, _acl: Value, _db: State<'_, Database>) -> Result<(), String> {
+pub async fn delete_acl(
+    _cluster_id: String,
+    _acl: Value,
+    _db: State<'_, Database>,
+) -> Result<(), String> {
     Err(ACL_MSG.into())
 }

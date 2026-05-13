@@ -103,7 +103,11 @@ export function AddAclDialog({ open, clusterId, onClose, onCreated }: AddAclDial
     } catch (err) {
       setErrors({
         submit:
-          typeof err === 'string' ? err : err instanceof Error ? err.message : t('addAcl.errSubmitFailed'),
+          typeof err === 'string'
+            ? err
+            : err instanceof Error
+              ? err.message
+              : t('addAcl.errSubmitFailed'),
       });
     } finally {
       setSubmitting(false);
@@ -153,7 +157,9 @@ export function AddAclDialog({ open, clusterId, onClose, onCreated }: AddAclDial
             justifyContent: 'space-between',
           }}
         >
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 600 }}>{t('addAcl.title')}</h2>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 600 }}>
+            {t('addAcl.title')}
+          </h2>
           <button
             type="button"
             aria-label={t('common.close')}
@@ -190,9 +196,13 @@ export function AddAclDialog({ open, clusterId, onClose, onCreated }: AddAclDial
               placeholder={t('addAcl.principalExample')}
               style={{ ...inputStyle, fontFamily: 'var(--font-heading)', fontSize: 12 }}
             />
-            <p style={{ fontSize: 11, color: 'var(--color-text-faint)', marginTop: 4 }}>{t('addAcl.principalFormatHint')}</p>
+            <p style={{ fontSize: 11, color: 'var(--color-text-faint)', marginTop: 4 }}>
+              {t('addAcl.principalFormatHint')}
+            </p>
             {errors.principal && (
-              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.principal}</p>
+              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                {errors.principal}
+              </p>
             )}
           </div>
 
@@ -236,11 +246,15 @@ export function AddAclDialog({ open, clusterId, onClose, onCreated }: AddAclDial
             <input
               value={resourceName}
               onChange={(e) => setResourceName(e.target.value)}
-              placeholder={resourceType === 'CLUSTER' ? 'kafka-cluster' : t('addAcl.resourceNamePlaceholder')}
+              placeholder={
+                resourceType === 'CLUSTER' ? 'kafka-cluster' : t('addAcl.resourceNamePlaceholder')
+              }
               style={{ ...inputStyle, fontFamily: 'var(--font-heading)', fontSize: 12 }}
             />
             {errors.resourceName && (
-              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.resourceName}</p>
+              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                {errors.resourceName}
+              </p>
             )}
           </div>
 
@@ -300,7 +314,11 @@ export function AddAclDialog({ open, clusterId, onClose, onCreated }: AddAclDial
                 </button>
               ))}
             </div>
-            {errors.ops && <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 6 }}>{errors.ops}</p>}
+            {errors.ops && (
+              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 6 }}>
+                {errors.ops}
+              </p>
+            )}
           </div>
 
           <div style={{ marginBottom: 12 }}>
@@ -346,7 +364,14 @@ export function AddAclDialog({ open, clusterId, onClose, onCreated }: AddAclDial
           </div>
 
           {errors.submit && (
-            <p style={{ color: 'var(--color-error)', fontSize: 12, marginBottom: 8, whiteSpace: 'pre-wrap' }}>
+            <p
+              style={{
+                color: 'var(--color-error)',
+                fontSize: 12,
+                marginBottom: 8,
+                whiteSpace: 'pre-wrap',
+              }}
+            >
               {errors.submit}
             </p>
           )}
@@ -394,7 +419,9 @@ export function AddAclDialog({ open, clusterId, onClose, onCreated }: AddAclDial
               gap: 8,
             }}
           >
-            {submitting && <Loader2 size={16} style={{ animation: 'km-spin 0.9s linear infinite' }} />}
+            {submitting && (
+              <Loader2 size={16} style={{ animation: 'km-spin 0.9s linear infinite' }} />
+            )}
             {submitting ? t('addAcl.adding') : t('common.submit')}
           </button>
         </div>

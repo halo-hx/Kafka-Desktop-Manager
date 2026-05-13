@@ -85,7 +85,9 @@ export function TopicPartitionsPanel({ topicName }: { clusterId: string; topicNa
         >
           {topicName}
         </h1>
-        <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>{t('partitions.sampleDataNote')}</p>
+        <p style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
+          {t('partitions.sampleDataNote')}
+        </p>
       </header>
 
       <div
@@ -97,7 +99,9 @@ export function TopicPartitionsPanel({ topicName }: { clusterId: string; topicNa
       >
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
-            <tr style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}>
+            <tr
+              style={{ background: 'var(--color-surface)', position: 'sticky', top: 0, zIndex: 1 }}
+            >
               {columns.map((col) => (
                 <th
                   key={col.key}
@@ -161,8 +165,22 @@ export function TopicPartitionsPanel({ topicName }: { clusterId: string; topicNa
                       color: noLeader ? 'var(--color-error)' : 'var(--color-text)',
                     }}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                      {noLeader && <OctagonAlert size={15} strokeWidth={2} color="var(--color-error)" aria-hidden />}
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                      }}
+                    >
+                      {noLeader && (
+                        <OctagonAlert
+                          size={15}
+                          strokeWidth={2}
+                          color="var(--color-error)"
+                          aria-hidden
+                        />
+                      )}
                       {r.leader}
                     </span>
                   </td>
@@ -184,9 +202,21 @@ export function TopicPartitionsPanel({ topicName }: { clusterId: string; topicNa
                       color: 'var(--color-text-muted)',
                     }}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        gap: 6,
+                      }}
+                    >
                       {isrLtRep && !noLeader && (
-                        <AlertTriangle size={15} strokeWidth={2} color="var(--color-warning)" aria-hidden />
+                        <AlertTriangle
+                          size={15}
+                          strokeWidth={2}
+                          color="var(--color-warning)"
+                          aria-hidden
+                        />
                       )}
                       {r.isr}
                     </span>

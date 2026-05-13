@@ -41,7 +41,9 @@ pub(crate) struct ConnectionSavePatch {
     pub color_tag: Option<String>,
     pub notes: Option<String>,
     pub last_connected_at: Option<String>,
+    #[allow(dead_code)]
     pub created_at: Option<String>,
+    #[allow(dead_code)]
     pub updated_at: Option<String>,
 }
 
@@ -176,16 +178,15 @@ pub async fn load_connections(db: State<'_, Database>) -> Result<Vec<Value>, Str
 }
 
 #[tauri::command]
-pub async fn save_connection(
-    db: State<'_, Database>,
-    connection: Value,
-) -> Result<String, String> {
+pub async fn save_connection(db: State<'_, Database>, connection: Value) -> Result<String, String> {
     let inner = unwrap_connection_object(&connection)?;
-    let patch: ConnectionSavePatch =
-        serde_json::from_value(inner.clone()).map_err(|e| {
-            log::error!("[save_connection] deserialize failed: {e}  raw={}", serde_json::to_string(inner).unwrap_or_default());
-            e.to_string()
-        })?;
+    let patch: ConnectionSavePatch = serde_json::from_value(inner.clone()).map_err(|e| {
+        log::error!(
+            "[save_connection] deserialize failed: {e}  raw={}",
+            serde_json::to_string(inner).unwrap_or_default()
+        );
+        e.to_string()
+    })?;
 
     let id = patch
         .id
@@ -216,9 +217,7 @@ pub async fn save_connection(
         if merged.created_at.is_empty() {
             merged.created_at = merged.updated_at.clone();
         }
-        db_clone
-            .save_connection(&merged)
-            .map_err(map_app_err)?;
+        db_clone.save_connection(&merged).map_err(map_app_err)?;
         Ok::<ClusterConnectionRow, String>(merged)
     })
     .await
@@ -228,9 +227,15 @@ pub async fn save_connection(
 }
 
 #[tauri::command]
-pub async fn delete_connection(db: State<'_, Database>, connection_id: String) -> Result<(), String> {
+pub async fn delete_connection(
+    db: State<'_, Database>,
+    connection_id: String,
+) -> Result<(), String> {
     let db = (*db).clone();
-    db_run(db, move |database| database.delete_connection(&connection_id)).await
+    db_run(db, move |database| {
+        database.delete_connection(&connection_id)
+    })
+    .await
 }
 
 #[tauri::command]
@@ -281,11 +286,8 @@ pub async fn test_connection(connection: Value) -> Result<Value, String> {
 }
 
 #[tauri::command]
-pub async fn connect_cluster(
-    db: State<'_, Database>,
-    cluster_id: String,
-) -> Result<Value, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+pub async fn connect_cluster(db: State<'_, Database>, cluster_id: String) -> Result<Value, String> {
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
 
     let overview = tokio::task::spawn_blocking(move || {
         let metadata = fetch_metadata_blocking(&conn)?;
@@ -316,7 +318,7 @@ pub async fn get_broker_config(
     broker_id: i32,
     db: State<'_, Database>,
 ) -> Result<Vec<Value>, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     tokio::task::spawn_blocking(move || {
         let cfg = create_kafka_config(&conn);
         let admin: AdminClient<rdkafka::client::DefaultClientContext> =
@@ -347,13 +349,7 @@ pub async fn get_broker_config(
             );
 
             let mut res_arr = [resource];
-            rdkafka_sys::rd_kafka_DescribeConfigs(
-                native_ptr,
-                res_arr.as_mut_ptr(),
-                1,
-                opts,
-                queue,
-            );
+            rdkafka_sys::rd_kafka_DescribeConfigs(native_ptr, res_arr.as_mut_ptr(), 1, opts, queue);
 
             let event = rdkafka_sys::rd_kafka_queue_poll(queue, timeout_ms + 5000);
             let result = if event.is_null() {
@@ -375,21 +371,26 @@ pub async fn get_broker_config(
                         Err("DescribeConfigs result is empty".to_string())
                     } else {
                         let mut res_cnt: usize = 0;
-                        let resources =
-                            rdkafka_sys::rd_kafka_DescribeConfigs_result_resources(res, &mut res_cnt);
+                        let resources = rdkafka_sys::rd_kafka_DescribeConfigs_result_resources(
+                            res,
+                            &mut res_cnt,
+                        );
                         if res_cnt == 0 || resources.is_null() {
                             Ok(vec![])
                         } else {
                             let mut entries = Vec::new();
                             for i in 0..res_cnt {
                                 let config_res = *resources.add(i);
-                                let res_err = rdkafka_sys::rd_kafka_ConfigResource_error(config_res);
+                                let res_err =
+                                    rdkafka_sys::rd_kafka_ConfigResource_error(config_res);
                                 if res_err as i32 != 0 {
                                     continue;
                                 }
                                 let mut entry_cnt: usize = 0;
-                                let config_entries =
-                                    rdkafka_sys::rd_kafka_ConfigResource_configs(config_res, &mut entry_cnt);
+                                let config_entries = rdkafka_sys::rd_kafka_ConfigResource_configs(
+                                    config_res,
+                                    &mut entry_cnt,
+                                );
                                 if config_entries.is_null() {
                                     continue;
                                 }
@@ -467,7 +468,7 @@ pub async fn alter_cluster_configs(
     if changes.is_empty() {
         return Ok(());
     }
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     tokio::task::spawn_blocking(move || {
         let cfg = create_kafka_config(&conn);
         let admin: AdminClient<rdkafka::client::DefaultClientContext> =
@@ -646,19 +647,12 @@ pub(crate) fn describe_broker_configs_blocking(
             err_buf.len(),
         );
         let mut res_arr = [resource];
-        rdkafka_sys::rd_kafka_DescribeConfigs(
-            native_ptr,
-            res_arr.as_mut_ptr(),
-            1,
-            opts,
-            queue,
-        );
+        rdkafka_sys::rd_kafka_DescribeConfigs(native_ptr, res_arr.as_mut_ptr(), 1, opts, queue);
         let event = rdkafka_sys::rd_kafka_queue_poll(queue, timeout_ms + 5000);
         if !event.is_null() {
             let etype = rdkafka_sys::rd_kafka_event_type(event);
             let event_err = rdkafka_sys::rd_kafka_event_error(event);
-            if event_err as i32 == 0
-                && etype == rdkafka_sys::RD_KAFKA_EVENT_DESCRIBECONFIGS_RESULT
+            if event_err as i32 == 0 && etype == rdkafka_sys::RD_KAFKA_EVENT_DESCRIBECONFIGS_RESULT
             {
                 let res = rdkafka_sys::rd_kafka_event_DescribeConfigs_result(event);
                 if !res.is_null() {
@@ -724,4 +718,3 @@ pub(crate) fn describe_broker_configs_blocking(
     }
     out
 }
-

@@ -3,16 +3,7 @@
  */
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
-import {
-  Loader2,
-  Pause,
-  Play,
-  RotateCcw,
-  Trash2,
-  Download,
-  Save,
-  Search,
-} from 'lucide-react';
+import { Loader2, Pause, Play, RotateCcw, Trash2, Download, Save, Search } from 'lucide-react';
 import type { ConnectorDetail, ConnectorTask } from '../../types';
 import { snakeToCamel } from '../../lib/tauri';
 import { useT } from '../../i18n';
@@ -85,7 +76,8 @@ function normalizeTasks(raw: unknown[]): ConnectorTask[] {
 function normalizeDetail(raw: unknown): ConnectorDetail {
   const x = snakeToCamel(raw) as Partial<ConnectorDetail> & { tasks?: unknown[] };
   const tasks = Array.isArray(x.tasks) ? normalizeTasks(x.tasks as unknown[]) : [];
-  const cfgRaw = x.config && typeof x.config === 'object' && !Array.isArray(x.config) ? x.config : {};
+  const cfgRaw =
+    x.config && typeof x.config === 'object' && !Array.isArray(x.config) ? x.config : {};
   const cfg: Record<string, string> = {};
   for (const [k, v] of Object.entries(cfgRaw as Record<string, unknown>)) {
     cfg[k] = v === null || v === undefined ? '' : typeof v === 'string' ? v : JSON.stringify(v);
@@ -159,7 +151,11 @@ export function ConnectorDetailPanel({
     };
   }, []);
 
-  const runAction = async (key: string, fn: () => Promise<void>, opts?: { skipReload?: boolean }) => {
+  const runAction = async (
+    key: string,
+    fn: () => Promise<void>,
+    opts?: { skipReload?: boolean },
+  ) => {
     setActionBusy(key);
     setConfigSaveMsg(null);
     try {
@@ -200,7 +196,9 @@ export function ConnectorDetailPanel({
     const q = configSearch.trim().toLowerCase();
     const entries = Object.entries(configDraft);
     if (!q) return entries;
-    return entries.filter(([k, v]) => k.toLowerCase().includes(q) || String(v).toLowerCase().includes(q));
+    return entries.filter(
+      ([k, v]) => k.toLowerCase().includes(q) || String(v).toLowerCase().includes(q),
+    );
   }, [configDraft, configSearch]);
 
   const toggleExpandFailed = (taskId: number) => {
@@ -319,11 +317,13 @@ export function ConnectorDetailPanel({
           {d.name || connectorName}
         </h1>
         <nav style={{ display: 'flex', gap: 4 }}>
-          {([
-            ['overview', t('connectorDetail.overview')],
-            ['config', t('connectorDetail.config')],
-            ['tasks', t('connectorDetail.tasks')],
-          ] as const).map(([k, label]) => (
+          {(
+            [
+              ['overview', t('connectorDetail.overview')],
+              ['config', t('connectorDetail.config')],
+              ['tasks', t('connectorDetail.tasks')],
+            ] as const
+          ).map(([k, label]) => (
             <button
               key={k}
               type="button"
@@ -356,7 +356,9 @@ export function ConnectorDetailPanel({
               padding: 'var(--space-5)',
             }}
           >
-            <p style={{ fontSize: 12, color: 'var(--color-text-faint)', marginBottom: 8 }}>{t('connectorDetail.status')}</p>
+            <p style={{ fontSize: 12, color: 'var(--color-text-faint)', marginBottom: 8 }}>
+              {t('connectorDetail.status')}
+            </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <StateBadge state={d.state} />
               <span style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
@@ -377,11 +379,17 @@ export function ConnectorDetailPanel({
             }}
           >
             <div>
-              <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}>{t('connectorDetail.type')}</span>
-              <p style={{ fontFamily: 'var(--font-heading)', fontSize: 13, marginTop: 4 }}>{d.type}</p>
+              <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}>
+                {t('connectorDetail.type')}
+              </span>
+              <p style={{ fontFamily: 'var(--font-heading)', fontSize: 13, marginTop: 4 }}>
+                {d.type}
+              </p>
             </div>
             <div>
-              <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}>{t('connectorDetail.implClass')}</span>
+              <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}>
+                {t('connectorDetail.implClass')}
+              </span>
               <p
                 style={{
                   fontFamily: 'var(--font-heading)',
@@ -394,7 +402,9 @@ export function ConnectorDetailPanel({
               </p>
             </div>
             <div>
-              <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}>{t('connectorDetail.workerUrl')}</span>
+              <span style={{ color: 'var(--color-text-faint)', fontSize: 12 }}>
+                {t('connectorDetail.workerUrl')}
+              </span>
               <p style={{ fontFamily: 'var(--font-heading)', fontSize: 12, marginTop: 4 }}>
                 {d.workerUrl || '—'}
               </p>
@@ -553,7 +563,9 @@ export function ConnectorDetailPanel({
             </button>
           </div>
           {configSaveMsg ? (
-            <p style={{ color: 'var(--color-success)', fontSize: 12, marginBottom: 8 }}>{configSaveMsg}</p>
+            <p style={{ color: 'var(--color-success)', fontSize: 12, marginBottom: 8 }}>
+              {configSaveMsg}
+            </p>
           ) : null}
           <div
             style={{
@@ -565,11 +577,30 @@ export function ConnectorDetailPanel({
           >
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
-                <tr style={{ background: 'var(--color-surface-2)', position: 'sticky', top: 0, zIndex: 1 }}>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', color: 'var(--color-text-muted)' }}>
+                <tr
+                  style={{
+                    background: 'var(--color-surface-2)',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                  }}
+                >
+                  <th
+                    style={{
+                      padding: '10px 14px',
+                      textAlign: 'left',
+                      color: 'var(--color-text-muted)',
+                    }}
+                  >
                     {t('connectorDetail.configKey')}
                   </th>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', color: 'var(--color-text-muted)' }}>
+                  <th
+                    style={{
+                      padding: '10px 14px',
+                      textAlign: 'left',
+                      color: 'var(--color-text-muted)',
+                    }}
+                  >
                     {t('connectorDetail.configValue')}
                   </th>
                 </tr>
@@ -579,8 +610,7 @@ export function ConnectorDetailPanel({
                   <tr
                     key={key}
                     style={{
-                      background:
-                        i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
+                      background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
                     }}
                   >
                     <td
@@ -598,9 +628,7 @@ export function ConnectorDetailPanel({
                     <td style={{ padding: '8px 14px' }}>
                       <input
                         value={val}
-                        onChange={(e) =>
-                          setConfigDraft((c) => ({ ...c, [key]: e.target.value }))
-                        }
+                        onChange={(e) => setConfigDraft((c) => ({ ...c, [key]: e.target.value }))}
                         style={{
                           width: '100%',
                           padding: '6px 10px',
@@ -634,7 +662,14 @@ export function ConnectorDetailPanel({
         >
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
-              <tr style={{ background: 'var(--color-surface-2)', position: 'sticky', top: 0, zIndex: 1 }}>
+              <tr
+                style={{
+                  background: 'var(--color-surface-2)',
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: 1,
+                }}
+              >
                 {[
                   { h: t('connectorDetail.taskId'), right: true },
                   { h: t('connectorDetail.taskStatus'), right: false },
@@ -657,7 +692,10 @@ export function ConnectorDetailPanel({
             <tbody>
               {d.tasks.length === 0 ? (
                 <tr>
-                  <td colSpan={4} style={{ padding: 36, textAlign: 'center', color: 'var(--color-text-faint)' }}>
+                  <td
+                    colSpan={4}
+                    style={{ padding: 36, textAlign: 'center', color: 'var(--color-text-faint)' }}
+                  >
                     {t('connectorDetail.noTasksShort')}
                   </td>
                 </tr>
@@ -740,7 +778,9 @@ export function ConnectorDetailPanel({
                           {!isFail ? (
                             '—'
                           ) : expanded ? (
-                            <span style={{ color: 'var(--color-text-muted)' }}>{t('connectorDetail.collapseDetail')}</span>
+                            <span style={{ color: 'var(--color-text-muted)' }}>
+                              {t('connectorDetail.collapseDetail')}
+                            </span>
                           ) : (
                             <span>{t('connectorDetail.clickToExpand')}</span>
                           )}
@@ -799,8 +839,16 @@ export function ConnectorDetailPanel({
               width: '90vw',
             }}
           >
-            <p style={{ marginBottom: 12, fontWeight: 600 }}>{t('connectorDetail.confirmDeleteTitle')}</p>
-            <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginBottom: 'var(--space-4)' }}>
+            <p style={{ marginBottom: 12, fontWeight: 600 }}>
+              {t('connectorDetail.confirmDeleteTitle')}
+            </p>
+            <p
+              style={{
+                fontSize: 13,
+                color: 'var(--color-text-muted)',
+                marginBottom: 'var(--space-4)',
+              }}
+            >
               {connectorName}
             </p>
             <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>

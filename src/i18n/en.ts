@@ -39,7 +39,8 @@ const en: Record<TranslationKey, string> = {
 
   // ── Welcome ──
   'welcome.title': 'Kafka Desktop Manager',
-  'welcome.desc': 'Select a cluster connection from the sidebar, or click "New Connection" to add a new Kafka cluster.',
+  'welcome.desc':
+    'Select a cluster connection from the sidebar, or click "New Connection" to add a new Kafka cluster.',
   'welcome.newConnection': 'New Connection',
 
   // ── Tab Bar ──
@@ -209,7 +210,8 @@ const en: Record<TranslationKey, string> = {
   'conn.hidePassword': 'Hide password',
   'conn.testConnection': 'Test Connection',
   'conn.fromTemplate': 'From Template',
-  'conn.templateConfirm': 'Applying "{name}" template will override current security settings. Continue?',
+  'conn.templateConfirm':
+    'Applying "{name}" template will override current security settings. Continue?',
   'conn.confirmOverride': 'Confirm Override',
   'conn.connectionSuccess': 'Connection successful',
   'conn.brokerCount': '{count} Brokers',
@@ -252,7 +254,8 @@ const en: Record<TranslationKey, string> = {
   'overview.viewACL': 'View ACL',
   'overview.editConfig': 'Edit Cluster Config',
   'overview.editConfig.title': 'Edit Cluster Configuration',
-  'overview.editConfig.subtitle': 'Against broker {brokerId} (controller) · Only modified entries are submitted via IncrementalAlterConfigs',
+  'overview.editConfig.subtitle':
+    'Against broker {brokerId} (controller) · Only modified entries are submitted via IncrementalAlterConfigs',
   'overview.editConfig.searchPlaceholder': 'Search configuration…',
   'overview.editConfig.showOnlyEditable': 'Editable only',
   'overview.editConfig.showOnlyChanged': 'Changed only',
@@ -263,15 +266,18 @@ const en: Record<TranslationKey, string> = {
   'overview.editConfig.defaultBadge': 'default',
   'overview.editConfig.sensitiveBadge': 'sensitive',
   'overview.editConfig.modifiedBadge': 'modified',
-  'overview.editConfig.sensitiveHidden': '(sensitive value is hidden; editing will set a new value)',
+  'overview.editConfig.sensitiveHidden':
+    '(sensitive value is hidden; editing will set a new value)',
   'overview.editConfig.empty': 'No editable configuration entries',
   'overview.editConfig.loadError': 'Failed to load configuration: {error}',
   'overview.editConfig.applySuccess': 'Applied {count} configuration change(s)',
   'overview.editConfig.applyError': 'Failed to apply configuration: {error}',
   'overview.editConfig.confirmTitle': 'Confirm cluster configuration changes?',
-  'overview.editConfig.confirmMessage': 'The following changes will be applied to broker {brokerId}. Some settings may require a restart to take effect:',
+  'overview.editConfig.confirmMessage':
+    'The following changes will be applied to broker {brokerId}. Some settings may require a restart to take effect:',
   'overview.editConfig.confirm': 'Confirm',
-  'overview.editConfig.noControllerError': 'Controller broker not found; cannot edit cluster configuration',
+  'overview.editConfig.noControllerError':
+    'Controller broker not found; cannot edit cluster configuration',
   'overview.resolving': 'Resolving node address…',
   'overview.na': 'N/A',
   'overview.noBrokers': 'No broker data available',
@@ -316,7 +322,8 @@ const en: Record<TranslationKey, string> = {
   'broker.partition': 'Partition',
   'broker.replicas': 'Replicas',
   'broker.isr': 'ISR',
-  'broker.leaderPlaceholderNote': 'Leader partition list is placeholder data until the backend API is connected.',
+  'broker.leaderPlaceholderNote':
+    'Leader partition list is placeholder data until the backend API is connected.',
 
   // ── Topic List ──
   'topicList.title': 'Topic List',
@@ -372,7 +379,8 @@ const en: Record<TranslationKey, string> = {
   // ── Delete Topic Dialog ──
   'deleteTopic.title': 'Delete Topic',
   'deleteTopic.confirm': 'Are you sure you want to delete topic "{name}"?',
-  'deleteTopic.warning': 'This action cannot be undone. All data in the topic will be permanently deleted.',
+  'deleteTopic.warning':
+    'This action cannot be undone. All data in the topic will be permanently deleted.',
   'deleteTopic.typeToConfirm': 'Type the topic name to confirm deletion:',
   'deleteTopic.deleting': 'Deleting...',
   'deleteTopic.deleteFailed': 'Failed to delete topic',
@@ -399,7 +407,8 @@ const en: Record<TranslationKey, string> = {
   'topicProps.no': 'No',
   'topicProps.pageSubtitle': 'Topic properties and configuration',
   'topicProps.contentSerialization': 'Content serialization',
-  'topicProps.fetchErrorPlaceholder': 'No config from server or unknown format; showing sample data.',
+  'topicProps.fetchErrorPlaceholder':
+    'No config from server or unknown format; showing sample data.',
   'topicProps.fetchErrorGeneric': 'Could not load topic config; showing sample data.',
   'topicProps.searchConfigPlaceholder': 'Search configuration…',
   'topicProps.onlyNonDefault': 'Show non-default only',
@@ -560,14 +569,17 @@ const en: Record<TranslationKey, string> = {
   'consumerDetail.settings': 'Settings',
   'consumerDetail.startOffset': 'Start Offset',
   'consumerDetail.consumerOffset': 'Consumer Offset',
-  'consumerDetail.offsetFooter': 'Partitions {totalPartitions} · Total lag {totalLag} · Avg lag {avgLag}',
+  'consumerDetail.offsetFooter':
+    'Partitions {totalPartitions} · Total lag {totalLag} · Avg lag {avgLag}',
   'consumerDetail.noOffsetsCommitted': 'No committed offsets for this consumer group.',
   'consumerDetail.noActiveMembers': 'No active members.',
   'consumerDetail.deleteConfirm': 'Delete this consumer group? This cannot be undone.',
   'consumerDetail.deleteFailed': 'Delete failed: the backend command may not be implemented.',
   'consumerDetail.deleteGroup': 'Delete consumer group',
-  'consumerDetail.resetOffsetDisabledTitle': 'Reset offset is only allowed when the group is empty or dead.',
-  'consumerDetail.resetOffsetUnavailable': 'Reset offset is unavailable while members are active or rebalancing. Stop consumers or wait until the group is Empty or Dead.',
+  'consumerDetail.resetOffsetDisabledTitle':
+    'Reset offset is only allowed when the group is empty or dead.',
+  'consumerDetail.resetOffsetUnavailable':
+    'Reset offset is unavailable while members are active or rebalancing. Stop consumers or wait until the group is Empty or Dead.',
 
   // ── Reset Offset Dialog ──
   'resetOffset.title': 'Reset Offset',
@@ -585,7 +597,8 @@ const en: Record<TranslationKey, string> = {
   'resetOffset.endOffset': 'End Offset',
   'resetOffset.resetting': 'Resetting...',
   'resetOffset.reset': 'Reset',
-  'resetOffset.warning': 'Resetting offsets may cause duplicate or missed messages. Please proceed with caution.',
+  'resetOffset.warning':
+    'Resetting offsets may cause duplicate or missed messages. Please proceed with caution.',
   'resetOffset.mustStop': 'Please stop the consumer group before resetting offsets.',
   'resetOffset.dialogHeading': 'Reset consumer group offset',
   'resetOffset.groupLabel': 'Group',

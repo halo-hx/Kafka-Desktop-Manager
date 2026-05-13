@@ -29,7 +29,12 @@ function newConfigRow(): { id: string; key: string; value: string } {
   return { id: `${Date.now()}-${Math.random()}`, key: '', value: '' };
 }
 
-export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: CreateConnectorDialogProps) {
+export function CreateConnectorDialog({
+  open,
+  clusterId,
+  onClose,
+  onCreated,
+}: CreateConnectorDialogProps) {
   const t = useT();
   const [name, setName] = useState('');
   const [connectorClass, setConnectorClass] = useState('');
@@ -150,7 +155,11 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
     } catch (err) {
       setErrors({
         submit:
-          typeof err === 'string' ? err : err instanceof Error ? err.message : t('createConnector.errCreateFailed'),
+          typeof err === 'string'
+            ? err
+            : err instanceof Error
+              ? err.message
+              : t('createConnector.errCreateFailed'),
       });
     } finally {
       setSubmitting(false);
@@ -226,7 +235,15 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
 
         <div style={{ padding: 'var(--space-5)', overflowY: 'auto', flex: 1 }}>
           <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 6 }}>
+            <label
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--color-text-muted)',
+                display: 'block',
+                marginBottom: 6,
+              }}
+            >
               {t('createConnector.name')}
             </label>
             <input
@@ -237,12 +254,22 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
               style={{ ...inputStyle, fontFamily: 'var(--font-heading)' }}
             />
             {errors.name && (
-              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.name}</p>
+              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                {errors.name}
+              </p>
             )}
           </div>
 
           <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 6 }}>
+            <label
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--color-text-muted)',
+                display: 'block',
+                marginBottom: 6,
+              }}
+            >
               {t('createConnector.className')}
             </label>
             <input
@@ -252,7 +279,9 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
               style={{ ...inputStyle, fontFamily: 'var(--font-heading)', fontSize: 12 }}
             />
             {errors.connectorClass && (
-              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.connectorClass}</p>
+              <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                {errors.connectorClass}
+              </p>
             )}
           </div>
 
@@ -291,7 +320,9 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
             </button>
           </div>
           {errors.validate && (
-            <p style={{ color: 'var(--color-error)', fontSize: 11, marginBottom: 8 }}>{errors.validate}</p>
+            <p style={{ color: 'var(--color-error)', fontSize: 11, marginBottom: 8 }}>
+              {errors.validate}
+            </p>
           )}
           {validateResult && (
             <pre
@@ -314,7 +345,15 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
 
           {pasteOpen && (
             <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', display: 'block', marginBottom: 6 }}>
+              <label
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'var(--color-text-muted)',
+                  display: 'block',
+                  marginBottom: 6,
+                }}
+              >
                 {t('createConnector.pasteConfigLabel')}
               </label>
               <textarea
@@ -330,7 +369,9 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
                 }}
               />
               {errors.paste && (
-                <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>{errors.paste}</p>
+                <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 4 }}>
+                  {errors.paste}
+                </p>
               )}
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <button
@@ -372,7 +413,16 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
             </div>
           )}
 
-          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-muted)', marginBottom: 8 }}>{t('createConnector.config')}</p>
+          <p
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              marginBottom: 8,
+            }}
+          >
+            {t('createConnector.config')}
+          </p>
           <div
             style={{
               border: '1px solid var(--color-border-subtle)',
@@ -412,7 +462,9 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
                       <input
                         value={row.key}
                         onChange={(e) =>
-                          setRows((r) => r.map((x) => (x.id === row.id ? { ...x, key: e.target.value } : x)))
+                          setRows((r) =>
+                            r.map((x) => (x.id === row.id ? { ...x, key: e.target.value } : x)),
+                          )
                         }
                         placeholder={t('createConnector.configKeyPlaceholder')}
                         style={{ ...inputStyle, fontSize: 12, fontFamily: 'var(--font-heading)' }}
@@ -422,7 +474,9 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
                       <input
                         value={row.value}
                         onChange={(e) =>
-                          setRows((r) => r.map((x) => (x.id === row.id ? { ...x, value: e.target.value } : x)))
+                          setRows((r) =>
+                            r.map((x) => (x.id === row.id ? { ...x, value: e.target.value } : x)),
+                          )
                         }
                         placeholder={t('createConnector.valuePlaceholder')}
                         style={{ ...inputStyle, fontSize: 12, fontFamily: 'var(--font-heading)' }}
@@ -470,10 +524,14 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
             {t('createConnector.addKeyValue')}
           </button>
           {errors.config && (
-            <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>{errors.config}</p>
+            <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>
+              {errors.config}
+            </p>
           )}
           {errors.submit && (
-            <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>{errors.submit}</p>
+            <p style={{ color: 'var(--color-error)', fontSize: 11, marginTop: 8 }}>
+              {errors.submit}
+            </p>
           )}
         </div>
 
@@ -521,7 +579,11 @@ export function CreateConnectorDialog({ open, clusterId, onClose, onCreated }: C
             }}
           >
             {submitting && (
-              <Loader2 size={16} strokeWidth={2} style={{ animation: 'km-spin 1s linear infinite' }} />
+              <Loader2
+                size={16}
+                strokeWidth={2}
+                style={{ animation: 'km-spin 1s linear infinite' }}
+              />
             )}
             {submitting ? t('createConnector.creating') : t('createConnector.create')}
           </button>

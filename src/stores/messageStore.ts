@@ -318,7 +318,9 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
         let lastPollTs = prev?.lastPollTs ?? now;
         if (dt >= 1000) {
           const rate = pollCountWindow / (dt / 1000);
-          set((s) => ({ msgsPerSecond: { ...s.msgsPerSecond, [key]: Math.round(rate * 10) / 10 } }));
+          set((s) => ({
+            msgsPerSecond: { ...s.msgsPerSecond, [key]: Math.round(rate * 10) / 10 },
+          }));
           pollCountWindow = 0;
           lastPollTs = now;
         }

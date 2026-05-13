@@ -208,11 +208,9 @@ export const useConnectionStore = create<ConnectionStore>((set, get) => ({
       const conn = get().connections.find((c) => c.id === id);
       if (conn) {
         const { useUIStore } = await import('./uiStore');
-        useUIStore.getState().openTab(
-          { type: 'cluster-dashboard', clusterId: id },
-          conn.name,
-          'layout-dashboard',
-        );
+        useUIStore
+          .getState()
+          .openTab({ type: 'cluster-dashboard', clusterId: id }, conn.name, 'layout-dashboard');
       }
     }
   },

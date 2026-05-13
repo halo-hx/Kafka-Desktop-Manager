@@ -3,15 +3,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
-import {
-  Inbox,
-  LayoutList,
-  Loader2,
-  RefreshCw,
-  Search,
-  Server,
-  Settings,
-} from 'lucide-react';
+import { Inbox, LayoutList, Loader2, RefreshCw, Search, Server, Settings } from 'lucide-react';
 import { snakeToCamel } from '../../lib/tauri';
 import { useClusterStore } from '../../stores/clusterStore';
 import { useT } from '../../i18n';
@@ -133,8 +125,7 @@ export function BrokerDetailPanel({ clusterId, brokerId }: BrokerDetailPanelProp
     );
   }, [configRows, query]);
 
-  const subtitle =
-    broker != null ? `${broker.host}:${broker.port}` : t('overview.resolving');
+  const subtitle = broker != null ? `${broker.host}:${broker.port}` : t('overview.resolving');
 
   const tabBtn = (id: SubTab, icon: React.ReactNode, label: string) => (
     <button
@@ -154,7 +145,8 @@ export function BrokerDetailPanel({ clusterId, brokerId }: BrokerDetailPanelProp
         border: '1px solid',
         cursor: 'pointer',
         fontFamily: 'var(--font-body)',
-        transition: 'background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast)',
+        transition:
+          'background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast)',
         ...(subTab === id
           ? {
               background: 'var(--color-primary-muted)',
@@ -202,7 +194,9 @@ export function BrokerDetailPanel({ clusterId, brokerId }: BrokerDetailPanelProp
             Broker {brokerId} · {subtitle}
           </h1>
           {usingPlaceholderConfig && !configLoading && (
-            <p style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>{t('broker.placeholderConfigNote')}</p>
+            <p style={{ fontSize: 11, color: 'var(--color-text-faint)' }}>
+              {t('broker.placeholderConfigNote')}
+            </p>
           )}
         </div>
         <button
@@ -369,7 +363,11 @@ export function BrokerDetailPanel({ clusterId, brokerId }: BrokerDetailPanelProp
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
                   <tr style={{ background: 'var(--color-surface)' }}>
-                    {[t('broker.configuration'), t('broker.configValue'), t('broker.configSource')].map((h) => (
+                    {[
+                      t('broker.configuration'),
+                      t('broker.configValue'),
+                      t('broker.configSource'),
+                    ].map((h) => (
                       <th
                         key={h}
                         style={{
@@ -446,7 +444,9 @@ export function BrokerDetailPanel({ clusterId, brokerId }: BrokerDetailPanelProp
                 }}
               >
                 <Inbox size={28} strokeWidth={1.5} opacity={0.45} aria-hidden />
-                {configRows.length === 0 ? t('broker.noConfigRows') : t('broker.noMatchingConfigFilter')}
+                {configRows.length === 0
+                  ? t('broker.noConfigRows')
+                  : t('broker.noMatchingConfigFilter')}
               </div>
             )}
           </div>
@@ -465,7 +465,12 @@ export function BrokerDetailPanel({ clusterId, brokerId }: BrokerDetailPanelProp
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr style={{ background: 'var(--color-surface)' }}>
-                  {[t('broker.topic'), t('broker.partition'), t('broker.replicas'), t('broker.isr')].map((h, colIdx) => (
+                  {[
+                    t('broker.topic'),
+                    t('broker.partition'),
+                    t('broker.replicas'),
+                    t('broker.isr'),
+                  ].map((h, colIdx) => (
                     <th
                       key={h}
                       style={{

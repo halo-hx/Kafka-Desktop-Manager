@@ -129,19 +129,18 @@ function JsonPre({ text, folded }: { text: string; folded: boolean }) {
   );
 }
 
-function DetailPanel({
-  message,
-  onClose,
-}: {
-  message: KafkaMessage;
-  onClose: () => void;
-}) {
+function DetailPanel({ message, onClose }: { message: KafkaMessage; onClose: () => void }) {
   const t = useT();
   const [tab, setTab] = useState<DetailTab>('value');
   const [format, setFormat] = useState<ValueFormat>('auto');
   const [jsonFolded, setJsonFolded] = useState(false);
 
-  const raw = tab === 'value' ? message.value : tab === 'key' ? message.key : JSON.stringify(message.headers, null, 2);
+  const raw =
+    tab === 'value'
+      ? message.value
+      : tab === 'key'
+        ? message.key
+        : JSON.stringify(message.headers, null, 2);
   const displayPlain = formatBody(raw, tab === 'headers' ? 'text' : format);
   const jsonMode = tab !== 'headers' && (format === 'json' || format === 'auto');
 
@@ -227,7 +226,16 @@ function DetailPanel({
       </div>
 
       {/* Tabs + format + actions */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: '10px 20px', borderBottom: '1px solid var(--color-border-subtle)', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 8,
+          padding: '10px 20px',
+          borderBottom: '1px solid var(--color-border-subtle)',
+          alignItems: 'center',
+        }}
+      >
         {(['key', 'value', 'headers'] as DetailTab[]).map((tabName) => (
           <button
             key={tabName}
@@ -261,8 +269,12 @@ function DetailPanel({
 
         {tab !== 'headers' && (
           <>
-            <span style={{ width: 1, height: 20, background: 'var(--color-border)', margin: '0 4px' }} />
-            <span style={{ color: 'var(--color-text-faint)', fontSize: 12, fontWeight: 500 }}>{t('messages.format')}</span>
+            <span
+              style={{ width: 1, height: 20, background: 'var(--color-border)', margin: '0 4px' }}
+            />
+            <span style={{ color: 'var(--color-text-faint)', fontSize: 12, fontWeight: 500 }}>
+              {t('messages.format')}
+            </span>
             {formatOptions.map((f) => (
               <button
                 key={f}
@@ -275,7 +287,10 @@ function DetailPanel({
                   fontFamily: 'var(--font-heading)',
                   fontWeight: 500,
                   cursor: 'pointer',
-                  border: format === f ? '1px solid var(--color-primary)' : '1px solid var(--color-border)',
+                  border:
+                    format === f
+                      ? '1px solid var(--color-primary)'
+                      : '1px solid var(--color-border)',
                   borderRadius: 'var(--radius-sm)',
                   background: format === f ? 'var(--color-primary-muted)' : 'var(--color-surface)',
                   color: format === f ? 'var(--color-primary)' : 'var(--color-text-faint)',
@@ -344,7 +359,11 @@ function DetailPanel({
             color: 'var(--color-text)',
           }}
         >
-          {displayPlain || <span style={{ color: 'var(--color-text-faint)', fontStyle: 'italic' }}>{t('messages.emptyDisplay')}</span>}
+          {displayPlain || (
+            <span style={{ color: 'var(--color-text-faint)', fontStyle: 'italic' }}>
+              {t('messages.emptyDisplay')}
+            </span>
+          )}
         </pre>
       )}
     </div>
@@ -366,7 +385,13 @@ const ghostBtn: React.CSSProperties = {
   transition: 'all var(--transition-fast)',
 };
 
-export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string; topicName: string }) {
+export function TopicMessageViewer({
+  clusterId,
+  topicName,
+}: {
+  clusterId: string;
+  topicName: string;
+}) {
   const t = useT();
   const tk = topicStoreKey(clusterId, topicName);
   const messages = useMessageStore((s) => s.messages[tk] ?? EMPTY_MESSAGES);
@@ -378,7 +403,9 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
   const stopFetch = useMessageStore((s) => s.stopFetch);
   const toggleLiveMode = useMessageStore((s) => s.toggleLiveMode);
 
-  const topicMeta = useClusterStore((s) => s.topics[clusterId]?.find((x) => x.name === topicName) ?? null);
+  const topicMeta = useClusterStore(
+    (s) => s.topics[clusterId]?.find((x) => x.name === topicName) ?? null,
+  );
   const loadTopics = useClusterStore((s) => s.loadTopics);
   useEffect(() => {
     if (!topicMeta) void loadTopics(clusterId);
@@ -540,7 +567,14 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-bg)' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        background: 'var(--color-bg)',
+      }}
+    >
       {/* Header */}
       <div
         style={{
@@ -555,13 +589,41 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
         {/* Title row + action buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <span style={{ fontSize: 11, color: 'var(--color-text-faint)', fontWeight: 500, letterSpacing: '0.02em' }}>{t('messages.currentTopic')}</span>
-            <span style={{ fontWeight: 700, fontSize: 15, fontFamily: 'var(--font-heading)', color: 'var(--color-text)' }}>{topicName}</span>
+            <span
+              style={{
+                fontSize: 11,
+                color: 'var(--color-text-faint)',
+                fontWeight: 500,
+                letterSpacing: '0.02em',
+              }}
+            >
+              {t('messages.currentTopic')}
+            </span>
+            <span
+              style={{
+                fontWeight: 700,
+                fontSize: 15,
+                fontFamily: 'var(--font-heading)',
+                color: 'var(--color-text)',
+              }}
+            >
+              {topicName}
+            </span>
           </div>
 
           <div style={{ marginLeft: 16, display: 'flex', gap: 8, alignItems: 'center' }}>
-            <PrimaryBtn icon={<Play size={14} />} label={t('messages.fetch')} onClick={handleFetch} disabled={loading} />
-            <ActionBtn icon={<Square size={13} />} label={t('messages.stop')} onClick={() => stopFetch(clusterId, topicName)} disabled={!loading} />
+            <PrimaryBtn
+              icon={<Play size={14} />}
+              label={t('messages.fetch')}
+              onClick={handleFetch}
+              disabled={loading}
+            />
+            <ActionBtn
+              icon={<Square size={13} />}
+              label={t('messages.stop')}
+              onClick={() => stopFetch(clusterId, topicName)}
+              disabled={!loading}
+            />
             <ActionBtn
               icon={<Radio size={14} className={liveMode ? 'spin-slow' : ''} />}
               label={t('messages.realtimeMode')}
@@ -581,37 +643,68 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
                 setSendOpen(true);
               }}
             />
-            <ActionBtn icon={<Download size={14} />} label={t('messages.exportMessages')} onClick={() => setExportOpen(true)} disabled={selectedIds.size === 0} />
+            <ActionBtn
+              icon={<Download size={14} />}
+              label={t('messages.exportMessages')}
+              onClick={() => setExportOpen(true)}
+              disabled={selectedIds.size === 0}
+            />
           </div>
         </div>
 
         {/* Controls row */}
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10 }}>
           <FieldGroup label={t('messages.range')}>
-            <select value={range} onChange={(e) => setRange(e.target.value as MessageRange)} style={selStyle}>
+            <select
+              value={range}
+              onChange={(e) => setRange(e.target.value as MessageRange)}
+              style={selStyle}
+            >
               {(Object.keys(rangeLabels) as MessageRange[]).map((k) => (
-                <option key={k} value={k}>{rangeLabels[k]}</option>
+                <option key={k} value={k}>
+                  {rangeLabels[k]}
+                </option>
               ))}
             </select>
           </FieldGroup>
           {range === 'offset' && (
-            <input type="number" placeholder={t('messages.startOffset')} value={offsetValue} onChange={(e) => setOffsetValue(e.target.value)} style={inpStyle} />
+            <input
+              type="number"
+              placeholder={t('messages.startOffset')}
+              value={offsetValue}
+              onChange={(e) => setOffsetValue(e.target.value)}
+              style={inpStyle}
+            />
           )}
           {range === 'timestamp' && (
-            <input type="datetime-local" step="0.001" value={timestampValue} onChange={(e) => setTimestampValue(e.target.value)} style={inpStyle} />
+            <input
+              type="datetime-local"
+              step="0.001"
+              value={timestampValue}
+              onChange={(e) => setTimestampValue(e.target.value)}
+              style={inpStyle}
+            />
           )}
           <FieldGroup label={t('messages.partition')}>
-            <select value={fetchPartition} onChange={(e) => setFetchPartition(e.target.value)} style={selStyle}>
+            <select
+              value={fetchPartition}
+              onChange={(e) => setFetchPartition(e.target.value)}
+              style={selStyle}
+            >
               <option value="">{t('messages.allPartitions')}</option>
               {partitions.map((p) => (
-                <option key={p} value={String(p)}>{p}</option>
+                <option key={p} value={String(p)}>
+                  {p}
+                </option>
               ))}
             </select>
           </FieldGroup>
           <FieldGroup label={t('messages.batch')}>
             <select value={countSel} onChange={(e) => setCountSel(e.target.value)} style={selStyle}>
               {COUNT_OPTIONS.map((n) => (
-                <option key={n} value={String(n)}>{n}</option>
+                <option key={n} value={String(n)}>
+                  {n}
+                </option>
               ))}
               <option value="custom">{t('messages.custom')}</option>
             </select>
@@ -629,16 +722,31 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
           <div style={{ flex: 1 }} />
 
           {liveMode && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontFamily: 'var(--font-heading)' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                fontSize: 12,
+                fontFamily: 'var(--font-heading)',
+              }}
+            >
               <span className="live-dot" />
-              <span style={{ color: 'var(--color-error)', fontWeight: 600 }}>{t('messages.live')}</span>
-              <span style={{ color: 'var(--color-text-muted)' }}>{msgsPerSec} {t('messages.perSecond')}</span>
+              <span style={{ color: 'var(--color-error)', fontWeight: 600 }}>
+                {t('messages.live')}
+              </span>
+              <span style={{ color: 'var(--color-text-muted)' }}>
+                {msgsPerSec} {t('messages.perSecond')}
+              </span>
             </div>
           )}
 
           <span style={{ fontSize: 12, color: 'var(--color-text-faint)' }}>
-            {t('messages.loaded')}:<strong style={{ color: 'var(--color-text-muted)' }}>{fetchProgress.loaded}</strong> /{' '}
-            <strong style={{ color: 'var(--color-text-muted)' }}>{fetchProgress.target || '—'}</strong>{' '}
+            {t('messages.loaded')}:
+            <strong style={{ color: 'var(--color-text-muted)' }}>{fetchProgress.loaded}</strong> /{' '}
+            <strong style={{ color: 'var(--color-text-muted)' }}>
+              {fetchProgress.target || '—'}
+            </strong>{' '}
             {t('messages.messagesUnit')}
           </span>
         </div>
@@ -676,9 +784,15 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
             />
           </div>
 
-          <select value={filterField} onChange={(e) => setFilterField(e.target.value as FilterField)} style={selStyle}>
+          <select
+            value={filterField}
+            onChange={(e) => setFilterField(e.target.value as FilterField)}
+            style={selStyle}
+          >
             {FILTER_FIELDS.map((f) => (
-              <option key={f} value={f}>{filterFieldLabel(f, t)}</option>
+              <option key={f} value={f}>
+                {filterFieldLabel(f, t)}
+              </option>
             ))}
           </select>
 
@@ -710,7 +824,12 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
 
           <button
             type="button"
-            onClick={() => setExtraFilters((x) => [...x, { id: `${Date.now()}`, field: 'Value', value: '', regex: false, logic: 'AND' }])}
+            onClick={() =>
+              setExtraFilters((x) => [
+                ...x,
+                { id: `${Date.now()}`, field: 'Value', value: '', regex: false, logic: 'AND' },
+              ])
+            }
             style={dashedStyle}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = 'var(--color-primary)';
@@ -725,50 +844,121 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
           </button>
 
           {extraFilters.map((f) => (
-            <div key={f.id} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 10px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)', background: 'var(--color-surface)', fontSize: 12 }}>
+            <div
+              key={f.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                padding: '4px 10px',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--color-surface)',
+                fontSize: 12,
+              }}
+            >
               <button
                 type="button"
                 onClick={() =>
                   setExtraFilters((rows) =>
-                    rows.map((r) => (r.id === f.id ? { ...r, logic: r.logic === 'AND' ? 'OR' : 'AND' } : r)),
+                    rows.map((r) =>
+                      r.id === f.id ? { ...r, logic: r.logic === 'AND' ? 'OR' : 'AND' } : r,
+                    ),
                   )
                 }
-                style={{ border: 'none', cursor: 'pointer', padding: '2px 8px', borderRadius: 'var(--radius-xs)', background: 'var(--color-primary-muted)', color: 'var(--color-primary)', fontWeight: 700, fontSize: 10, fontFamily: 'var(--font-heading)' }}
+                style={{
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '2px 8px',
+                  borderRadius: 'var(--radius-xs)',
+                  background: 'var(--color-primary-muted)',
+                  color: 'var(--color-primary)',
+                  fontWeight: 700,
+                  fontSize: 10,
+                  fontFamily: 'var(--font-heading)',
+                }}
               >
                 {f.logic === 'AND' ? t('messages.filterAnd') : t('messages.filterOr')}
               </button>
               <select
                 value={f.field}
                 onChange={(e) =>
-                  setExtraFilters((rows) => rows.map((r) => (r.id === f.id ? { ...r, field: e.target.value as FilterField } : r)))
+                  setExtraFilters((rows) =>
+                    rows.map((r) =>
+                      r.id === f.id ? { ...r, field: e.target.value as FilterField } : r,
+                    ),
+                  )
                 }
-                style={{ border: 'none', background: 'transparent', outline: 'none', color: 'var(--color-text-muted)', fontSize: 12 }}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  outline: 'none',
+                  color: 'var(--color-text-muted)',
+                  fontSize: 12,
+                }}
               >
                 {FILTER_FIELDS.map((fld) => (
-                  <option key={fld} value={fld}>{filterFieldLabel(fld, t)}</option>
+                  <option key={fld} value={fld}>
+                    {filterFieldLabel(fld, t)}
+                  </option>
                 ))}
               </select>
               <input
                 placeholder={t('messages.jsonpath')}
                 title={t('messages.jsonpath')}
-                style={{ width: 64, padding: '2px 6px', fontSize: 11, background: 'var(--color-bg)', border: '1px solid var(--color-border-subtle)', borderRadius: 'var(--radius-xs)', color: 'var(--color-text)' }}
+                style={{
+                  width: 64,
+                  padding: '2px 6px',
+                  fontSize: 11,
+                  background: 'var(--color-bg)',
+                  border: '1px solid var(--color-border-subtle)',
+                  borderRadius: 'var(--radius-xs)',
+                  color: 'var(--color-text)',
+                }}
                 value={f.jsonPath ?? ''}
                 onChange={(e) =>
-                  setExtraFilters((rows) => rows.map((r) => (r.id === f.id ? { ...r, jsonPath: e.target.value || undefined } : r)))
+                  setExtraFilters((rows) =>
+                    rows.map((r) =>
+                      r.id === f.id ? { ...r, jsonPath: e.target.value || undefined } : r,
+                    ),
+                  )
                 }
               />
               <input
                 value={f.value}
-                onChange={(e) => setExtraFilters((rows) => rows.map((r) => (r.id === f.id ? { ...r, value: e.target.value } : r)))}
+                onChange={(e) =>
+                  setExtraFilters((rows) =>
+                    rows.map((r) => (r.id === f.id ? { ...r, value: e.target.value } : r)),
+                  )
+                }
                 placeholder={t('common.value')}
-                style={{ width: 80, padding: '2px 6px', border: 'none', background: 'transparent', outline: 'none', color: 'var(--color-text)', fontSize: 12 }}
+                style={{
+                  width: 80,
+                  padding: '2px 6px',
+                  border: 'none',
+                  background: 'transparent',
+                  outline: 'none',
+                  color: 'var(--color-text)',
+                  fontSize: 12,
+                }}
               />
               <button
                 type="button"
                 onClick={() => setExtraFilters((rows) => rows.filter((r) => r.id !== f.id))}
-                style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--color-text-faint)', display: 'flex', alignItems: 'center' }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-error)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-faint)'; }}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--color-text-faint)',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = 'var(--color-error)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = 'var(--color-text-faint)';
+                }}
               >
                 <X size={13} />
               </button>
@@ -780,21 +970,42 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
       {/* Message table */}
       <div style={{ flex: 1, minHeight: 0 }}>
         {sortedMessages.length === 0 ? (
-          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, color: 'var(--color-text-faint)' }}>
-            <div style={{
-              width: 80,
-              height: 80,
-              borderRadius: '50%',
-              background: 'var(--color-surface)',
+          <div
+            style={{
+              height: '100%',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '2px dashed var(--color-border)',
-            }}>
+              gap: 16,
+              color: 'var(--color-text-faint)',
+            }}
+          >
+            <div
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: '50%',
+                background: 'var(--color-surface)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '2px dashed var(--color-border)',
+              }}
+            >
               <Inbox size={36} strokeWidth={1.2} color="var(--color-border)" />
             </div>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-text-muted)', marginBottom: 6 }}>{t('messages.noMessages')}</p>
+              <p
+                style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: 'var(--color-text-muted)',
+                  marginBottom: 6,
+                }}
+              >
+                {t('messages.noMessages')}
+              </p>
               <p style={{ fontSize: 13, color: 'var(--color-text-faint)' }}>{emptyHint}</p>
             </div>
           </div>
@@ -805,8 +1016,16 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
             fixedHeaderContent={() => (
               <tr>
                 <th style={{ ...th, width: 88 }}>{t('messages.partition')}</th>
-                <th style={{ ...th, width: 108, cursor: 'pointer' }} onClick={() => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}>
-                  {t('messages.offset')} {sortDir === 'asc' ? <ChevronUp size={12} style={{ verticalAlign: 'middle' }} /> : <ChevronDown size={12} style={{ verticalAlign: 'middle' }} />}
+                <th
+                  style={{ ...th, width: 108, cursor: 'pointer' }}
+                  onClick={() => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
+                >
+                  {t('messages.offset')}{' '}
+                  {sortDir === 'asc' ? (
+                    <ChevronUp size={12} style={{ verticalAlign: 'middle' }} />
+                  ) : (
+                    <ChevronDown size={12} style={{ verticalAlign: 'middle' }} />
+                  )}
                 </th>
                 <th style={{ ...th, width: 200 }}>{t('messages.timestamp')}</th>
                 <th style={th}>{t('messages.key')}</th>
@@ -829,7 +1048,11 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
                     onContextMenu={(e) => onRowMouse(e, idx, msg, idx)}
                     style={{
                       ...((rest as { style?: React.CSSProperties }).style ?? {}),
-                      background: act ? 'var(--color-primary-muted)' : isSel ? 'rgba(59,130,246,0.04)' : undefined,
+                      background: act
+                        ? 'var(--color-primary-muted)'
+                        : isSel
+                          ? 'rgba(59,130,246,0.04)'
+                          : undefined,
                       borderLeft: act ? '3px solid var(--color-primary)' : '3px solid transparent',
                       cursor: 'pointer',
                       transition: 'background var(--transition-fast)',
@@ -842,21 +1065,93 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
             }}
             itemContent={(_index, msg) => (
               <>
-                <td style={{ padding: '9px 14px', textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: 12, color: 'var(--color-text-muted)' }}>{msg.partition}</td>
-                <td style={{ padding: '9px 14px', fontFamily: 'var(--font-heading)', fontSize: 12, color: 'var(--color-primary)', fontWeight: 600 }}>{msg.offset.toLocaleString()}</td>
-                <td style={{ padding: '9px 14px', fontFamily: 'var(--font-heading)', fontSize: 11.5, whiteSpace: 'nowrap', color: 'var(--color-text-muted)' }}>{msg.timestamp}</td>
-                <td style={{ padding: '9px 14px', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: 12 }}>
-                  {msg.key || <span style={{ color: 'var(--color-text-faint)', fontStyle: 'italic' }}>∅</span>}
+                <td
+                  style={{
+                    padding: '9px 14px',
+                    textAlign: 'center',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 12,
+                    color: 'var(--color-text-muted)',
+                  }}
+                >
+                  {msg.partition}
                 </td>
-                <td style={{ padding: '9px 14px', maxWidth: 360, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 13 }} title={msg.value}>
+                <td
+                  style={{
+                    padding: '9px 14px',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 12,
+                    color: 'var(--color-primary)',
+                    fontWeight: 600,
+                  }}
+                >
+                  {msg.offset.toLocaleString()}
+                </td>
+                <td
+                  style={{
+                    padding: '9px 14px',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 11.5,
+                    whiteSpace: 'nowrap',
+                    color: 'var(--color-text-muted)',
+                  }}
+                >
+                  {msg.timestamp}
+                </td>
+                <td
+                  style={{
+                    padding: '9px 14px',
+                    maxWidth: 200,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 12,
+                  }}
+                >
+                  {msg.key || (
+                    <span style={{ color: 'var(--color-text-faint)', fontStyle: 'italic' }}>∅</span>
+                  )}
+                </td>
+                <td
+                  style={{
+                    padding: '9px 14px',
+                    maxWidth: 360,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    fontSize: 13,
+                  }}
+                  title={msg.value}
+                >
                   {truncate(msg.value, 200)}
                 </td>
                 <td style={{ padding: '9px 14px', textAlign: 'center' }}>
-                  <span style={{ padding: '2px 10px', borderRadius: 999, fontSize: 11, fontFamily: 'var(--font-heading)', fontWeight: 500, background: 'var(--color-surface-2)', color: 'var(--color-text-muted)' }}>
+                  <span
+                    style={{
+                      padding: '2px 10px',
+                      borderRadius: 999,
+                      fontSize: 11,
+                      fontFamily: 'var(--font-heading)',
+                      fontWeight: 500,
+                      background: 'var(--color-surface-2)',
+                      color: 'var(--color-text-muted)',
+                    }}
+                  >
                     {Object.keys(msg.headers).length}
                   </span>
                 </td>
-                <td style={{ padding: '9px 14px', textAlign: 'right', fontFamily: 'var(--font-heading)', fontSize: 11.5, color: 'var(--color-text-faint)' }}>{msg.size}B</td>
+                <td
+                  style={{
+                    padding: '9px 14px',
+                    textAlign: 'right',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 11.5,
+                    color: 'var(--color-text-faint)',
+                  }}
+                >
+                  {msg.size}B
+                </td>
               </>
             )}
           />
@@ -884,13 +1179,25 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
           }}
           onMouseDown={(e) => e.stopPropagation()}
         >
-          <CtxItem onClick={() => void navigator.clipboard?.writeText(ctx.msg.key)}>{t('messages.copyKey')}</CtxItem>
-          <CtxItem onClick={() => void navigator.clipboard?.writeText(ctx.msg.value)}>{t('messages.copyValue')}</CtxItem>
+          <CtxItem onClick={() => void navigator.clipboard?.writeText(ctx.msg.key)}>
+            {t('messages.copyKey')}
+          </CtxItem>
+          <CtxItem onClick={() => void navigator.clipboard?.writeText(ctx.msg.value)}>
+            {t('messages.copyValue')}
+          </CtxItem>
           <CtxItem
             onClick={() =>
               void navigator.clipboard?.writeText(
                 JSON.stringify(
-                  { partition: ctx.msg.partition, offset: ctx.msg.offset, timestamp: ctx.msg.timestamp, key: ctx.msg.key, value: ctx.msg.value, headers: ctx.msg.headers, size: ctx.msg.size },
+                  {
+                    partition: ctx.msg.partition,
+                    offset: ctx.msg.offset,
+                    timestamp: ctx.msg.timestamp,
+                    key: ctx.msg.key,
+                    value: ctx.msg.value,
+                    headers: ctx.msg.headers,
+                    size: ctx.msg.size,
+                  },
                   null,
                   2,
                 ),
@@ -903,8 +1210,19 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
             onClick={async () => {
               const { save } = await import('@tauri-apps/plugin-dialog');
               const { writeTextFile } = await import('@tauri-apps/plugin-fs');
-              const path = await save({ defaultPath: `msg-${ctx.msg.partition}-${ctx.msg.offset}.json`, filters: [{ name: 'JSON', extensions: ['json'] }] });
-              if (path) await writeTextFile(path, JSON.stringify({ key: ctx.msg.key, value: ctx.msg.value, headers: ctx.msg.headers }, null, 2));
+              const path = await save({
+                defaultPath: `msg-${ctx.msg.partition}-${ctx.msg.offset}.json`,
+                filters: [{ name: 'JSON', extensions: ['json'] }],
+              });
+              if (path)
+                await writeTextFile(
+                  path,
+                  JSON.stringify(
+                    { key: ctx.msg.key, value: ctx.msg.value, headers: ctx.msg.headers },
+                    null,
+                    2,
+                  ),
+                );
               setCtx(null);
             }}
           >
@@ -912,7 +1230,11 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
           </CtxItem>
           <CtxItem
             onClick={() => {
-              setClonePayload({ key: ctx.msg.key, value: ctx.msg.value, headers: { ...ctx.msg.headers } });
+              setClonePayload({
+                key: ctx.msg.key,
+                value: ctx.msg.value,
+                headers: { ...ctx.msg.headers },
+              });
               setCtx(null);
               setSendOpen(true);
             }}
@@ -934,7 +1256,11 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
         initialValue={clonePayload?.value}
         initialHeaders={clonePayload?.headers}
       />
-      <MessageExportDialog open={exportOpen} onClose={() => setExportOpen(false)} rows={selectedRows} />
+      <MessageExportDialog
+        open={exportOpen}
+        onClose={() => setExportOpen(false)}
+        rows={selectedRows}
+      />
 
       <style>{`
         @keyframes spin-slow { to { transform: rotate(360deg); } }
@@ -948,7 +1274,16 @@ export function TopicMessageViewer({ clusterId, topicName }: { clusterId: string
 
 function FieldGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label style={{ fontSize: 12, color: 'var(--color-text-faint)', display: 'flex', gap: 6, alignItems: 'center', fontWeight: 500 }}>
+    <label
+      style={{
+        fontSize: 12,
+        color: 'var(--color-text-faint)',
+        display: 'flex',
+        gap: 6,
+        alignItems: 'center',
+        fontWeight: 500,
+      }}
+    >
       {label}
       {children}
     </label>
@@ -960,7 +1295,9 @@ function CtxItem({ children, onClick }: { children: React.ReactNode; onClick: ()
     <li>
       <button
         type="button"
-        onClick={() => { onClick(); }}
+        onClick={() => {
+          onClick();
+        }}
         style={{
           width: '100%',
           textAlign: 'left',
@@ -1058,7 +1395,11 @@ function ActionBtn({
         borderRadius: 'var(--radius-sm)',
         border: `1px solid ${active ? 'var(--color-primary)' : 'var(--color-border)'}`,
         background: active ? 'var(--color-primary-muted)' : 'var(--color-surface)',
-        color: active ? 'var(--color-primary)' : disabled ? 'var(--color-text-faint)' : 'var(--color-text-muted)',
+        color: active
+          ? 'var(--color-primary)'
+          : disabled
+            ? 'var(--color-text-faint)'
+            : 'var(--color-text-muted)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         transition: 'all var(--transition-fast)',
       }}

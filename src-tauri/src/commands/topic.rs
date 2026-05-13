@@ -15,7 +15,7 @@ pub async fn load_cluster_topics(
     cluster_id: String,
     db: State<'_, Database>,
 ) -> Result<Vec<Value>, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     tokio::task::spawn_blocking(move || topic_summaries_blocking(&conn))
         .await
         .map_err(|e| e.to_string())?
@@ -30,11 +30,15 @@ pub async fn create_topic(
     configs: HashMap<String, String>,
     db: State<'_, Database>,
 ) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let cfg = create_kafka_config(&conn);
     let admin = AdminClient::from_config(&cfg).map_err(|e| e.to_string())?;
     let opts = AdminOptions::new().operation_timeout(Some(KAFKA_RPC_TIMEOUT));
-    let mut topic = NewTopic::new(name.as_str(), partitions, TopicReplication::Fixed(replication_factor));
+    let mut topic = NewTopic::new(
+        name.as_str(),
+        partitions,
+        TopicReplication::Fixed(replication_factor),
+    );
     for (k, v) in &configs {
         topic = topic.set(k.as_str(), v.as_str());
     }
@@ -56,7 +60,7 @@ pub async fn delete_topic(
     topic_name: String,
     db: State<'_, Database>,
 ) -> Result<(), String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     let cfg = create_kafka_config(&conn);
     let admin = AdminClient::from_config(&cfg).map_err(|e| e.to_string())?;
     let opts = AdminOptions::new().operation_timeout(Some(KAFKA_RPC_TIMEOUT));
@@ -74,8 +78,11 @@ pub async fn delete_topic(
 }
 
 #[tauri::command]
-pub async fn load_cluster_overview(cluster_id: String, db: State<'_, Database>) -> Result<Value, String> {
-    let conn = get_connection_or_err(&*db, &cluster_id).await?;
+pub async fn load_cluster_overview(
+    cluster_id: String,
+    db: State<'_, Database>,
+) -> Result<Value, String> {
+    let conn = get_connection_or_err(&db, &cluster_id).await?;
     tokio::task::spawn_blocking(move || {
         let metadata = fetch_metadata_blocking(&conn)?;
         let mut overview = metadata_overview(&metadata);
@@ -89,7 +96,10 @@ pub async fn load_cluster_overview(cluster_id: String, db: State<'_, Database>) 
             .unwrap_or(0);
 
         if let Some(obj) = overview.as_object_mut() {
-            obj.insert("consumer_group_count".into(), serde_json::json!(group_count));
+            obj.insert(
+                "consumer_group_count".into(),
+                serde_json::json!(group_count),
+            );
             obj.insert("cluster_name".into(), serde_json::json!(conn.name));
             obj.insert("cluster_mode".into(), serde_json::json!(conn.cluster_mode));
 

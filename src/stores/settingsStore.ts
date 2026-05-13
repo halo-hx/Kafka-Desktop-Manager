@@ -21,14 +21,18 @@ function readLocal(): Partial<PersistedSettingsBlob> {
 
 function mergeApp(raw: Partial<AppUserSettings>): AppUserSettings {
   const font = Number(raw.editorFontSize);
-  const fs = Number.isFinite(font) ? Math.min(20, Math.max(12, font)) : DEFAULT_APP_USER_SETTINGS.editorFontSize;
+  const fs = Number.isFinite(font)
+    ? Math.min(20, Math.max(12, font))
+    : DEFAULT_APP_USER_SETTINGS.editorFontSize;
   return {
     ...DEFAULT_APP_USER_SETTINGS,
     ...raw,
     editorFontSize: fs,
     jsonIndent: raw.jsonIndent === 4 ? 4 : 2,
     hexBytesPerRow: raw.hexBytesPerRow === 8 || raw.hexBytesPerRow === 32 ? raw.hexBytesPerRow : 16,
-    defaultMessageLoadCount: [50, 100, 500, 1000, 5000].includes(raw.defaultMessageLoadCount as number)
+    defaultMessageLoadCount: [50, 100, 500, 1000, 5000].includes(
+      raw.defaultMessageLoadCount as number,
+    )
       ? (raw.defaultMessageLoadCount as AppUserSettings['defaultMessageLoadCount'])
       : DEFAULT_APP_USER_SETTINGS.defaultMessageLoadCount,
     timestampDisplayFormat:
