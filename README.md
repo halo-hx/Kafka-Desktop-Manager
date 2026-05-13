@@ -99,7 +99,7 @@ pnpm tauri build    # produce a release bundle
 
 ## 🗺️ Roadmap
 
-See [PRODUCT_PLAN.md](./PRODUCT_PLAN.md) for the full roadmap. Short-term goals:
+Short-term goals:
 
 - [ ] Auto-update via Tauri updater
 - [ ] Plugin / extension system

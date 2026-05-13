@@ -49,3 +49,9 @@ coverage/
 # Misc
 *.tsbuildinfo
 .cache/
+
+# Internal / private docs (kept locally, not published)
+/PRODUCT_PLAN.md
+/TESTING.md
+/UI_TESTING.md
+/design-system/
