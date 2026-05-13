@@ -46,6 +46,14 @@ Pre-built binaries are available on the [Releases](https://github.com/halo-hx/Ka
 - Windows — `.msi` / `.exe`
 - Linux — `.AppImage` / `.deb` / `.rpm`
 
+> **macOS users — first-launch note.** The bundle is not yet signed with an Apple Developer ID, so Gatekeeper may show “*Kafka Desktop Manager.app is damaged and can’t be opened*” on first launch. This is a quarantine flag on the downloaded file, not actual corruption. Fix it once with:
+>
+> ```bash
+> xattr -cr "/Applications/Kafka Desktop Manager.app"
+> ```
+>
+> Then double-click to open normally. (A signed & notarized build is on the roadmap.)
+
 ### Build from source
 
 Prerequisites:

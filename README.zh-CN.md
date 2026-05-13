@@ -35,6 +35,14 @@
 - Windows — `.msi` / `.exe`
 - Linux — `.AppImage` / `.deb` / `.rpm`
 
+> **macOS 首次打开提示 “已损坏，无法打开”？** 目前没有 Apple Developer 签名，下载后会被 macOS Gatekeeper 打上隔离标记（并非真的损坏）。在终端执行一次即可：
+>
+> ```bash
+> xattr -cr "/Applications/Kafka Desktop Manager.app"
+> ```
+>
+> 然后双击正常打开。（后续版本会提供签名 + 公证构建。）
+
 ### 从源码构建
 
 环境要求：Node.js ≥ 18、pnpm ≥ 8、Rust stable、以及 [Tauri 平台依赖](https://tauri.app/start/prerequisites/)。
